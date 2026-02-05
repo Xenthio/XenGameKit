@@ -117,12 +117,21 @@ public partial class PlayerMovement : Component
 
 	/// <summary>
 	/// Air movement acceleration with speed cap applied correctly.
-	/// The cap limits velocity gain but not the acceleration multiplier.
+	/// Matches Source Engine's AirAccelerate behavior where the speed cap 
+	/// limits velocity gain but not the acceleration multiplier.
 	/// </summary>
-	public void ApplyAirMovement( Vector3 desiredMove, float accelRate, float speedLimit )
+	/// <param name="desiredMove">The desired movement vector (wish velocity)</param>
+	/// <param name="accelRate">The air acceleration rate (typically AirAcceleration property, default 10)</param>
+	/// <param name="speedLimit">The air speed cap (typically AirControl property, default 30, matches Source's GetAirSpeedCap)</param>
+	public void AirAccelerate( Vector3 desiredMove, float accelRate, float speedLimit )
 	{
-		var moveDirection = desiredMove.Normal;
 		var fullMagnitude = desiredMove.Length;
+		
+		// Early exit if no movement desired
+		if ( fullMagnitude < 0.0001f )
+			return;
+			
+		var moveDirection = desiredMove / fullMagnitude;
 		
 		// Limit the target speed for velocity delta calculation
 		var cappedMagnitude = Math.Min( fullMagnitude, speedLimit );
@@ -137,6 +146,7 @@ public partial class PlayerMovement : Component
 			return;
 		
 		// Calculate acceleration using FULL magnitude (not capped)
+		// Note: SurfaceFriction is applied here to match Source Engine's AirAccelerate implementation
 		var accelAmount = accelRate * fullMagnitude * Time.Delta * SurfaceFriction;
 		
 		// Clamp to the maximum allowable increase

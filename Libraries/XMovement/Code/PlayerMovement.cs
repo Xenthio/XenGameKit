@@ -69,7 +69,7 @@ public partial class PlayerMovement : Component
 			else
 			{
 				// Air movement: Apply speed cap to the gain limit, not the acceleration rate
-				ApplyAirMovement( WishVelocity, AirAcceleration, AirControl );
+				AirAccelerate( WishVelocity, AirAcceleration, AirControl );
 			}
 		}
 
