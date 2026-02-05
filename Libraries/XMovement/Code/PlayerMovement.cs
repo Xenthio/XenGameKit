@@ -20,7 +20,9 @@ public partial class PlayerMovement : Component
 	[Property, Group( "Friction" )] public float StopSpeed { get; set; } = 100.0f;
 
 	/// <summary>
-	/// Can we control our movement in the air?
+	/// DEPRECATED: This property is no longer used. 
+	/// Air acceleration now matches Source Engine behavior where the full wish velocity is used.
+	/// Left here for backwards compatibility with existing prefabs/scenes.
 	/// </summary>
 	[Property, Group( "Config" )] public float AirControl { get; set; } = 30f;
 
@@ -66,7 +68,7 @@ public partial class PlayerMovement : Component
 			}
 			else
 			{
-				Accelerate( WishVelocity.ClampLength( AirControl ), AirAcceleration );
+				Accelerate( WishVelocity, AirAcceleration );
 			}
 		}
 
