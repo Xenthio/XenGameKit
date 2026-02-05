@@ -20,13 +20,13 @@ public partial class PlayerMovement : Component
 	[Property, Group( "Friction" )] public float StopSpeed { get; set; } = 100.0f;
 
 	/// <summary>
-	/// DEPRECATED: This property is no longer used. 
-	/// Air acceleration now matches Source Engine behavior where the full wish velocity is used.
-	/// Left here for backwards compatibility with existing prefabs/scenes.
+	/// Maximum speed cap for air movement calculations (similar to Source Engine's GetAirSpeedCap).
+	/// This limits how much speed can be gained per frame in the air, while still allowing
+	/// full acceleration rate. Default is 30, matching Source Engine.
 	/// </summary>
 	[Property, Group( "Config" )] public float AirControl { get; set; } = 30f;
 
-	[Property, Group( "Acceleration" )] public float AirAcceleration { get; set; } = 40f;
+	[Property, Group( "Acceleration" )] public float AirAcceleration { get; set; } = 10f;
 
 	[Property, Group( "Acceleration" )] public float BaseAcceleration { get; set; } = 10;
 	[Property] public MovementFrequencyMode MovementFrequency { get; set; } = MovementFrequencyMode.PerFixedUpdate;
@@ -68,7 +68,8 @@ public partial class PlayerMovement : Component
 			}
 			else
 			{
-				Accelerate( WishVelocity, AirAcceleration );
+				// Air movement: Apply speed cap to the gain limit, not the acceleration rate
+				ApplyAirMovement( WishVelocity, AirAcceleration, AirControl );
 			}
 		}
 

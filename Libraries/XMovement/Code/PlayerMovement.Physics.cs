@@ -116,6 +116,36 @@ public partial class PlayerMovement : Component
 	}
 
 	/// <summary>
+	/// Air movement acceleration with speed cap applied correctly.
+	/// The cap limits velocity gain but not the acceleration multiplier.
+	/// </summary>
+	public void ApplyAirMovement( Vector3 desiredMove, float accelRate, float speedLimit )
+	{
+		var moveDirection = desiredMove.Normal;
+		var fullMagnitude = desiredMove.Length;
+		
+		// Limit the target speed for velocity delta calculation
+		var cappedMagnitude = Math.Min( fullMagnitude, speedLimit );
+		
+		// Calculate current velocity in the desired direction
+		var projectedSpeed = Velocity.Dot( moveDirection );
+		
+		// Find how much speed we can add (using capped value)
+		var speedIncrease = cappedMagnitude - projectedSpeed;
+		
+		if ( speedIncrease <= 0 )
+			return;
+		
+		// Calculate acceleration using FULL magnitude (not capped)
+		var accelAmount = accelRate * fullMagnitude * Time.Delta * SurfaceFriction;
+		
+		// Clamp to the maximum allowable increase
+		var finalAccel = Math.Min( accelAmount, speedIncrease );
+		
+		Velocity += moveDirection * finalAccel;
+	}
+
+	/// <summary>
 	/// Apply an amount of friction to the current velocity.
 	/// No need to scale by time delta - it will be done inside.
 	/// </summary>
