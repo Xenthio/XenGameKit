@@ -126,8 +126,6 @@ public partial class PlayerMovement : Component
 	public void AirAccelerate( Vector3 desiredMove, float accelRate, float speedLimit )
 	{
 		var wishspeed = desiredMove.Length;
-		
-		// Early exit if no movement desired
 		if ( wishspeed == 0 )
 			return;
 			
@@ -145,8 +143,8 @@ public partial class PlayerMovement : Component
 		if ( addspeed <= 0 )
 			return;
 		
-		// Calculate acceleration using FULL wishspeed (not capped)
-		// Note: SurfaceFriction is applied here to match Source Engine's AirAccelerate implementation
+		// Determine acceleration speed using uncapped wishspeed
+		// SurfaceFriction is intentionally applied here, matching Source Engine behavior
 		var accelspeed = accelRate * wishspeed * Time.Delta * SurfaceFriction;
 		
 		// Cap at addspeed
