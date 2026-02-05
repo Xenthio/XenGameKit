@@ -128,7 +128,7 @@ public partial class PlayerMovement : Component
 		var wishspeed = desiredMove.Length;
 		
 		// Early exit if no movement desired
-		if ( wishspeed < 0.0001f )
+		if ( wishspeed == 0 )
 			return;
 			
 		var wishdir = desiredMove / wishspeed;
