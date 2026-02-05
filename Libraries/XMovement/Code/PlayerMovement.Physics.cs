@@ -106,7 +106,7 @@ public partial class PlayerMovement : Component
 			return;
 
 		// Determine amount of acceleration.
-		var accelspeed = acceleration * wishspeed * Time.Delta * SurfaceFriction;
+		var accelspeed = acceleration * Time.Delta * wishspeed * SurfaceFriction;
 
 		// Cap at addspeed
 		if ( accelspeed > addspeed )
@@ -125,34 +125,35 @@ public partial class PlayerMovement : Component
 	/// <param name="speedLimit">The air speed cap (typically AirControl property, default 30, matches Source's GetAirSpeedCap)</param>
 	public void AirAccelerate( Vector3 desiredMove, float accelRate, float speedLimit )
 	{
-		var fullMagnitude = desiredMove.Length;
+		var wishspeed = desiredMove.Length;
 		
 		// Early exit if no movement desired
-		if ( fullMagnitude < 0.0001f )
+		if ( wishspeed < 0.0001f )
 			return;
 			
-		var moveDirection = desiredMove / fullMagnitude;
+		var wishdir = desiredMove / wishspeed;
 		
-		// Limit the target speed for velocity delta calculation
-		var cappedMagnitude = Math.Min( fullMagnitude, speedLimit );
+		// Limit the target speed for velocity delta calculation (like Source's GetAirSpeedCap)
+		var wishspd = Math.Min( wishspeed, speedLimit );
 		
 		// Calculate current velocity in the desired direction
-		var projectedSpeed = Velocity.Dot( moveDirection );
+		var currentspeed = Velocity.Dot( wishdir );
 		
 		// Find how much speed we can add (using capped value)
-		var speedIncrease = cappedMagnitude - projectedSpeed;
+		var addspeed = wishspd - currentspeed;
 		
-		if ( speedIncrease <= 0 )
+		if ( addspeed <= 0 )
 			return;
 		
-		// Calculate acceleration using FULL magnitude (not capped)
+		// Calculate acceleration using FULL wishspeed (not capped)
 		// Note: SurfaceFriction is applied here to match Source Engine's AirAccelerate implementation
-		var accelAmount = accelRate * fullMagnitude * Time.Delta * SurfaceFriction;
+		var accelspeed = accelRate * wishspeed * Time.Delta * SurfaceFriction;
 		
-		// Clamp to the maximum allowable increase
-		var finalAccel = Math.Min( accelAmount, speedIncrease );
+		// Cap at addspeed
+		if ( accelspeed > addspeed )
+			accelspeed = addspeed;
 		
-		Velocity += moveDirection * finalAccel;
+		Velocity += wishdir * accelspeed;
 	}
 
 	/// <summary>
