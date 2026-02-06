@@ -352,7 +352,7 @@
           "__type": "XMovement.PlayerMovement",
           "__guid": "e4f27186-b664-4f4b-80a7-9070220b786b",
           "Acceleration": 10,
-          "AirAcceleration": 50,
+          "AirAcceleration": 10,
           "AirControl": 30,
           "BaseAcceleration": 10,
           "BaseFriction": 4,

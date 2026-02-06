@@ -77,7 +77,7 @@ public partial class PlayerWalkControllerComplex : Component
 				Controller.BaseFriction = 8f;
 				Controller.StopSpeed = 10f;
 				Controller.BaseAcceleration = 10f;
-				Controller.AirAcceleration = 50f;
+				Controller.AirAcceleration = 15f; // TTT often uses higher values for more dynamic movement
 
 				EnableWalking = false;
 
@@ -95,7 +95,7 @@ public partial class PlayerWalkControllerComplex : Component
 				Controller.BaseFriction = 8f;
 				Controller.StopSpeed = 10f;
 				Controller.BaseAcceleration = 10f;
-				Controller.AirAcceleration = 50f;
+				Controller.AirAcceleration = 15f; // TTT often uses higher values for more dynamic movement
 
 				EnableWalking = false;
 

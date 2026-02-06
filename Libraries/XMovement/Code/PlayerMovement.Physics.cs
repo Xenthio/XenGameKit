@@ -106,12 +106,51 @@ public partial class PlayerMovement : Component
 			return;
 
 		// Determine amount of acceleration.
-		var accelspeed = acceleration * wishspeed * Time.Delta * SurfaceFriction;
+		var accelspeed = acceleration * Time.Delta * wishspeed * SurfaceFriction;
 
 		// Cap at addspeed
 		if ( accelspeed > addspeed )
 			accelspeed = addspeed;
 
+		Velocity += wishdir * accelspeed;
+	}
+
+	/// <summary>
+	/// Air movement acceleration with speed cap applied correctly.
+	/// Matches Source Engine's AirAccelerate behavior where the speed cap 
+	/// limits velocity gain but not the acceleration multiplier.
+	/// </summary>
+	/// <param name="desiredMove">The desired movement vector (wish velocity)</param>
+	/// <param name="accelRate">The air acceleration rate (typically AirAcceleration property, default 10)</param>
+	/// <param name="speedLimit">The air speed cap (typically AirControl property, default 30, matches Source's GetAirSpeedCap)</param>
+	public void AirAccelerate( Vector3 desiredMove, float accelRate, float speedLimit )
+	{
+		var wishspeed = desiredMove.Length;
+		if ( wishspeed == 0 )
+			return;
+			
+		var wishdir = desiredMove / wishspeed;
+		
+		// Limit the target speed for velocity delta calculation (like Source's GetAirSpeedCap)
+		var wishspd = Math.Min( wishspeed, speedLimit );
+		
+		// Calculate current velocity in the desired direction
+		var currentspeed = Velocity.Dot( wishdir );
+		
+		// Find how much speed we can add (using capped value)
+		var addspeed = wishspd - currentspeed;
+		
+		if ( addspeed <= 0 )
+			return;
+		
+		// Determine acceleration speed using uncapped wishspeed
+		// SurfaceFriction is intentionally applied here, matching Source Engine behavior
+		var accelspeed = accelRate * wishspeed * Time.Delta * SurfaceFriction;
+		
+		// Cap at addspeed
+		if ( accelspeed > addspeed )
+			accelspeed = addspeed;
+		
 		Velocity += wishdir * accelspeed;
 	}
 
