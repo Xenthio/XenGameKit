@@ -135,7 +135,7 @@
         "__guid": "14f16545-0f5a-4dd2-8241-2666c86c8f78",
         "__enabled": true,
         "Acceleration": 10,
-        "AirAcceleration": 40,
+        "AirAcceleration": 10,
         "AirControl": 30,
         "BaseAcceleration": 10,
         "BaseFriction": 4,
