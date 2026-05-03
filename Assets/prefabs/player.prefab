@@ -142,10 +142,15 @@
         "Acceleration": 10,
         "AirAcceleration": 10,
         "AirControl": 30,
+        "AllDirectionsTraceDistance": 8192,
         "BaseAcceleration": 10,
         "BaseFriction": 8,
         "BaseVelocity": "0,0,0",
+        "BidirectionalTraceDistance": 8192,
+        "BidirectionalTraceThreshold": 5,
         "Bounciness": 0,
+        "CustomOutOfBoundsCheck": null,
+        "DetectionMode": "BidirectionalTrace",
         "DoClassicPlatforms": true,
         "Gravity": "0,0,800",
         "GroundAngle": 46,
@@ -160,6 +165,13 @@
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null,
+        "OnEnterOutOfBounds": null,
+        "OnLeaveOutOfBounds": null,
+        "OnTouchOutOfBounds": null,
+        "OutOfBoundsDetectionEnabled": true,
+        "OutOfBoundsIsSolid": true,
+        "OutOfBoundsTag": "oob",
+        "OutOfBoundsTraceDistance": 4096,
         "PhysicsBody": {
           "_type": "gameobject",
           "go": "104caf8e-6b54-46f8-a3d3-14a41ffd0c3e"
@@ -517,7 +529,9 @@
         "AgentStepSize": 18,
         "AgentMaxSlope": 40,
         "ExcludedBodies": "",
-        "IncludedBodies": ""
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
       }
     },
     "__variables": []

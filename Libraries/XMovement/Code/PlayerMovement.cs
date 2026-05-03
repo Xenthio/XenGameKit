@@ -83,6 +83,8 @@ public partial class PlayerMovement : Component
 		if ( TryUnstuck() )
 			return;
 
+		ClipVelocityToOutOfBounds();
+
 		if ( IsOnGround )
 		{
 			Move( true );
@@ -95,6 +97,8 @@ public partial class PlayerMovement : Component
 		if ( IsOnGround ) StayOnGround();
 
 		CategorizePosition();
+
+		HandleOutOfBounds();
 
 		// Finish gravity
 		if ( !IsOnGround && withGravity )

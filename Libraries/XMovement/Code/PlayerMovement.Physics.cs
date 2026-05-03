@@ -392,7 +392,7 @@ public partial class PlayerMovement : Component
 	bool IsStuck()
 	{
 		var result = BuildTrace( WorldPosition, WorldPosition ).Run();
-		return result.StartedSolid;
+		return result.StartedSolid || IsOutOfBounds( WorldPosition );
 	}
 	[ConVar] public static bool debug_playermovement_unstick { get; set; } = false;
 	Transform _previousTransform;
@@ -402,12 +402,14 @@ public partial class PlayerMovement : Component
 		var result = BuildTrace( WorldPosition, WorldPosition ).Run();
 
 		// Not stuck, we cool
-		if ( !result.StartedSolid )
+		if ( !result.StartedSolid && !IsOutOfBounds( WorldPosition ) )
 		{
 			_stuckTries = 0;
 			_previousTransform = Transform.World;
 			return false;
 		}
+
+		var wasOutOfBounds = IsOutOfBounds( WorldPosition );
 
 		/*using ( Gizmo.Scope( "unstuck", Transform.World ) )
 		{
@@ -431,13 +433,13 @@ public partial class PlayerMovement : Component
 			}*/
 
 			// this can solve so many issues super quickly so do this first.
-			if ( i <= 2 )
+			if ( i <= 2 && !wasOutOfBounds )
 			{
 				pos = WorldPosition + Vector3.Up * ((i) * 0.2f);
 				if ( debug_playermovement_unstick ) DebugOverlay.Box( BoundingBox, Color.Cyan, 2, Transform.World.WithRotation( Rotation.Identity ) );
 			}
 			// Try base velocity 
-			if ( (PhysicsBodyVelocity.Length > 0 || (PhysicsBodyRigidbody.IsValid() && PhysicsBodyRigidbody.WorldPosition != WorldPosition)) && i < 80 )
+			if ( (PhysicsBodyVelocity.Length > 0 || (PhysicsBodyRigidbody.IsValid() && PhysicsBodyRigidbody.WorldPosition != WorldPosition)) && i < 80 && !wasOutOfBounds )
 			{
 				normal = PhysicsBodyVelocity.Normal * Time.Delta;
 				normal.z = Math.Max( 0, normal.z );
@@ -470,14 +472,17 @@ public partial class PlayerMovement : Component
 				}*/
 			}
 			// Second try the up direction for moving platforms
-			else if ( i < 4 )
+			else if ( i < 4 && !wasOutOfBounds )
 			{
 				pos = WorldPosition + Vector3.Up * ((i) * 3f);
 				if ( debug_playermovement_unstick ) DebugOverlay.Box( BoundingBox, Color.Yellow, 2, Transform.World.WithRotation( Rotation.Identity ) );
 			}
 			else
 			{
-				normal = Vector3.Random.Normal * (((float)_stuckTries) * 1.25f);
+				var pushscale = 1.25f;
+				if ( wasOutOfBounds ) pushscale = 3f;
+				normal = Vector3.Random.Normal * (((float)_stuckTries) * pushscale);
+
 				if ( debug_playermovement_unstick ) DebugOverlay.Line( WorldPosition, pos, Color.Blue, 2 );
 				pos = WorldPosition + normal;
 				normal *= 0.25f;
@@ -491,10 +496,10 @@ public partial class PlayerMovement : Component
 			}*/
 			result = BuildTrace( pos, pos ).Run();
 
-			if ( !result.StartedSolid )
+			if ( !result.StartedSolid && !IsOutOfBounds( pos ) )
 			{
 				//Log.Info( $"unstuck after {_stuckTries} tries ({_stuckTries * AttemptsPerTick} tests)" );
-				Velocity += normal / Time.Delta;
+				if (!wasOutOfBounds) Velocity += normal / Time.Delta;
 				WorldPosition = pos;
 				_previousTransform = Transform.World;
 				return false;
