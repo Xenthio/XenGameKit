@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Engine.Utility.RayTrace;
 using System;
+using System.Diagnostics;
 
 namespace XMovement;
 
@@ -15,9 +16,16 @@ public partial class PlayerMovement : Component
 	/// </summary>
 	[Property, Feature( "Out of Bounds" ), ShowIf( "DetectionMode", OutOfBoundsDetectionMode.DownwardsTrace )] public float OutOfBoundsTraceDistance { get; set; } = 4096f;
 
+	[Property, Feature( "Out of Bounds" ), ShowIf( "DetectionMode", OutOfBoundsDetectionMode.DownwardsTrace ), ShowIf( "DetectionMode", OutOfBoundsDetectionMode.BidirectionalTrace )]
+	public bool AccurateDownwardsTraceSampling { get; set; } = true;
+
+	[Property, Feature( "Out of Bounds" ), ShowIf( "DetectionMode", OutOfBoundsDetectionMode.BidirectionalTrace )]
+	public bool AccurateBidirectionalSampling { get; set; } = false;
+
 	[Property, Feature( "Out of Bounds" )] public OutOfBoundsDetectionMode DetectionMode { get; set; } = OutOfBoundsDetectionMode.DownwardsTrace;
 
 	[ConVar] public static bool debug_playermovement_oob { get; set; } = false;
+	[ConVar] public static bool debug_playermovement_oob_timing { get; set; } = false;
 
 	public enum OutOfBoundsDetectionMode
 	{
@@ -76,18 +84,30 @@ public partial class PlayerMovement : Component
 	{
 		if ( !OutOfBoundsDetectionEnabled ) return false;
 
-		// Always check feet position for all modes.
-		if ( CheckOutOfBoundsAt( position ) ) return true;
+		var timingEnabled = debug_playermovement_oob_timing;
+		long timingStart = 0;
+		if ( timingEnabled )
+			timingStart = Stopwatch.GetTimestamp();
 
+		var isOutOfBounds = false;
+
+		// Always check feet position for all modes.
+		if ( CheckOutOfBoundsAt( position ) )
+		{
+			isOutOfBounds = true;
+		}
 		// For non-downwards modes also probe the head position so a player standing in a
 		// sliver above a wall (feet technically inside, head outside) is caught.
-		if ( DetectionMode != OutOfBoundsDetectionMode.DownwardsTrace )
+		else if ( DetectionMode != OutOfBoundsDetectionMode.DownwardsTrace )
 		{
 			var headPos = position + Vector3.Up * (Height * WorldScale.z * 0.9f);
-			if ( CheckOutOfBoundsAt( headPos ) ) return true;
+			isOutOfBounds = CheckOutOfBoundsAt( headPos );
 		}
 
-		return false;
+		if ( timingEnabled )
+			RecordOutOfBoundsTiming( Stopwatch.GetElapsedTime( timingStart ) );
+
+		return isOutOfBounds;
 	}
 
 	private bool CheckOutOfBoundsAt( Vector3 position )
@@ -106,12 +126,26 @@ public partial class PlayerMovement : Component
 
 	private bool DownwardsTraceOutOfBoundsCheck( Vector3 position )
 	{
-		// Trace straight down from the player's center. Using the full bbox sweep (via
-		// BuildTrace) means the trace width matches the capsule, so the player must be
-		// fully over the void before OOB triggers — this avoids false positives near any
-		// normal platform edge.
-		var tr = BuildTrace( position, position + Vector3.Down * OutOfBoundsTraceDistance ).Run();
-		return !tr.Hit;
+		// Sample a 3x3 grid across the player's footprint so floor void checks line up more
+		// closely with the actual collision area rather than just the center point.
+		var sampleRadius = Radius * MathF.Max( WorldScale.x, WorldScale.y );
+
+		foreach ( var normalizedSampleOffset in GetFootprintSampleOffsets( AccurateDownwardsTraceSampling ) )
+		{
+			var sampleOffset = normalizedSampleOffset * sampleRadius;
+			var samplePosition = position + new Vector3( sampleOffset.x, sampleOffset.y, 0.0f );
+			var tr = BuildProbeTrace( samplePosition, samplePosition + Vector3.Down * OutOfBoundsTraceDistance ).Run();
+			if ( !tr.Hit )
+				return true;
+
+			if ( debug_playermovement_oob )
+			{
+				DebugOverlaySystem.Current.Line( samplePosition, tr.EndPosition, tr.Hit ? Color.Green : Color.Red, 0 );
+				DebugOverlaySystem.Current.Sphere( new Sphere( tr.EndPosition, 4f ), Color.Green, 0, overlay: true );
+			}
+		}
+
+		return false;
 	}
 
 	/// <summary>
@@ -127,6 +161,48 @@ public partial class PlayerMovement : Component
 		Vector3.Forward, Vector3.Backward,
 		Vector3.Left, Vector3.Right,
 	};
+
+	private static readonly Vector2[] AccurateFootprintSampleOffsets =
+	{
+		new( -0.75f, -0.75f ),
+		new( 0.0f, -0.75f ),
+		new( 0.75f, -0.75f ),
+		new( -0.75f, 0.0f ),
+		new( 0.0f, 0.0f ),
+		new( 0.75f, 0.0f ),
+		new( -0.75f, 0.75f ),
+		new( 0.0f, 0.75f ),
+		new( 0.75f, 0.75f ),
+	};
+
+	private static readonly Vector2[] SingleFootprintSampleOffset =
+	{
+		new( 0.0f, 0.0f )
+	};
+
+	private double _oobTimingTotalMs;
+	private double _oobTimingMaxMs;
+	private int _oobTimingSampleCount;
+
+	private ReadOnlySpan<Vector2> GetFootprintSampleOffsets( bool accurateSampling )
+	{
+		return accurateSampling ? AccurateFootprintSampleOffsets : SingleFootprintSampleOffset;
+	}
+
+	private void RecordOutOfBoundsTiming( TimeSpan elapsed )
+	{
+		_oobTimingSampleCount++;
+		_oobTimingTotalMs += elapsed.TotalMilliseconds;
+		_oobTimingMaxMs = Math.Max( _oobTimingMaxMs, elapsed.TotalMilliseconds );
+
+		if ( _oobTimingSampleCount < 30 )
+			return;
+
+		Log.Info( $"PlayerMovement OOB avg {_oobTimingTotalMs / _oobTimingSampleCount:0.###}ms max {_oobTimingMaxMs:0.###}ms over {_oobTimingSampleCount} checks" );
+		_oobTimingSampleCount = 0;
+		_oobTimingTotalMs = 0;
+		_oobTimingMaxMs = 0;
+	}
 
 	private bool AllDirectionsOutOfBoundsCheck( Vector3 position )
 	{
@@ -162,48 +238,55 @@ public partial class PlayerMovement : Component
 		if ( DownwardsTraceOutOfBoundsCheck( position ) ) return true;
 
 		int oobCount = 0;
+		var sampleRadius = Radius * MathF.Max( WorldScale.x, WorldScale.y );
 
 		foreach ( var dir in AllDirectionAxes )
 		{
-			var startPoint = position + (Vector3.Up * 0.5f);
-			var farPoint = position + dir * BidirectionalTraceDistance;
+			var directionIsOob = false;
 
-			// Point ray outward — using the bbox sweep here causes false positives from
-			// nearby walls within Radius. The head-position sample in IsOutOfBounds handles
-			// the sliver case instead.
-			var outward = BuildProbeTrace( startPoint, farPoint ).UseHitPosition().Run();
-
-			if ( !outward.Hit )
+			foreach ( var normalizedSampleOffset in GetFootprintSampleOffsets( AccurateBidirectionalSampling ) )
 			{
-				// Up: open sky is expected, skip.
-				if ( dir == Vector3.Up ) continue;
-				// Horizontal/down: open space, skip (sides being open is fine).
-				continue;
-			}
+				var sampleOffset = normalizedSampleOffset * sampleRadius;
+				var originOffset = new Vector3( sampleOffset.x, sampleOffset.y, 0.0f );
+				var startPoint = position + originOffset + (Vector3.Up * 0.5f);
+				var farPoint = startPoint + dir * BidirectionalTraceDistance;
 
-			// Fire the return ray from just past the outward hit, back toward the player.
-			// If it hits something before reaching us, there's a hull wall between the
-			// hit surface and the player — we're on the outside of it.
-			var returnStart = outward.HitPosition + dir * -0.1f;
-			var inward = BuildProbeTrace( returnStart, startPoint ).IgnoreKeyframed().IgnoreDynamic().Run();
-			//DebugOverlaySystem.Current.Line( startPoint, outward.HitPosition, Color.Green );
+				// Point ray outward from multiple points across the collision footprint so
+				// thin slivers the center point can fit into are caught by the outer samples.
+				var outward = BuildProbeTrace( startPoint, farPoint ).UseHitPosition().Run();
 
-			// if normal is axis aligned
-			var isaligned = inward.Normal.Dot( dir ) > 0.99f;
-
-			// start and end position are not slightly off due to precision issues
-			var isclose = inward.HitPosition.Distance( returnStart ) < 0.1f;
-
-			if ( inward.Hit && !inward.StartedSolid && !isclose )
-			{
-				//Log.Info( inward.HitPosition.Distance( startPoint ) );
-				if ( debug_playermovement_oob )
+				if ( !outward.Hit )
 				{
-					DebugOverlaySystem.Current.Line(returnStart, inward.HitPosition, Color.Red, 2 );
-					DebugOverlaySystem.Current.Sphere( new Sphere(inward.StartPosition, 4f), Color.Red, 2, overlay: true );
+					// Up: open sky is expected, skip.
+					if ( dir == Vector3.Up ) continue;
+					// Horizontal/down: open space, skip (sides being open is fine).
+					continue;
 				}
-				if ( ++oobCount >= BidirectionalTraceThreshold ) return true;
+
+				// Fire the return ray from just past the outward hit, back toward this sample.
+				// If it hits something before reaching us, there's a hull wall between the
+				// hit surface and this point in the player footprint.
+				var returnStart = outward.HitPosition + dir * -0.1f;
+				var inward = BuildProbeTrace( returnStart, startPoint ).IgnoreKeyframed().IgnoreDynamic().Run();
+
+				// Start and end position are not slightly off due to precision issues.
+				var isclose = inward.HitPosition.Distance( returnStart ) < 0.1f;
+
+				if ( inward.Hit && !inward.StartedSolid && !isclose )
+				{
+					if ( debug_playermovement_oob )
+					{
+						DebugOverlaySystem.Current.Line( returnStart, inward.HitPosition, Color.Red, 2 );
+						DebugOverlaySystem.Current.Sphere( new Sphere( inward.StartPosition, 4f ), Color.Red, 2, overlay: true );
+					}
+
+					directionIsOob = true;
+					break;
+				}
 			}
+
+			if ( directionIsOob && ++oobCount >= BidirectionalTraceThreshold )
+				return true;
 		}
 
 		return false;
