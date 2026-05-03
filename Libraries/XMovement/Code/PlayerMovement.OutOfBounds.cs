@@ -24,6 +24,13 @@ public partial class PlayerMovement : Component
 
 	[Property, Feature( "Out of Bounds" )] public OutOfBoundsDetectionMode DetectionMode { get; set; } = OutOfBoundsDetectionMode.DownwardsTrace;
 
+	/// <summary>
+	/// Detection mode used when validating candidate positions during the unstuck process.
+	/// Defaults to BidirectionalTrace for more thorough checking so the player
+	/// cannot be unstuck to a position outside the world.
+	/// </summary>
+	[Property, Feature( "Out of Bounds" )] public OutOfBoundsDetectionMode UnstickOutOfBoundsMode { get; set; } = OutOfBoundsDetectionMode.BidirectionalTrace;
+
 	[ConVar] public static bool debug_playermovement_oob { get; set; } = false;
 	[ConVar] public static bool debug_playermovement_oob_timing { get; set; } = false;
 
@@ -110,9 +117,11 @@ public partial class PlayerMovement : Component
 		return isOutOfBounds;
 	}
 
-	private bool CheckOutOfBoundsAt( Vector3 position )
+	private bool CheckOutOfBoundsAt( Vector3 position ) => CheckOutOfBoundsAt( position, DetectionMode );
+
+	private bool CheckOutOfBoundsAt( Vector3 position, OutOfBoundsDetectionMode mode )
 	{
-		return DetectionMode switch
+		return mode switch
 		{
 			OutOfBoundsDetectionMode.DownwardsTrace => DownwardsTraceOutOfBoundsCheck( position ),
 			OutOfBoundsDetectionMode.AllDirectionsTrace => AllDirectionsOutOfBoundsCheck( position ),
@@ -122,6 +131,28 @@ public partial class PlayerMovement : Component
 			OutOfBoundsDetectionMode.Custom => CustomOutOfBoundsCheck?.Invoke() ?? false,
 			_ => false
 		};
+	}
+
+	/// <summary>
+	/// Like <see cref="IsOutOfBounds(Vector3)"/> but uses <see cref="UnstickOutOfBoundsMode"/>
+	/// instead of <see cref="DetectionMode"/>. Used by the unstuck system to prevent
+	/// teleporting the player to a position that is outside the world.
+	/// </summary>
+	public bool IsOutOfBoundsForUnstick( Vector3 position )
+	{
+		if ( !OutOfBoundsDetectionEnabled ) return false;
+
+		if ( CheckOutOfBoundsAt( position, UnstickOutOfBoundsMode ) ) return true;
+
+		// Also probe the head position for non-downwards modes so a player fitting
+		// in a floor-level sliver above a hull wall is still blocked.
+		if ( UnstickOutOfBoundsMode != OutOfBoundsDetectionMode.DownwardsTrace )
+		{
+			var headPos = position + Vector3.Up * (Height * WorldScale.z * 0.9f);
+			if ( CheckOutOfBoundsAt( headPos, UnstickOutOfBoundsMode ) ) return true;
+		}
+
+		return false;
 	}
 
 	private bool DownwardsTraceOutOfBoundsCheck( Vector3 position )

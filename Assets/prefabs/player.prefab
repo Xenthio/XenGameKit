@@ -152,7 +152,7 @@
         "BidirectionalTraceThreshold": 2,
         "Bounciness": 0,
         "CustomOutOfBoundsCheck": null,
-        "DetectionMode": "BidirectionalTrace",
+        "DetectionMode": "DownwardsTrace",
         "DoClassicPlatforms": true,
         "Gravity": "0,0,800",
         "GroundAngle": 46,
@@ -212,6 +212,7 @@
         "Radius": 16,
         "StepHeight": 18,
         "StopSpeed": 10,
+        "UnstickOutOfBoundsMode": "BidirectionalTrace",
         "UseCollisionRules": false,
         "Velocity": "0,0,-52112"
       },

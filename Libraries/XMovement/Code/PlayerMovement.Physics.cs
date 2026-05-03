@@ -496,7 +496,7 @@ public partial class PlayerMovement : Component
 			}*/
 			result = BuildTrace( pos, pos ).Run();
 
-			if ( !result.StartedSolid && !IsOutOfBounds( pos ) )
+			if ( !result.StartedSolid && !IsOutOfBoundsForUnstick( pos ) )
 			{
 				//Log.Info( $"unstuck after {_stuckTries} tries ({_stuckTries * AttemptsPerTick} tests)" );
 				if (!wasOutOfBounds) Velocity += normal / Time.Delta;
