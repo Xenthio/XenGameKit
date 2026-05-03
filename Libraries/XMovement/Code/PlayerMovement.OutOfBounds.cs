@@ -164,7 +164,7 @@ public partial class PlayerMovement : Component
 		foreach ( var normalizedSampleOffset in GetFootprintSampleOffsets( AccurateDownwardsTraceSampling ) )
 		{
 			var sampleOffset = normalizedSampleOffset * sampleRadius;
-			var samplePosition = position + new Vector3( sampleOffset.x, sampleOffset.y, 0.0f );
+			var samplePosition = position + new Vector3( sampleOffset.x, sampleOffset.y, 2f );
 			var tr = BuildProbeTrace( samplePosition, samplePosition + Vector3.Down * OutOfBoundsTraceDistance ).Run();
 			if ( !tr.Hit )
 				return true;
