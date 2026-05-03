@@ -1719,7 +1719,7 @@
                       "Scale": 0.1,
                       "TextAlignment": "Center",
                       "TextScope": {
-                        "Text": "Up Down \u002B Spin",
+                        "Text": "Up Down + Spin",
                         "TextColor": "1,1,1,1",
                         "FontName": "Poppins",
                         "FontSize": 128,
@@ -2008,7 +2008,7 @@
                       "Scale": 0.1,
                       "TextAlignment": "Center",
                       "TextScope": {
-                        "Text": "Front Back \u002B Spin",
+                        "Text": "Front Back + Spin",
                         "TextColor": "1,1,1,1",
                         "FontName": "Poppins",
                         "FontSize": 128,
