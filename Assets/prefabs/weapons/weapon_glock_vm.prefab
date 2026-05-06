@@ -45,7 +45,16 @@
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null,
-        "ReloadSoundEvents": [],
+        "ReloadSoundEvents": [
+          {
+            "Time": 0.0,
+            "Sound": "sounds/weapons/glock/pistol_mag_out.sound"
+          },
+          {
+            "Time": 0.8,
+            "Sound": "sounds/weapons/glock/pistol_mag_in.sound"
+          }
+        ],
         "Renderer": {
           "_type": "component",
           "component_id": "a3000001-0000-0000-0000-000000000003",
@@ -54,7 +63,16 @@
         },
         "ThrowableType": "HEGrenade",
         "TracerEffect": null,
-        "UseFastAnimations": false
+        "UseFastAnimations": false,
+        "MagazineTransform": {
+          "_type": "gameobject",
+          "go": "813ef9d0-50d4-4864-b520-2e66e8d09ee2"
+        },
+        "MagazineDropPrefab": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/magazine_pistol.prefab"
+        },
+        "MagazineDropTime": 0.2
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
@@ -186,6 +204,19 @@
         "NetworkOrphaned": 0,
         "NetworkTransmit": true,
         "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "813ef9d0-50d4-4864-b520-2e66e8d09ee2",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "magazine",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
         "Components": [],
         "Children": []
       }

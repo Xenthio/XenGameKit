@@ -10,25 +10,53 @@
     "Tags": "item",
     "Enabled": true,
     "NetworkMode": 1,
-    "NetworkInterpolation": true,
+    "NetworkFlags": 0,
     "NetworkOrphaned": 1,
+    "NetworkTransmit": true,
     "OwnerTransfer": 1,
     "Components": [
       {
         "__type": "ItemAmmo",
         "__guid": "55c34504-f38d-49cb-9d92-85b0d829a6e0",
         "__enabled": true,
+        "Flags": 0,
         "AmmoType": "resource/ammotypes/smg.ammo",
         "Amount": 45,
-        "PickupSound": "sounds/weapons/ammo_pickup.sound"
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "PickupSound": "sounds/weapons/ammo_pickup.sound",
+        "Respawns": false,
+        "RespawnTime": 30
       },
       {
         "__type": "Sandbox.BoxCollider",
         "__guid": "3acb658c-95ef-4a2f-b4bf-2cd5885b05ce",
         "__enabled": true,
-        "IsTrigger": true,
+        "Flags": 0,
         "Center": "0,0,16",
-        "Scale": "32,32,32"
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "32,32,32",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
       }
     ],
     "Children": [
@@ -43,26 +71,71 @@
         "Tags": "",
         "Enabled": true,
         "NetworkMode": 2,
-        "NetworkInterpolation": true,
+        "NetworkFlags": 0,
         "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [
           {
             "__type": "Sandbox.ModelRenderer",
             "__guid": "066cde83-221f-4ccc-8d1f-669f6c005863",
             "__enabled": true,
-            "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+            "Flags": 0,
             "BodyGroups": 1,
-            "RenderType": "On"
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
           }
         ],
         "Children": []
       }
-    ]
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
   },
+  "ResourceVersion": 2,
   "ShowInMenu": true,
   "MenuPath": "XenGameKit/Items/Ammo/item_ammo_smg1",
+  "MenuIcon": null,
   "DontBreakAsTemplate": true,
-  "ResourceVersion": 2,
+  "__references": [
+    "facepunch.ammobox9mm#142897"
+  ],
   "__version": 2
 }

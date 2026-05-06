@@ -54,7 +54,7 @@
         "RollingResistance": null,
         "Start": "1,0,0",
         "Static": false,
-        "Surface": "weapons/common/effects/ejected_9mm.surface",
+        "Surface": "prefabs/effects/ejected_9mm.surface",
         "SurfaceVelocity": "0,0,0"
       },
       {
