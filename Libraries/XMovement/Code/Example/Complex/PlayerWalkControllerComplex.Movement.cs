@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 namespace XMovement;
 
 public partial class PlayerWalkControllerComplex : Component
@@ -110,12 +111,18 @@ public partial class PlayerWalkControllerComplex : Component
 	}
 
 	/// <summary>
+	/// Fired (broadcast to all clients) when this player jumps.
+	/// </summary>
+	public event Action OnJumped;
+
+	/// <summary>
 	/// A network message that lets other users that we've triggered a jump.
 	/// </summary>
 	[Rpc.Broadcast]
 	public void BroadcastPlayerJumped()
 	{
 		AnimationHelper?.TriggerJump();
+		OnJumped?.Invoke();
 	}
 
 	private void BuildFrameInput()

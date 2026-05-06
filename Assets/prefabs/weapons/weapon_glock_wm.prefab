@@ -1,0 +1,73 @@
+{
+  "RootObject": {
+    "__guid": "a2000001-0000-0000-0000-000000000001",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weapon_glock_wm",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "Components": [
+      {
+        "__type": "WorldModel",
+        "__guid": "a2000001-0000-0000-0000-000000000002",
+        "__enabled": true,
+        "Renderer": {
+          "_type": "component",
+          "component_id": "a2000001-0000-0000-0000-000000000003",
+          "go": "a2000001-0000-0000-0000-000000000001",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "EjectBrass": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/eject_9mm.prefab"
+        },
+        "EjectTransform": {
+          "_type": "gameobject",
+          "go": "a2000001-0000-0000-0000-000000000011"
+        }
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "a2000001-0000-0000-0000-000000000003",
+        "__enabled": true,
+        "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
+        "CreateAttachments": true,
+        "PlaybackRate": 1,
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "a2000001-0000-0000-0000-000000000010",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "muzzle",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Enabled": true,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "a2000001-0000-0000-0000-000000000011",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "eject",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Enabled": true,
+        "Components": [],
+        "Children": []
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "ResourceVersion": 2,
+  "__version": 2
+}

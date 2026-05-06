@@ -5,7 +5,7 @@ namespace XMovement;
 public partial class PlayerWalkControllerComplex : Component
 {
 	[Property, FeatureEnabled( "VR" )] public bool EnableVR { get; set; } = false;
-	[RequireComponent] public VRAnchor Anchor { get; set; }
+	[Property, Feature( "VR" )] public VRAnchor Anchor { get; set; }
 	[Property] public VRTrackedObject HeadTracker { get; set; }
 	[Sync] public bool IsInVR { get; set; } = false;
 

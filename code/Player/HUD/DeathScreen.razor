@@ -1,0 +1,15 @@
+@using Sandbox;
+@using Sandbox.UI;
+
+@if ( PlayerDeathEffect.IsDeathScreenActive )
+{
+	<root class="death-screen">
+		<div class="vignette"></div>
+		<label class="you-died">YOU DIED</label>
+	</root>
+}
+
+@code
+{
+	protected override int BuildHash() => System.HashCode.Combine( PlayerDeathEffect.IsDeathScreenActive );
+}

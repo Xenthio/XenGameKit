@@ -1,0 +1,38 @@
+.death-screen {
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	pointer-events: none;
+	mix-blend-mode: saturation; /* desaturates everything below */
+	animation: death-fade-in 0.8s ease-out forwards;
+
+	.vignette {
+		position: absolute;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		background: radial-gradient(ellipse at center, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+	}
+
+	.you-died {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+		top: 45%;
+		font-size: 48px;
+		font-weight: bold;
+		color: rgba(200, 30, 30, 0.9);
+		text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+		opacity: 0;
+		animation: label-fade-in 0.5s ease-out 0.4s forwards;
+	}
+}
+
+@keyframes death-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+@keyframes label-fade-in {
+	from { opacity: 0; transform: translateY(10px); }
+	to   { opacity: 1; transform: translateY(0); }
+}

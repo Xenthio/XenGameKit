@@ -2,14 +2,43 @@ Vitals {
 	position: absolute;
 	left: 0px;
 	bottom: 0px;
+	flex-direction: row;
+	gap: 8px;
+	padding: 16px;
 
 	.Health {
 		padding: 12px 24px;
-		border-radius: 8px;
 
-		.iconpanel {
-			font-size: 32px;
+		iconpanel {
+			font-size: 28px;
 			margin-right: 8px;
+			color: #e05;
+		}
+
+		label {
+			font-size: 28px;
+			font-weight: bold;
+		}
+	}
+
+	.Ammo {
+		padding: 12px 24px;
+		align-items: baseline;
+
+		.clip {
+			font-size: 32px;
+			font-weight: bold;
+		}
+
+		.divider {
+			font-size: 20px;
+			color: #aaa;
+			margin: 0 4px;
+		}
+
+		.reserve {
+			font-size: 20px;
+			color: #aaa;
 		}
 	}
 }

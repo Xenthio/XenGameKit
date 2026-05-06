@@ -1,0 +1,68 @@
+{
+  "RootObject": {
+    "__guid": "2eeb09dd-fbe0-4270-a58b-b45ddba9b054",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "item_ammo_pistol",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "item",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 1,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "ItemAmmo",
+        "__guid": "5c25e8de-8946-40f6-b00b-d9ee11eb93b8",
+        "__enabled": true,
+        "AmmoType": "resource/ammotypes/9mm.ammo",
+        "Amount": 17,
+        "PickupSound": "sounds/weapons/ammo_pickup.sound"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "8c5d33ee-d91a-414c-8a4a-ff98da1a28b2",
+        "__enabled": true,
+        "IsTrigger": true,
+        "Center": "0,0,16",
+        "Scale": "32,32,32"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "a78b53fa-b3ac-48e8-9fa6-25093c0d6a68",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "ammobox_9mm",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "b1a52602-092c-444d-8aac-ac4d0a8a83af",
+            "__enabled": true,
+            "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+            "BodyGroups": 1,
+            "RenderType": "On"
+          }
+        ],
+        "Children": []
+      }
+    ]
+  },
+  "ShowInMenu": true,
+  "MenuPath": "XenGameKit/Items/Ammo/item_ammo_pistol",
+  "DontBreakAsTemplate": true,
+  "ResourceVersion": 2,
+  "__version": 2
+}

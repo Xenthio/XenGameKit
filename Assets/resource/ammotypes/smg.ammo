@@ -1,0 +1,8 @@
+{
+  "Title": "SMG Ammo",
+  "Icon": null,
+  "MaxReserve": 225,
+  "DefaultStartingAmmo": 45,
+  "__references": [],
+  "__version": 0
+}

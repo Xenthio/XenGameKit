@@ -25,31 +25,21 @@
           "go": "657d0338-98b9-4460-b74f-4fc58b823095"
         },
         "Health": 100,
+        "MaxArmour": 100,
         "MaxHealth": 100,
-        "Movement": {
-          "_type": "component",
-          "component_id": "14f16545-0f5a-4dd2-8241-2666c86c8f78",
-          "go": "df0069e0-452d-42e0-af9a-a56c27398cce",
-          "component_type": "PlayerMovement"
-        },
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
-        "OnComponentUpdate": null,
-        "WalkController": {
-          "_type": "component",
-          "component_id": "19ac7684-4641-48ee-b617-8e266cf12238",
-          "go": "df0069e0-452d-42e0-af9a-a56c27398cce",
-          "component_type": "PlayerWalkControllerComplex"
-        }
+        "OnComponentUpdate": null
       },
       {
         "__type": "PlayerInventory",
         "__guid": "00d42939-9375-4e07-9428-48756dee3cb0",
         "__enabled": true,
         "Flags": 0,
+        "MaxSlots": 6,
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,
@@ -63,6 +53,7 @@
         "__enabled": true,
         "Flags": 0,
         "AllowPogosticking": true,
+        "Anchor": null,
         "ApplyUserPreferences": true,
         "Body": {
           "_type": "gameobject",
@@ -87,7 +78,7 @@
         "EnableNoclipping": true,
         "EnableRunning": true,
         "EnableSwimming": true,
-        "EnableUse": false,
+        "EnableUse": true,
         "EnableVR": true,
         "EnableWalking": false,
         "FirstPersonOffset": "0,0,0",
@@ -96,12 +87,7 @@
           "go": "cd9eaf58-5e7d-4395-a6ee-cde7c784c426"
         },
         "HeadHeight": 64,
-        "HeadTracker": {
-          "_type": "component",
-          "component_id": "52ce627f-fe62-410b-8909-c7c9661ee99c",
-          "go": "cd9eaf58-5e7d-4395-a6ee-cde7c784c426",
-          "component_type": "VRTrackedObject"
-        },
+        "HeadTracker": null,
         "Height": 72,
         "JumpAction": "Jump",
         "JumpPower": 268.32816,
@@ -246,8 +232,23 @@
         }
       },
       {
-        "__type": "Sandbox.VR.VRAnchor",
-        "__guid": "c7795a5f-3e61-4879-b4b3-502ce740cad0",
+        "__type": "PlayerFallDamage",
+        "__guid": "a186edc1-be9f-43e2-8b22-41868ef60d87",
+        "__enabled": true,
+        "Flags": 0,
+        "DamageMultiplier": 1,
+        "MaxFallSpeed": 1024,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "SafeFallSpeed": 580
+      },
+      {
+        "__type": "PlayerCameraEvents",
+        "__guid": "e2aca38d-5169-4a24-830a-c033f98bcd5a",
         "__enabled": true,
         "Flags": 0,
         "OnComponentDestroy": null,
@@ -256,6 +257,31 @@
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null
+      },
+      {
+        "__type": "PlayerUse",
+        "__guid": "c8fbc6b5-c4f3-4a56-b68c-5e1ef5f56e00",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "PlayerDeathEffect",
+        "__guid": "2fb7192b-125d-4008-9109-ab0197a4c671",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RespawnDelay": 5
       }
     ],
     "Children": [
@@ -284,7 +310,7 @@
             "BodyGroups": 341,
             "BoneMergeTarget": null,
             "CreateAttachments": false,
-            "CreateBoneObjects": false,
+            "CreateBoneObjects": true,
             "LodOverride": null,
             "MaterialGroup": null,
             "MaterialOverride": null,
@@ -311,7 +337,7 @@
               "BloomLayer": false,
               "AfterUILayer": false
             },
-            "RenderType": "On",
+            "RenderType": "ShadowsOnly",
             "Sequence": {
               "Name": null,
               "Looping": true,
@@ -338,24 +364,7 @@
         "NetworkOrphaned": 0,
         "NetworkTransmit": true,
         "OwnerTransfer": 1,
-        "Components": [
-          {
-            "__type": "Sandbox.VR.VRTrackedObject",
-            "__guid": "52ce627f-fe62-410b-8909-c7c9661ee99c",
-            "__enabled": true,
-            "Flags": 0,
-            "OnComponentDestroy": null,
-            "OnComponentDisabled": null,
-            "OnComponentEnabled": null,
-            "OnComponentFixedUpdate": null,
-            "OnComponentStart": null,
-            "OnComponentUpdate": null,
-            "PoseSource": "Head",
-            "PoseType": "Grip",
-            "TrackingType": "All",
-            "UseRelativeTransform": false
-          }
-        ],
+        "Components": [],
         "Children": []
       },
       {

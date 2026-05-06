@@ -4,14 +4,37 @@
 
 <root class="padding-medium">
 	<div class="Health Widget">
-		<iconpanel>local_hospital</iconpanel>
-		<label>
-			@Player.FindLocalPlayer().Health
-		</label>
+		<iconpanel>favorite</iconpanel>
+		<label>@Health</label>
 	</div>
+
+	@if ( ActiveWeapon is BaseWeapon weapon )
+	{
+		<div class="Ammo Widget">
+			@if ( weapon.UsesClips )
+			{
+				<label class="clip">@weapon.ClipContents</label>
+				<label class="divider"> / </label>
+				<label class="reserve">@weapon.ReserveAmmo</label>
+			}
+			else if ( weapon.UsesAmmo )
+			{
+				<label class="clip">@weapon.ReserveAmmo</label>
+			}
+		</div>
+	}
 </root>
 
 @code
 {
-	protected override int BuildHash() => System.HashCode.Combine(Player.FindLocalPlayer().Health);
+	Player LocalPlayer => Player.FindLocalPlayer();
+	float Health => LocalPlayer?.Health ?? 0;
+	BaseCarryable ActiveWeapon => LocalPlayer?.GetComponent<PlayerInventory>()?.ActiveWeapon;
+
+	protected override int BuildHash() => System.HashCode.Combine(
+		Health,
+		ActiveWeapon,
+		(ActiveWeapon as BaseWeapon)?.ClipContents,
+		(ActiveWeapon as BaseWeapon)?.ReserveAmmo
+	);
 }

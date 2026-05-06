@@ -1,0 +1,225 @@
+{
+  "RootObject": {
+    "__guid": "a3000001-0000-0000-0000-000000000001",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weapon_glock_vm",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "ViewModel",
+        "__guid": "a3000001-0000-0000-0000-000000000002",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationSpeed": 1,
+        "DeploySound": null,
+        "EjectBrass": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/eject_9mm.prefab"
+        },
+        "EjectTransform": {
+          "_type": "gameobject",
+          "go": "a3000001-0000-0000-0000-000000000011"
+        },
+        "IncrementalAnimationSpeed": 3,
+        "IncrementalReloadFinishSounds": [],
+        "IncrementalReloadSoundEvents": [],
+        "IncrementalReloadStartSounds": [],
+        "InertiaScale": "2,2",
+        "IsIncremental": false,
+        "IsThrowable": false,
+        "MuzzleEffect": null,
+        "MuzzleTransform": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "ReloadSoundEvents": [],
+        "Renderer": {
+          "_type": "component",
+          "component_id": "a3000001-0000-0000-0000-000000000003",
+          "go": "a3000001-0000-0000-0000-000000000001",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "ThrowableType": "HEGrenade",
+        "TracerEffect": null,
+        "UseFastAnimations": false
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "a3000001-0000-0000-0000-000000000003",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 18446744073709551615,
+        "BoneMergeTarget": null,
+        "CreateAttachments": true,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/weapons/sbox_pistol_usp/v_usp.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": false,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "5eef9819-2b50-4cfc-bc02-ceb4969badbe",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 29,
+        "BoneMergeTarget": {
+          "_type": "component",
+          "component_id": "a3000001-0000-0000-0000-000000000003",
+          "go": "a3000001-0000-0000-0000-000000000001",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "CreateAttachments": false,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/first_person/v_first_person_arms_human.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": false,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "a3000001-0000-0000-0000-000000000010",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "muzzle",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "a3000001-0000-0000-0000-000000000011",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "eject",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.v_first_person_arms_human#205798",
+    "facepunch.v_usp#205818"
+  ],
+  "__version": 2
+}

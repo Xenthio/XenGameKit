@@ -311,6 +311,14 @@ public partial class PlayerMovement : Component
 	}
 
 	/// <summary>
+	/// <summary>
+	/// Fired when the player lands on the ground after being airborne.
+	/// Parameters: fall distance, impact velocity.
+	/// </summary>
+	public event Action<float, Vector3> OnLanded;
+
+	private Vector3 _preLandVelocity;
+
 	/// We're no longer on the ground, remove it
 	/// </summary>
 	public virtual void ClearGround()
@@ -322,6 +330,7 @@ public partial class PlayerMovement : Component
 			PhysicsBodyRigidbody.Velocity = Vector3.Zero;
 		}
 
+		_preLandVelocity = Velocity;
 		PreviousGroundObject = GroundObject;
 		IsOnGround = false;
 		GroundObject = default;
@@ -335,6 +344,7 @@ public partial class PlayerMovement : Component
 	/// </summary>
 	public virtual void ChangeGround( SceneTraceResult pm )
 	{
+		bool wasOnGround = IsOnGround;
 		PreviousGroundObject = GroundObject;
 		IsOnGround = pm.Hit;
 		GroundObject = pm.GameObject;
@@ -346,6 +356,13 @@ public partial class PlayerMovement : Component
 		if ( pm.Hit )
 		{
 			CatergorizeGroundSurface( pm );
+
+			// Just landed
+			if ( !wasOnGround )
+			{
+				var fallDistance = -_preLandVelocity.z;
+				OnLanded?.Invoke( fallDistance, _preLandVelocity );
+			}
 		}
 	}
 

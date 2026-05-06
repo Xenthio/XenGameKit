@@ -4,6 +4,124 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 	{
 	}
 
+	// -------------------------------------------------------------------------
+	// Console Commands
+	// -------------------------------------------------------------------------
+
+	/// <summary>
+	/// Spawn a prefab by name. Source/GMod style.
+	/// e.g. "ent_create weapon_glock" or "ent_create entities/npc_zombie"
+	/// </summary>
+	[ConCmd( "ent_create", ConVarFlags.Server | ConVarFlags.Cheat )]
+	public static void EntCreate( Connection source, string name )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		var transform = player.IsValid()
+			? new Transform( player.EyeTransform.Position + player.EyeTransform.Forward * 64f, player.EyeTransform.Rotation )
+			: Transform.Zero;
+		DoEntCreate( name, transform );
+	}
+
+	/// <summary>
+	/// Give a weapon or spawn an entity directly into your inventory.
+	/// </summary>
+	[ConCmd( "give", ConVarFlags.Server | ConVarFlags.Cheat )]
+	public static void Give( Connection source, string name )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		if ( !player.IsValid() ) return;
+		GiveToPlayer( player, name );
+	}
+
+	static void GiveToPlayer( Player player, string name )
+	{
+		var prefab = ResolvePrefab( name );
+		if ( prefab is null ) { Log.Warning( $"give: could not find prefab '{name}'" ); return; }
+
+		var carryable = prefab.Components.Get<BaseCarryable>( true );
+		if ( carryable.IsValid() )
+		{
+			player.GetComponent<PlayerInventory>()?.Pickup( prefab );
+			return;
+		}
+
+		// Not a weapon — spawn at player's feet
+		DoEntCreate( name, player.WorldTransform );
+	}
+
+	/// <summary>
+	/// Toggle noclip for the calling player.
+	/// </summary>
+	[ConCmd( "noclip", ConVarFlags.Server | ConVarFlags.Cheat )]
+	public static void Noclip( Connection source )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		if ( player.IsValid() )
+			player.WalkController.IsNoclipping = !player.WalkController.IsNoclipping;
+	}
+
+	/// <summary>
+	/// Kill yourself. Classic.
+	/// </summary>
+	[ConCmd( "kill", ConVarFlags.Server )]
+	public static void KillSelf( Connection source )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		player?.OnDamage( new DamageInfo( float.MaxValue, (GameObject)null ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// Prefab resolution
+	// -------------------------------------------------------------------------
+
+	static void DoEntCreate( string name, Transform spawnTransform )
+	{
+		var prefab = ResolvePrefab( name );
+		if ( prefab is null )
+		{
+			Log.Warning( $"ent_create: could not find prefab '{name}'" );
+			return;
+		}
+
+		var go = prefab.Clone( new CloneConfig { Transform = spawnTransform } );
+		go.NetworkSpawn();
+	}
+
+	/// <summary>
+	/// Resolves a prefab by short name or full path.
+	/// Checks in order:
+	///   prefabs/weapons/weapon_{name}.prefab
+	///   prefabs/weapons/{name}.prefab
+	///   prefabs/entities/{name}.prefab
+	///   prefabs/{name}.prefab
+	///   {name}.prefab
+	///   {name}  (full path as-is)
+	/// </summary>
+	public static GameObject ResolvePrefab( string name )
+	{
+		var candidates = new[]
+		{
+			$"prefabs/weapons/weapon_{name}.prefab",
+			$"prefabs/weapons/{name}.prefab",
+			$"prefabs/entities/{name}.prefab",
+			$"prefabs/{name}.prefab",
+			$"{name}.prefab",
+			name,
+		};
+
+		foreach ( var path in candidates )
+		{
+			var prefab = GameObject.GetPrefab( path );
+			if ( prefab is not null ) return prefab;
+		}
+
+		return null;
+	}
+
+	// -------------------------------------------------------------------------
+	// Scene / Network lifecycle
+	// -------------------------------------------------------------------------
+
 	void ISceneStartup.OnHostInitialize()
 	{
 		if ( !Scene.WantsSystemScene ) return;
@@ -11,7 +129,6 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		Scene.NavMesh.AgentRadius = 20;
 		Scene.NavMesh.AgentHeight = 72;
 		Scene.NavMesh.IsEnabled = true;
-
 	}
 
 	void Component.INetworkListener.OnActive( Connection channel )
@@ -22,16 +139,11 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		SpawnPlayer( playerData );
 	}
 
-	/// <summary>
-	/// Called when someone leaves the server. This will only be called for the host.
-	/// </summary>
 	void Component.INetworkListener.OnDisconnected( Connection channel )
 	{
 		var pd = PlayerData.For( channel );
 		if ( pd is not null )
-		{
 			pd.GameObject.Destroy();
-		}
 	}
 
 	private PlayerData CreatePlayerInfo( Connection channel )
@@ -55,17 +167,17 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		Assert.NotNull( playerData, "PlayerData is null" );
 		Assert.True( Networking.IsHost, $"Client tried to SpawnPlayer: {playerData.DisplayName}" );
 
-		// does this connection already have a player?
 		if ( Scene.GetAll<Player>().Where( x => x.Network.Owner?.Id == playerData.PlayerId ).Any() )
 			return;
 
-		// Find a spawn location for this player
 		var startLocation = FindSpawnLocation().WithScale( 1 );
 
-		// Spawn this object and make the client the owner
-		var playerGo = GameObject.Clone( "/prefabs/player.prefab", new CloneConfig { Name = playerData.DisplayName, StartEnabled = false, Transform = startLocation } );
-
-		Log.Info( playerGo );
+		var playerGo = GameObject.Clone( "/prefabs/player.prefab", new CloneConfig
+		{
+			Name = playerData.DisplayName,
+			StartEnabled = false,
+			Transform = startLocation
+		} );
 
 		var player = playerGo.Components.Get<Player>( true );
 		player.PlayerData = playerData;
@@ -73,7 +185,7 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		var owner = Connection.Find( playerData.PlayerId );
 		playerGo.NetworkSpawn( owner );
 
-		IPlayerEvent.PostToGameObject( player.GameObject, x => x.OnSpawned() );
+		Local.IPlayerEvents.PostToGameObject( player.GameObject, x => x.OnSpawned() );
 	}
 
 	public void SpawnPlayerDelayed( PlayerData playerData )
@@ -82,33 +194,20 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		{
 			await Task.Delay( 4000 );
 			await GameTask.MainThread();
-			if ( Current is not null )
-				Current.SpawnPlayer( playerData );
+			Current?.SpawnPlayer( playerData );
 		} );
 	}
 
-	/// <summary>
-	/// In the editor, spawn the player where they're looking
-	/// </summary>
 	public static Transform EditorSpawnLocation { get; set; }
 
-	/// <summary>
-	/// Find the most appropriate place to respawn
-	/// </summary>
 	Transform FindSpawnLocation()
 	{
-
-		//
-		// If we have any SpawnPoint components in the scene, then use those
-		//
 		var spawnPoints = Scene.GetAllComponents<SpawnPoint>().ToArray();
 
 		if ( spawnPoints.Length == 0 )
 		{
 			if ( Application.IsEditor && !EditorSpawnLocation.Position.IsNearlyZero() )
-			{
 				return EditorSpawnLocation;
-			}
 
 			return Transform.Zero;
 		}
@@ -116,55 +215,36 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		var players = Scene.GetAll<Player>();
 
 		if ( !players.Any() )
-		{
 			return Random.Shared.FromArray( spawnPoints ).Transform.World;
-		}
 
-		//
-		// Find spawnpoint furthest away from any players
-		// TODO: in the future we may want a different logic, as spawning far away is not necessarily good.
-		// But good enough for now and also reduces chances of players from spawning on top of  or inside each other.
-		//
-		SpawnPoint spawnPointFurthestAway = null;
-		float spawnPointFurthestAwayDistanceSqr = float.MinValue;
+		// Pick spawnpoint furthest from any player to avoid spawn-on-top
+		SpawnPoint best = null;
+		float bestDist = float.MinValue;
 
-		foreach ( var spawnPoint in spawnPoints )
+		foreach ( var sp in spawnPoints )
 		{
-			float closestPlayerDistanceToSpawnpointSqr = float.MaxValue;
-
-			foreach ( var player in players )
+			float closest = float.MaxValue;
+			foreach ( var p in players )
 			{
-				float playerDistanceToSpawnPointSqr = (spawnPoint.Transform.World.Position - player.Transform.World.Position).LengthSquared;
-
-				if ( playerDistanceToSpawnPointSqr < closestPlayerDistanceToSpawnpointSqr )
-				{
-					closestPlayerDistanceToSpawnpointSqr = playerDistanceToSpawnPointSqr;
-				}
+				float d = (sp.Transform.World.Position - p.Transform.World.Position).LengthSquared;
+				if ( d < closest ) closest = d;
 			}
-
-			if ( closestPlayerDistanceToSpawnpointSqr > spawnPointFurthestAwayDistanceSqr )
-			{
-				spawnPointFurthestAwayDistanceSqr = closestPlayerDistanceToSpawnpointSqr;
-				spawnPointFurthestAway = spawnPoint;
-			}
+			if ( closest > bestDist ) { bestDist = closest; best = sp; }
 		}
 
-		return spawnPointFurthestAway.Transform.World;
+		return best.Transform.World;
 	}
+
+	// -------------------------------------------------------------------------
+	// Death handling
+	// -------------------------------------------------------------------------
 
 	[Rpc.Broadcast]
-	private static void SendMessage( string msg )
-	{
-		Log.Info( msg );
-	}
+	private static void SendMessage( string msg ) => Log.Info( msg );
 
-	/// <summary>
-	/// Called on the host when a played is killed
-	/// </summary>
 	public void OnDeath( Player player, DamageInfo dmg )
 	{
 		Assert.True( Networking.IsHost );
-
 		Assert.True( player.IsValid(), "Player invalid" );
 		Assert.True( player.PlayerData.IsValid(), $"{player.GameObject.Name}'s PlayerData invalid" );
 
@@ -174,15 +254,10 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 
 		if ( attackerData.IsValid() && !isSuicide )
 		{
-			Assert.True( weapon.IsValid(), $"Weapon invalid. (Attacker: {attackerData.DisplayName}, Victim: {player.DisplayName})" );
-
 			attackerData.Kills++;
-			attackerData.AddStat( $"kills" );
-
+			attackerData.AddStat( "kills" );
 			if ( weapon.IsValid() )
-			{
 				attackerData.AddStat( $"kills.{weapon.Name}" );
-			}
 		}
 
 		player.PlayerData.Deaths++;

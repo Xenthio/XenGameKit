@@ -77,10 +77,11 @@ public partial class PlayerWalkControllerComplex : Component
 			.IgnoreGameObjectHierarchy( GameObject )
 			.Run();
 
-		IPressable pressable = default;
+		if ( !tr.GameObject.IsValid() ) return null;
 
-		if ( tr.GameObject.IsValid() )
-			tr.GameObject.Components.TryGet<Component.IPressable>( out pressable );
+		// Walk up the hierarchy - the pressable component may be on a parent
+		// (e.g. DroppedWeapon is on the weapon root, but the trace hits the mesh child)
+		var pressable = tr.GameObject.Components.Get<Component.IPressable>( FindMode.EverythingInSelfAndParent );
 
 		if ( pressable != null && pressable.CanPress( new IPressable.Event() { Ray = AimRay, Source = this } ) )
 			return pressable as Component;

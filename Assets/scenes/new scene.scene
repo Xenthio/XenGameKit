@@ -3286,6 +3286,46 @@
         }
       ],
       "Children": []
+    },
+    {
+      "__guid": "38c2f80c-252e-4485-b20b-b1deb6756b32",
+      "__version": 2,
+      "__Prefab": "prefabs/weapons/weapon_glock.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "a1000001-0000-0000-0000-000000000001"
+            },
+            "Property": "Position",
+            "Value": "64.0000381,-191.999939,1.01958415E-06"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "a1000001-0000-0000-0000-000000000001"
+            },
+            "Property": "Rotation",
+            "Value": "0,0,0,0.99999994"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "a1000001-0000-0000-0000-000000000001": "38c2f80c-252e-4485-b20b-b1deb6756b32",
+        "a1000001-0000-0000-0000-000000000002": "8f263c23-f4d2-4bbe-911b-0b31d9186b2e",
+        "a1000001-0000-0000-0000-000000000003": "078eeb19-36d1-4f57-b032-28ee32f97fa5",
+        "a1000001-0000-0000-0000-000000000004": "aaaab72f-40d8-4066-9bfa-f03164858c10",
+        "a1000001-0000-0000-0000-000000000005": "b9c12b1c-d45f-45ff-9a56-3f04b6fd2b89",
+        "a1000001-0000-0000-0000-000000000010": "c5cf9662-e986-4db5-a15e-a08e50c2abf3",
+        "a1000001-0000-0000-0000-000000000011": "90a6c40e-e6ce-4322-bf90-f37267b0946a",
+        "a1000001-0000-0000-0000-000000000012": "2641c576-4a24-479f-ad67-e1fa8ff5b129",
+        "a1000001-0000-0000-0000-000000000013": "b425c7bb-b9f6-4d6f-9a5c-c8f0526aeff8",
+        "a1000001-0000-0000-0000-000000000014": "a7a3ee5c-0978-4ddb-a79f-ee5dc82ee113"
+      }
     }
   ],
   "SceneProperties": {
@@ -3311,14 +3351,14 @@
       "Sandbox.MovieMaker.MovieRecorderSystem": {
         "DisableClientRecording": false
       },
-      "Sandbox.SelectionSetsSystem": {
-        "Data": {
-          "SelectionSets": []
-        }
-      },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "2fb63415-c32c-47da-9548-000dc9e0162e"
+        }
+      },
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
         }
       }
     }

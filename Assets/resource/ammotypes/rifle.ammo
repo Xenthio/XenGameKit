@@ -1,0 +1,8 @@
+{
+  "Title": "Rifle Ammo",
+  "Icon": null,
+  "MaxReserve": 90,
+  "DefaultStartingAmmo": 30,
+  "__references": [],
+  "__version": 0
+}
