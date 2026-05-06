@@ -24,5 +24,8 @@ code/Properties/*
 
 *idea
 
+# AI agent docs
+.agent/
+
 # Exported / standalone games
 Exports/
