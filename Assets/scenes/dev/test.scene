@@ -874,7 +874,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "prop_crate_0",
-      "Position": "200,0,16",
+      "Position": "200,0,0",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
@@ -886,8 +886,29 @@
       "OwnerTransfer": 1,
       "Components": [
         {
+          "__type": "Sandbox.Prop",
+          "__guid": "945a15e4-a141-40c6-aa37-7a4625b53835",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "Health": 50,
+          "IsStatic": false,
+          "MaterialGroup": null,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnPropBreak": null,
+          "OnPropTakeDamage": null,
+          "StartAsleep": false,
+          "Tint": "1,1,1,1"
+        },
+        {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "c561d789-a1d8-4093-b0fe-9260ef071f43",
+          "__guid": "3c80fdfb-97e5-4e7f-8bd4-c869ead7bb7b",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -896,7 +917,7 @@
           "MaterialGroup": null,
           "MaterialOverride": null,
           "Materials": null,
-          "Model": "models/sbox_props/crate_a/crate_a.vmdl",
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -913,15 +934,15 @@
           "Tint": "1,1,1,1"
         },
         {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "3fb4e5d3-67e0-4f64-b2eb-bda323c90b5f",
+          "__type": "Sandbox.ModelCollider",
+          "__guid": "6b16ff7f-f4c3-4514-ba44-3f434d790c60",
           "__enabled": true,
           "Flags": 0,
-          "Center": "0,0,0",
           "ColliderFlags": 0,
           "Elasticity": null,
           "Friction": null,
           "IsTrigger": false,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -933,14 +954,13 @@
           "OnTriggerEnter": null,
           "OnTriggerExit": null,
           "RollingResistance": null,
-          "Scale": "50,50,50",
           "Static": false,
           "Surface": null,
           "SurfaceVelocity": "0,0,0"
         },
         {
           "__type": "Sandbox.Rigidbody",
-          "__guid": "2ae17594-2000-482a-ae98-69bd950dc887",
+          "__guid": "93d9d417-ce60-4fe4-a62c-5c008bce97a3",
           "__enabled": true,
           "Flags": 0,
           "AngularDamping": 0,
@@ -948,7 +968,7 @@
           "EnhancedCcd": false,
           "Gravity": true,
           "GravityScale": 1,
-          "ImpactDamage": 0,
+          "ImpactDamage": 25,
           "LinearDamping": 0,
           "Locking": {
             "X": false,
@@ -959,8 +979,8 @@
             "Roll": false
           },
           "MassCenterOverride": "0,0,0",
-          "MassOverride": 0,
-          "MinImpactDamageSpeed": 500,
+          "MassOverride": 7,
+          "MinImpactDamageSpeed": 1100,
           "MotionEnabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -980,7 +1000,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "prop_crate_1",
-      "Position": "200,0,48",
+      "Position": "200,17.0680809,35.2835846",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
@@ -992,8 +1012,29 @@
       "OwnerTransfer": 1,
       "Components": [
         {
-          "__type": "Sandbox.ModelRenderer",
+          "__type": "Sandbox.Prop",
           "__guid": "50450045-ac3a-42e4-8f08-9c2a8546ff44",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "Health": 50,
+          "IsStatic": false,
+          "MaterialGroup": null,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnPropBreak": null,
+          "OnPropTakeDamage": null,
+          "StartAsleep": false,
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "83f21e7c-02ae-4fe8-8752-6813cdde3dfc",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1002,7 +1043,7 @@
           "MaterialGroup": null,
           "MaterialOverride": null,
           "Materials": null,
-          "Model": "models/sbox_props/crate_a/crate_a.vmdl",
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1019,15 +1060,15 @@
           "Tint": "1,1,1,1"
         },
         {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "60d9a593-e6b8-4d9e-959e-c67de60b95a4",
+          "__type": "Sandbox.ModelCollider",
+          "__guid": "3fea2cdc-24c1-42d4-b7ff-8e1319a649cc",
           "__enabled": true,
           "Flags": 0,
-          "Center": "0,0,0",
           "ColliderFlags": 0,
           "Elasticity": null,
           "Friction": null,
           "IsTrigger": false,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1039,14 +1080,13 @@
           "OnTriggerEnter": null,
           "OnTriggerExit": null,
           "RollingResistance": null,
-          "Scale": "50,50,50",
           "Static": false,
           "Surface": null,
           "SurfaceVelocity": "0,0,0"
         },
         {
           "__type": "Sandbox.Rigidbody",
-          "__guid": "16882d91-2803-4129-ae65-7155708293ba",
+          "__guid": "88708dc0-32d8-4603-a058-946066c11c8d",
           "__enabled": true,
           "Flags": 0,
           "AngularDamping": 0,
@@ -1054,7 +1094,7 @@
           "EnhancedCcd": false,
           "Gravity": true,
           "GravityScale": 1,
-          "ImpactDamage": 0,
+          "ImpactDamage": 25,
           "LinearDamping": 0,
           "Locking": {
             "X": false,
@@ -1065,8 +1105,8 @@
             "Roll": false
           },
           "MassCenterOverride": "0,0,0",
-          "MassOverride": 0,
-          "MinImpactDamageSpeed": 500,
+          "MassOverride": 7,
+          "MinImpactDamageSpeed": 1100,
           "MotionEnabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1086,7 +1126,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "prop_crate_2",
-      "Position": "200,40,16",
+      "Position": "200,40,0",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
@@ -1098,8 +1138,29 @@
       "OwnerTransfer": 1,
       "Components": [
         {
+          "__type": "Sandbox.Prop",
+          "__guid": "b9ec66c3-a403-4e0e-95b3-b834cfe94750",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "Health": 50,
+          "IsStatic": false,
+          "MaterialGroup": null,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnPropBreak": null,
+          "OnPropTakeDamage": null,
+          "StartAsleep": false,
+          "Tint": "1,1,1,1"
+        },
+        {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "a8461121-fb90-4b0c-a2ff-e735330e7577",
+          "__guid": "3a639ae3-c1aa-4e5a-841b-21b5fbfcb7a2",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1108,7 +1169,7 @@
           "MaterialGroup": null,
           "MaterialOverride": null,
           "Materials": null,
-          "Model": "models/sbox_props/crate_a/crate_a.vmdl",
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1125,15 +1186,15 @@
           "Tint": "1,1,1,1"
         },
         {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "18812e55-b5af-4f2d-9fe1-54eb73687e87",
+          "__type": "Sandbox.ModelCollider",
+          "__guid": "a2f1b091-e2cb-491a-8058-dd987767cc17",
           "__enabled": true,
           "Flags": 0,
-          "Center": "0,0,0",
           "ColliderFlags": 0,
           "Elasticity": null,
           "Friction": null,
           "IsTrigger": false,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1145,14 +1206,13 @@
           "OnTriggerEnter": null,
           "OnTriggerExit": null,
           "RollingResistance": null,
-          "Scale": "50,50,50",
           "Static": false,
           "Surface": null,
           "SurfaceVelocity": "0,0,0"
         },
         {
           "__type": "Sandbox.Rigidbody",
-          "__guid": "12cd6dac-4b8d-4b99-acd7-935807289523",
+          "__guid": "1c2197f6-2dd9-4702-b5f5-23d1f085b42d",
           "__enabled": true,
           "Flags": 0,
           "AngularDamping": 0,
@@ -1160,7 +1220,7 @@
           "EnhancedCcd": false,
           "Gravity": true,
           "GravityScale": 1,
-          "ImpactDamage": 0,
+          "ImpactDamage": 25,
           "LinearDamping": 0,
           "Locking": {
             "X": false,
@@ -1171,8 +1231,8 @@
             "Roll": false
           },
           "MassCenterOverride": "0,0,0",
-          "MassOverride": 0,
-          "MinImpactDamageSpeed": 500,
+          "MassOverride": 7,
+          "MinImpactDamageSpeed": 1100,
           "MotionEnabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1192,7 +1252,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "prop_crate_3",
-      "Position": "200,-40,16",
+      "Position": "200,-40,0",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
@@ -1204,8 +1264,29 @@
       "OwnerTransfer": 1,
       "Components": [
         {
+          "__type": "Sandbox.Prop",
+          "__guid": "2d611dbb-d1f3-48e5-a8bf-abc505e7a0a9",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "Health": 50,
+          "IsStatic": false,
+          "MaterialGroup": null,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnPropBreak": null,
+          "OnPropTakeDamage": null,
+          "StartAsleep": false,
+          "Tint": "1,1,1,1"
+        },
+        {
           "__type": "Sandbox.ModelRenderer",
-          "__guid": "0050434b-e276-487d-b655-ee639924ab2e",
+          "__guid": "7699c7ed-6c5e-4208-850c-e884ddb44740",
           "__enabled": true,
           "Flags": 0,
           "BodyGroups": 18446744073709551615,
@@ -1214,7 +1295,7 @@
           "MaterialGroup": null,
           "MaterialOverride": null,
           "Materials": null,
-          "Model": "models/sbox_props/crate_a/crate_a.vmdl",
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1231,15 +1312,15 @@
           "Tint": "1,1,1,1"
         },
         {
-          "__type": "Sandbox.BoxCollider",
-          "__guid": "0406416f-5224-4395-a0a7-63cad8185ca3",
+          "__type": "Sandbox.ModelCollider",
+          "__guid": "a89aa55d-c358-4a96-b029-815589c8c371",
           "__enabled": true,
           "Flags": 0,
-          "Center": "0,0,0",
           "ColliderFlags": 0,
           "Elasticity": null,
           "Friction": null,
           "IsTrigger": false,
+          "Model": "models/sbox_props/wooden_crate/wooden_crate.vmdl",
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1251,14 +1332,13 @@
           "OnTriggerEnter": null,
           "OnTriggerExit": null,
           "RollingResistance": null,
-          "Scale": "50,50,50",
           "Static": false,
           "Surface": null,
           "SurfaceVelocity": "0,0,0"
         },
         {
           "__type": "Sandbox.Rigidbody",
-          "__guid": "385f4f6f-35f1-4247-8d9f-cd08e8f55277",
+          "__guid": "17dd747c-74d5-4f0e-a8a6-70fb383100bb",
           "__enabled": true,
           "Flags": 0,
           "AngularDamping": 0,
@@ -1266,7 +1346,7 @@
           "EnhancedCcd": false,
           "Gravity": true,
           "GravityScale": 1,
-          "ImpactDamage": 0,
+          "ImpactDamage": 25,
           "LinearDamping": 0,
           "Locking": {
             "X": false,
@@ -1277,8 +1357,8 @@
             "Roll": false
           },
           "MassCenterOverride": "0,0,0",
-          "MassOverride": 0,
-          "MinImpactDamageSpeed": 500,
+          "MassOverride": 7,
+          "MinImpactDamageSpeed": 1100,
           "MotionEnabled": true,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1398,18 +1478,18 @@
       "CustomBounds": false
     },
     "GameObjectSystems": {
-      "Sandbox.MovieMaker.MovieRecorderSystem": {
-        "DisableClientRecording": false
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
+        }
       },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "ce6922af-e250-4e8a-a73c-7cae5e756f93"
         }
       },
-      "Sandbox.SelectionSetsSystem": {
-        "Data": {
-          "SelectionSets": []
-        }
+      "Sandbox.MovieMaker.MovieRecorderSystem": {
+        "DisableClientRecording": false
       }
     }
   },
@@ -1417,7 +1497,8 @@
   "Title": "minimal",
   "Description": null,
   "__references": [
-    "facepunch.w_usp#152497"
+    "facepunch.w_usp#152497",
+    "facepunch.wooden_crate#143950"
   ],
   "__version": 3
 }
