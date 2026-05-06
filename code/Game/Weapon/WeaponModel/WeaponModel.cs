@@ -1,3 +1,5 @@
+using System.Threading;
+
 public abstract class WeaponModel : Component
 {
 	[Property] public SkinnedModelRenderer Renderer { get; set; }
