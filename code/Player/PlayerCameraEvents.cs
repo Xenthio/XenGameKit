@@ -32,5 +32,16 @@ public class PlayerCameraEvents : Component, ICameraSetup
 
 		Local.IPlayerEvents.PostToGameObject( Player.GameObject, x => x.OnCameraSetup( cc ) );
 		Local.IPlayerEvents.PostToGameObject( Player.GameObject, x => x.OnCameraPostSetup( cc ) );
+
+		// Hide third-person-only objects (e.g. world model props parented to the player root)
+		// when in first person. Tag any such renderer as "thirdperson" and it will
+		// automatically be excluded from the first-person camera view.
+		var isFirstPerson = Player.WalkController?.CameraMode ==
+			XMovement.PlayerWalkControllerComplex.CameraModes.FirstPerson;
+
+		if ( isFirstPerson )
+			cc.RenderExcludeTags.Add( "thirdperson" );
+		else
+			cc.RenderExcludeTags.Remove( "thirdperson" );
 	}
 }
