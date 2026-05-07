@@ -6,7 +6,7 @@ public partial class PlayerWalkControllerComplex : Component
 	[Property, FeatureEnabled( "Swimming" )] public bool EnableSwimming { get; set; } = true;
 	[Property, Feature( "Swimming" )] public string WaterTag { get; set; } = "water";
 	[Property, Feature( "Swimming" )] public float SwimmingSpeedScale { get; set; } = 0.8f;
-	[Property, Feature( "Swimming" )] public float SwimmingFriction { get; set; } = 1;
+	[Property, Feature( "Swimming" )] public float SwimmingFriction { get; set; } = 4;
 	[Property, InputAction, Feature( "Swimming" )] public string SwimUpAction { get; set; } = "Jump";
 	[Property, InputAction, Feature( "Swimming" )] public string SwimDownAction { get; set; } = "";
 	private bool IsSwimming => WaterLevel > 0.5f;
@@ -15,11 +15,13 @@ public partial class PlayerWalkControllerComplex : Component
 	{
 		if ( !EnableSwimming ) { WaterLevel = 0; return; }
 
-		var start = WorldPosition + Controller.BoundingBox.Maxs.z;
-		var end = WorldPosition;
+		// Use a point trace from foot to head — same as Source.
+		// A box trace at corners of a water trigger gives wrong results because
+		// the box clips outside the trigger, shrinking the fraction prematurely.
+		var foot = WorldPosition;
+		var head = WorldPosition + Vector3.Up * Controller.Height;
 
-		var pm = Scene.Trace.Ray( start, end )
-					.Size( Controller.BoundingBox.Mins, Controller.BoundingBox.Maxs )
+		var pm = Scene.Trace.Ray( head, foot )
 					.WithTag( WaterTag )
 					.HitTriggers()
 					.IgnoreGameObjectHierarchy( GameObject )
@@ -43,15 +45,44 @@ public partial class PlayerWalkControllerComplex : Component
 	public virtual void SwimMove()
 	{
 		Controller.IsOnGround = false;
+
+		// Build wish velocity from full 3D view angles (pitch included), like Source WaterMove.
+		// This means looking down swims you down, looking up swims you up.
+		// Use the same WishMove * rotation pattern as noclip and ground movement.
 		var wishvel = WishMove * EyeAngles.ToRotation();
 		wishvel *= (GetWishSpeed() * SwimmingSpeedScale);
-		if ( Input.Down( SwimUpAction ) ) wishvel = wishvel.WithZ( 100 );
-		if ( Input.Down( SwimDownAction ) ) wishvel = wishvel.WithZ( -100 );
-		Controller.WishVelocity = wishvel;
-		Controller.Acceleration = Controller.BaseAcceleration;
-		Controller.Accelerate( Controller.WishVelocity.ClampLength( 100 ) );
 
-		Controller.Move( withWishVelocity: false, withGravity: false, frictionOverride: 1 );
+		// Jump key moves up; no input sinks at 60 u/s (Source behaviour)
+		if ( Input.Down( SwimUpAction ) )
+		{
+			wishvel = wishvel.WithZ( wishvel.z + GetWishSpeed() * SwimmingSpeedScale );
+		}
+		else if ( WishMove.IsNearlyZero() )
+		{
+			wishvel = wishvel.WithZ( wishvel.z - 60f );
+		}
+
+		if ( !string.IsNullOrEmpty( SwimDownAction ) && Input.Down( SwimDownAction ) )
+			wishvel = wishvel.WithZ( -GetWishSpeed() * SwimmingSpeedScale );
+
+		Controller.WishVelocity = wishvel;
+
+		// Water friction: proportional speed bleed before acceleration (Source WaterMove).
+		// Unlike ground friction this doesn't use stop-speed — it's a straight percentage.
+		var speed = Controller.Velocity.Length;
+		if ( speed > 0 )
+		{
+			var newspeed = speed - Time.Delta * speed * SwimmingFriction * Controller.SurfaceFriction;
+			if ( newspeed < 0.1f ) newspeed = 0;
+			Controller.Velocity *= newspeed / speed;
+		}
+
+		// Accelerate up to wish speed (standard Accelerate, no special air cap needed in water)
+		Controller.Acceleration = Controller.BaseAcceleration;
+		Controller.Accelerate( wishvel );
+
+		// Move without applying wish velocity a second time or gravity
+		Controller.Move( withWishVelocity: false, withGravity: false );
 	}
 
 	protected float WaterJumpTime { get; set; }

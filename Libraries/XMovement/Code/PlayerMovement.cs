@@ -24,7 +24,16 @@ public partial class PlayerMovement : Component
 	/// </summary>
 	[Property, Group( "Config" )] public float AirControl { get; set; } = 30f;
 
-	[Property, Group( "Acceleration" )] public float AirAcceleration { get; set; } = 40f;
+	/// <summary>
+	/// Maximum wish speed used for the dot-product / addspeed check in air.
+	/// Equivalent to Source's GetAirSpeedCap() (hardcoded 30 in HL2/CS).
+	/// Keeping this low is what makes strafing feel like Source — you can always
+	/// add velocity sideways because the capped component against your current
+	/// velocity direction stays small.
+	/// </summary>
+	[Property, Group( "Config" )] public float AirSpeedCap { get; set; } = 30f;
+
+	[Property, Group( "Acceleration" )] public float AirAcceleration { get; set; } = 10f;
 
 	[Property, Group( "Acceleration" )] public float BaseAcceleration { get; set; } = 10;
 	[Property] public MovementFrequencyMode MovementFrequency { get; set; } = MovementFrequencyMode.PerFixedUpdate;
@@ -66,7 +75,10 @@ public partial class PlayerMovement : Component
 			}
 			else
 			{
-				Accelerate( WishVelocity.ClampLength( AirControl ), AirAcceleration );
+				// Source-correct air acceleration: full wish velocity passed in,
+				// AirAccelerate internally caps wishspd to AirSpeedCap for the
+				// dot-product check while using full speed for the accel formula.
+				AirAccelerate( WishVelocity, AirAcceleration );
 			}
 		}
 

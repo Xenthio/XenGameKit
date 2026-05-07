@@ -116,6 +116,37 @@ public partial class PlayerMovement : Component
 	}
 
 	/// <summary>
+	/// Source-correct air acceleration. Equivalent to CGameMovement::AirAccelerate.
+	/// 
+	/// The key difference from ground Accelerate: wishspeed is capped to AirSpeedCap
+	/// (equivalent to GetAirSpeedCap() = 30 in HL2/CS) for the dot-product and addspeed
+	/// check, but the FULL uncapped wishspeed is used in the accelspeed formula.
+	/// This is what produces proper strafing feel — you can keep gaining speed because
+	/// the 30-unit cap means currentspeed almost never exceeds wishspd at large velocities.
+	/// </summary>
+	public virtual void AirAccelerate( Vector3 wishVelocity, float acceleration )
+	{
+		var wishdir = wishVelocity.Normal;
+		var wishspeed = wishVelocity.Length;        // full speed, used for accelspeed formula
+		var wishspd = MathF.Min( wishspeed, AirSpeedCap ); // capped speed, used for dot check
+
+		// How much of our current velocity is already in the wish direction?
+		var currentspeed = Velocity.Dot( wishdir );
+
+		// How much more can we add before exceeding the cap?
+		var addspeed = wishspd - currentspeed;
+		if ( addspeed <= 0 )
+			return;
+
+		// Note: uses full wishspeed (not capped wishspd) — this is correct and intentional.
+		var accelspeed = acceleration * wishspeed * Time.Delta * SurfaceFriction;
+		if ( accelspeed > addspeed )
+			accelspeed = addspeed;
+
+		Velocity += wishdir * accelspeed;
+	}
+
+	/// <summary>
 	/// Apply an amount of friction to the current velocity.
 	/// No need to scale by time delta - it will be done inside.
 	/// </summary>
