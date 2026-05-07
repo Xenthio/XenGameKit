@@ -1278,7 +1278,26 @@
             }
           }
         ],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "e3fe9e1e-dbc3-42fb-b0c8-d554e74051fa"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "9c5b32da-947c-485e-b491-7a4347008a86"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "dcb050b3-79f2-49a3-8197-3178077e97e7"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1488,7 +1507,14 @@
             }
           }
         ],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "37066452-4274-4f94-b121-e8f81e5e48c5"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1509,11 +1535,7 @@
         "f9c4b37a-1792-433b-aa55-82ead7fde659": "95a760c6-2abf-42b5-a9de-e07af44e820b",
         "fda1d7c1-903d-4e5a-9f09-3e3aafd6b871": "b07f7766-776e-4354-b3ec-e28cf9ac0947",
         "8b026a9d-1081-42da-b80e-bd8171828f10": "68ebc65e-4a0a-40b6-974c-eadf829a1835",
-        "da54f1c6-b646-4cf2-832b-5630a1ad1424": "c81464b2-6195-431f-ae68-058d40623de3",
-        "639aa21d-3304-4ec3-99a9-671fde11d0b0": "6e07910d-c690-423e-bc6a-666c7f8f9acf",
-        "03f31d5f-6932-4d39-8509-12ba302347ea": "418a3607-d171-4c7d-a87d-b0f748b75adb",
-        "1c2ca32e-5b29-47e1-b2fa-0cfaa4e23e21": "f63cd317-d3cd-4035-a992-be0d9e3f66c6",
-        "56d2e636-5af6-4d2c-acf0-4384ccd3962f": "80bdb62e-9dc9-4d57-991f-1403bff8f0ec"
+        "37066452-4274-4f94-b121-e8f81e5e48c5": "ab41fa8c-7e4c-4009-a0a6-86a7a4f8d828"
       }
     }
   ],

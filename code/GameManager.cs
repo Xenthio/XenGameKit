@@ -61,6 +61,34 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 	}
 
 	/// <summary>
+	/// Switch to first-person camera. Source-style command.
+	/// </summary>
+	[ConCmd( "firstperson", ConVarFlags.Server )]
+	public static void FirstPerson( Connection source )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		if ( player.IsValid() )
+		{
+			player.WalkController.CameraMode = XMovement.PlayerWalkControllerComplex.CameraModes.FirstPerson;
+			player.WalkController.SetupCamera();
+		}
+	}
+
+	/// <summary>
+	/// Switch to third-person camera. Source-style command.
+	/// </summary>
+	[ConCmd( "thirdperson", ConVarFlags.Server )]
+	public static void ThirdPerson( Connection source )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		if ( player.IsValid() )
+		{
+			player.WalkController.CameraMode = XMovement.PlayerWalkControllerComplex.CameraModes.ThirdPerson;
+			player.WalkController.SetupCamera();
+		}
+	}
+
+	/// <summary>
 	/// Kill yourself. Classic.
 	/// </summary>
 	[ConCmd( "kill", ConVarFlags.Server )]
