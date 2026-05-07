@@ -1,0 +1,45 @@
+{
+    "RootObject": {
+        "__guid": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "weapon_crowbar_wm",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "Components": [
+            {
+                "__type": "WorldModel",
+                "__guid": "1f34e39e-205e-4312-82c4-717a49369396",
+                "__enabled": true,
+                "Renderer": {
+                    "_type": "component",
+                    "component_id": "00000000-0000-0000-0001-000000000001",
+                    "go": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
+                    "component_type": "SkinnedModelRenderer"
+                },
+                "EjectBrass": null,
+                "EjectTransform": null
+            },
+            {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "00000000-0000-0000-0001-000000000001",
+                "__enabled": true,
+                "Model": "models/weapons/w_crowbar.vmdl",
+                "CreateAttachments": true,
+                "PlaybackRate": 1,
+                "RenderType": "On",
+                "Tint": "1,1,1,1"
+            }
+        ],
+        "Children": []
+    },
+    "ShowInMenu": false,
+    "ResourceVersion": 2,
+    "__version": 2,
+    "__references": [
+        "facepunch.w_crowbar"
+    ]
+}

@@ -1,0 +1,140 @@
+{
+    "RootObject": {
+        "__guid": "a7c46018-4269-477e-b8b0-dc614f69d18b",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "weapon_crowbar_vm",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "Components": [
+            {
+                "__type": "ViewModel",
+                "__guid": "fbe22b4d-b9fc-4f45-9011-03614b8335f7",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationSpeed": 1,
+                "DeploySound": null,
+                "EjectBrass": null,
+                "EjectTransform": null,
+                "IncrementalAnimationSpeed": 3,
+                "IncrementalReloadFinishSounds": [],
+                "IncrementalReloadSoundEvents": [],
+                "IncrementalReloadStartSounds": [],
+                "InertiaScale": "2,2",
+                "IsIncremental": false,
+                "IsThrowable": false,
+                "MuzzleEffect": null,
+                "MuzzleTransform": null,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "ReloadSoundEvents": [],
+                "Renderer": {
+                    "_type": "component",
+                    "component_id": "00000000-0000-0000-0002-000000000001",
+                    "go": "a7c46018-4269-477e-b8b0-dc614f69d18b",
+                    "component_type": "SkinnedModelRenderer"
+                },
+                "ThrowableType": "HEGrenade",
+                "TracerEffect": null
+            },
+            {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "00000000-0000-0000-0002-000000000001",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationGraph": null,
+                "BodyGroups": 18446744073709551615,
+                "BoneMergeTarget": null,
+                "CreateAttachments": true,
+                "CreateBoneObjects": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/weapons/v_crowbar.vmdl",
+                "Morphs": {},
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Parameters": {
+                    "bools": {},
+                    "ints": {},
+                    "floats": {},
+                    "vectors": {},
+                    "rotations": {}
+                },
+                "PlaybackRate": 1,
+                "RenderOptions": {
+                    "GameLayer": true,
+                    "OverlayLayer": false,
+                    "BloomLayer": false,
+                    "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Sequence": {
+                    "Name": null,
+                    "Looping": true,
+                    "Blending": false
+                },
+                "Tint": "1,1,1,1",
+                "UseAnimGraph": true
+            }
+        ],
+        "Children": [
+            {
+                "__guid": "d45d967e-805b-4cbd-ab37-c743c01e5b6d",
+                "__version": 2,
+                "Flags": 8,
+                "Name": "arms",
+                "Position": "0,0,0",
+                "Rotation": "0,0,0,1",
+                "Scale": "1,1,1",
+                "Tags": "",
+                "Enabled": true,
+                "Components": [
+                    {
+                        "__type": "Sandbox.SkinnedModelRenderer",
+                        "__guid": "f8715bec-e3d1-49d9-9e93-7316b7600401",
+                        "__enabled": true,
+                        "Model": "models/first_person/v_first_person_arms_human.vmdl",
+                        "BoneMergeTarget": {
+                            "_type": "component",
+                            "component_id": "00000000-0000-0000-0002-000000000001",
+                            "go": "a7c46018-4269-477e-b8b0-dc614f69d18b",
+                            "component_type": "SkinnedModelRenderer"
+                        },
+                        "CreateAttachments": true,
+                        "PlaybackRate": 1,
+                        "RenderOptions": {
+                            "GameLayer": true,
+                            "OverlayLayer": false,
+                            "BloomLayer": false,
+                            "AfterUILayer": false
+                        },
+                        "RenderType": "On",
+                        "Tint": "1,1,1,1",
+                        "UseAnimGraph": true
+                    }
+                ],
+                "Children": []
+            }
+        ]
+    },
+    "ShowInMenu": false,
+    "ResourceVersion": 2,
+    "__references": [
+        "facepunch.v_crowbar",
+        "facepunch.v_first_person_arms_human#205798"
+    ],
+    "__version": 2
+}
