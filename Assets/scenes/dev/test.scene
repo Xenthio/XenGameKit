@@ -435,7 +435,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "Cube (2)",
-      "Position": "49.5370712,34.0889587,43.6761398",
+      "Position": "33.5894318,56.4102058,43.6761475",
       "Rotation": "1.81932798E-08,-8.23505879E-17,0.305232495,0.952278018",
       "Scale": "0.563288927,0.563288927,0.563288927",
       "Tags": "",
@@ -603,271 +603,34 @@
     {
       "__guid": "fd8e2c8e-9347-44d6-acb1-9462564d2f04",
       "__version": 2,
-      "Flags": 0,
-      "Name": "weapon_glock",
-      "Position": "80,0,18",
-      "Rotation": "0,0,0,1",
-      "Scale": "1,1,1",
-      "Tags": "weapon",
-      "Enabled": true,
-      "NetworkMode": 1,
-      "NetworkFlags": 0,
-      "NetworkOrphaned": 1,
-      "NetworkTransmit": true,
-      "OwnerTransfer": 1,
-      "Components": [
-        {
-          "__type": "IronSightsWeapon",
-          "__guid": "84190831-4947-4aff-afe2-a0e7a15d8408",
-          "__enabled": true,
-          "Flags": 0,
-          "AimConeBase": "0.5,0.25",
-          "AimConeRecovery": 0.2,
-          "AimConeSpread": "3,3",
-          "AimScale": 0.2,
-          "AmmoType": null,
-          "BulletRadius": 1,
-          "CanCancelReload": true,
-          "ClipContents": 17,
-          "ClipMaxSize": 17,
-          "Damage": 12,
-          "DeployTime": 0.5,
-          "DisplayIcon": null,
-          "DisplayName": "Glock",
-          "DroppedGameObject": {
-            "_type": "gameobject",
-            "go": "445c76ba-1383-463a-aaa4-0f29793e576c"
-          },
-          "HoldType": "Pistol",
-          "HolsterTime": 0,
-          "ImpactEffectOverride": null,
-          "IncrementalReloading": false,
-          "MaxReserveAmmo": 120,
-          "MuzzleGameObject": null,
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "ParentBone": "hold_r",
-          "Range": 4096,
-          "RecoilPitch": "-0.300000012,-0.100000001",
-          "RecoilYaw": "-0.100000001,0.100000001",
-          "ReloadTime": 1.5,
-          "ReserveAmmo": 0,
-          "ShootForce": 80,
-          "ShootSound": "sounds/weapons/glock/shoot.sound",
-          "StartingAmmo": 51,
-          "UsesAmmo": true,
-          "UsesClips": true,
-          "Value": 2,
-          "ViewModelPrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/weapons/weapon_glock_vm.prefab"
-          },
-          "WorldModelPrefab": {
-            "_type": "gameobject",
-            "prefab": "prefabs/weapons/weapon_glock_wm.prefab"
+      "__Prefab": "prefabs/weapons/weapon_glock.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "b641a718-ca83-4188-91ee-1c604b1cb53a"
+            },
+            "Property": "Position",
+            "Value": "80,0,18"
           }
-        },
-        {
-          "__type": "DroppedWeapon",
-          "__guid": "2c8ebcb5-a216-48ca-8e62-2f5e93729165",
-          "__enabled": true,
-          "Flags": 0,
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null
-        },
-        {
-          "__type": "Sandbox.ModelCollider",
-          "__guid": "84827c16-615f-4d98-9eec-1064d7fa70d3",
-          "__enabled": true,
-          "Flags": 0,
-          "ColliderFlags": 0,
-          "Elasticity": null,
-          "Friction": null,
-          "IsTrigger": false,
-          "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "OnObjectTriggerEnter": null,
-          "OnObjectTriggerExit": null,
-          "OnTriggerEnter": null,
-          "OnTriggerExit": null,
-          "RollingResistance": null,
-          "Static": false,
-          "Surface": null,
-          "SurfaceVelocity": "0,0,0"
-        },
-        {
-          "__type": "Sandbox.Rigidbody",
-          "__guid": "8440de9a-54ad-48c4-bb27-ff7f51512bd7",
-          "__enabled": true,
-          "Flags": 0,
-          "AngularDamping": 0,
-          "EnableImpactDamage": true,
-          "EnhancedCcd": false,
-          "Gravity": true,
-          "GravityScale": 1,
-          "ImpactDamage": 0,
-          "LinearDamping": 0,
-          "Locking": {
-            "X": false,
-            "Y": false,
-            "Z": false,
-            "Pitch": false,
-            "Yaw": false,
-            "Roll": false
-          },
-          "MassCenterOverride": "0,0,0",
-          "MassOverride": 0,
-          "MinImpactDamageSpeed": 500,
-          "MotionEnabled": true,
-          "OnComponentDestroy": null,
-          "OnComponentDisabled": null,
-          "OnComponentEnabled": null,
-          "OnComponentFixedUpdate": null,
-          "OnComponentStart": null,
-          "OnComponentUpdate": null,
-          "OverrideMassCenter": false,
-          "RigidbodyFlags": 0,
-          "StartAsleep": false
-        }
-      ],
-      "Children": [
-        {
-          "__guid": "445c76ba-1383-463a-aaa4-0f29793e576c",
-          "__version": 2,
-          "Flags": 0,
-          "Name": "standalone_wm",
-          "Position": "0,0,0",
-          "Rotation": "0,0,0,1",
-          "Scale": "1,1,1",
-          "Tags": "",
-          "Enabled": true,
-          "NetworkMode": 2,
-          "NetworkFlags": 0,
-          "NetworkOrphaned": 0,
-          "NetworkTransmit": true,
-          "OwnerTransfer": 1,
-          "Components": [
-            {
-              "__type": "WorldModel",
-              "__guid": "3f8d8448-5ea2-4567-ab9a-2dbd18af917b",
-              "__enabled": true,
-              "Flags": 0,
-              "DeploySound": null,
-              "EjectBrass": null,
-              "EjectTransform": null,
-              "MagazineDropPrefab": null,
-              "MagazineDropTime": 0.2,
-              "MagazineTransform": null,
-              "MuzzleEffect": null,
-              "MuzzleTransform": null,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "Renderer": null,
-              "TracerEffect": null
-            },
-            {
-              "__type": "Sandbox.SkinnedModelRenderer",
-              "__guid": "8400f569-1e51-4fe5-963d-60d61aaf7321",
-              "__enabled": true,
-              "Flags": 0,
-              "AnimationGraph": null,
-              "BodyGroups": 18446744073709551615,
-              "BoneMergeTarget": null,
-              "CreateAttachments": true,
-              "CreateBoneObjects": false,
-              "LodOverride": null,
-              "MaterialGroup": null,
-              "MaterialOverride": null,
-              "Materials": null,
-              "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
-              "Morphs": {},
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "Parameters": {
-                "bools": {},
-                "ints": {},
-                "floats": {},
-                "vectors": {},
-                "rotations": {}
-              },
-              "PlaybackRate": 1,
-              "RenderOptions": {
-                "GameLayer": true,
-                "OverlayLayer": false,
-                "BloomLayer": false,
-                "AfterUILayer": false
-              },
-              "RenderType": "On",
-              "Sequence": {
-                "Name": null,
-                "Looping": true,
-                "Blending": false
-              },
-              "Tint": "1,1,1,1",
-              "UseAnimGraph": true
-            }
-          ],
-          "Children": [
-            {
-              "__guid": "da0764e0-97eb-4d20-b6bd-acaa004ed994",
-              "__version": 2,
-              "Flags": 8,
-              "Name": "muzzle",
-              "Position": "0,0,0",
-              "Rotation": "0,0,0,1",
-              "Scale": "1,1,1",
-              "Tags": "",
-              "Enabled": true,
-              "NetworkMode": 2,
-              "NetworkFlags": 0,
-              "NetworkOrphaned": 0,
-              "NetworkTransmit": true,
-              "OwnerTransfer": 1,
-              "Components": [],
-              "Children": []
-            },
-            {
-              "__guid": "9b02343b-5344-465e-919c-bbaf3b7560ba",
-              "__version": 2,
-              "Flags": 8,
-              "Name": "eject",
-              "Position": "0,0,0",
-              "Rotation": "0,0,0,1",
-              "Scale": "1,1,1",
-              "Tags": "",
-              "Enabled": true,
-              "NetworkMode": 2,
-              "NetworkFlags": 0,
-              "NetworkOrphaned": 0,
-              "NetworkTransmit": true,
-              "OwnerTransfer": 1,
-              "Components": [],
-              "Children": []
-            }
-          ]
-        }
-      ]
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "b641a718-ca83-4188-91ee-1c604b1cb53a": "fd8e2c8e-9347-44d6-acb1-9462564d2f04",
+        "c3ed7c69-40b6-49db-bf61-9ce5965520b3": "84190831-4947-4aff-afe2-a0e7a15d8408",
+        "c77ce8a6-1f12-453c-a8a2-61b74024a31e": "2c8ebcb5-a216-48ca-8e62-2f5e93729165",
+        "d33b92b5-8580-4256-be09-b34f33c5a457": "84827c16-615f-4d98-9eec-1064d7fa70d3",
+        "0391e9ea-fed8-47ce-99ff-84f7d15550ff": "8440de9a-54ad-48c4-bb27-ff7f51512bd7",
+        "1f838394-9b8a-44e7-ad84-84a93c64a053": "445c76ba-1383-463a-aaa4-0f29793e576c",
+        "f4894998-edce-453f-9289-005c6732028e": "3f8d8448-5ea2-4567-ab9a-2dbd18af917b",
+        "18355607-b222-4aaa-a2ff-8fa40bc7e9fe": "8400f569-1e51-4fe5-963d-60d61aaf7321",
+        "b1308d16-8440-428c-8187-267a413c71b9": "da0764e0-97eb-4d20-b6bd-acaa004ed994",
+        "603e7a3e-7286-4095-ae57-fe3816b25679": "9b02343b-5344-465e-919c-bbaf3b7560ba"
+      }
     },
     {
       "__guid": "8aba857a-aa96-4a95-95d7-bc758de83820",
@@ -1379,7 +1142,26 @@
       "__Prefab": "prefabs/entities/item_healthkit.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
-        "RemovedObjects": [],
+        "RemovedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "e9c1b3af-ee67-4942-9297-e1e4ee7ac0b9"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "36169503-56b1-49f2-be39-5a018b5f42a1"
+            }
+          },
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "7908f097-38a4-4ac8-901b-015a2fe2dc6d"
+            }
+          }
+        ],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1396,9 +1178,7 @@
         "3f0c3c4a-8779-4eed-b3c0-b05ed9209e52": "15aa0812-0f66-43bb-98d4-dd23e1188a7e",
         "e03f3e09-ffa3-44c9-9c15-faac1d5a463a": "3676b7ce-6fab-4bde-8513-077de99224cf",
         "b2230152-5a09-44eb-bc09-4d7ee55543a4": "42ffec48-b775-481e-a805-96178bf01610",
-        "171fa033-6624-4a0e-88dc-18cd74bc895b": "8348e450-41e8-45f8-abb5-f3e221abb923",
-        "b8cbdbb2-5277-44f3-90d2-fd8b1f8f8b4e": "67835b6a-b503-47fc-9912-67898e9ba70e",
-        "2afc0042-1068-4eab-bdea-e66c9320fa0b": "63685f55-d840-41b2-aee9-453392b9e330"
+        "c670b5e9-2f6c-4381-aee2-eaf188378c31": "3d771523-aacb-46b1-8426-e462b233e579"
       }
     },
     {
@@ -1406,7 +1186,51 @@
       "__version": 2,
       "__Prefab": "prefabs/entities/item_ammo_pistol.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [],
+        "AddedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "802f5a3e-ce59-478a-9110-fcaf58bf8453"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "2eeb09dd-fbe0-4270-a58b-b45ddba9b054"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "5209817e-21ee-4c03-b69b-1b231b318efc"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "802f5a3e-ce59-478a-9110-fcaf58bf8453",
+              "__enabled": true,
+              "Flags": 0,
+              "BodyGroups": 1,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": null,
+              "Materials": null,
+              "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            }
+          }
+        ],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -1423,9 +1247,8 @@
       "__PrefabIdToInstanceId": {
         "2eeb09dd-fbe0-4270-a58b-b45ddba9b054": "d5b9ef98-00a9-47e2-a53a-ba9f95c8fc15",
         "5c25e8de-8946-40f6-b00b-d9ee11eb93b8": "df8ed1f2-07bb-46eb-a366-2175c3181733",
-        "8c5d33ee-d91a-414c-8a4a-ff98da1a28b2": "80f1e4f5-df98-444b-89bd-4f510b01b6ca",
-        "a78b53fa-b3ac-48e8-9fa6-25093c0d6a68": "e74f3cd7-cd45-4fc1-90d3-8bad2ddd37ce",
-        "b1a52602-092c-444d-8aac-ac4d0a8a83af": "6e1c7143-d4e6-4899-830e-5e9df282a33c"
+        "1e6a6df3-1c99-4ee9-8a22-5eae07acb640": "86a41bb0-ecde-4d25-8473-759a26a99ec5",
+        "5209817e-21ee-4c03-b69b-1b231b318efc": "e2c3dbb1-bf9f-4f6f-ac08-1e425b7157ed"
       }
     },
     {
@@ -1433,7 +1256,51 @@
       "__version": 2,
       "__Prefab": "prefabs/entities/item_ammo_smg1.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [],
+        "AddedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "4455d84f-151a-4407-b953-1f2017561c54"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "4f464588-2a74-403b-a9b4-047f48343df3"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "a8e867d1-5c33-4c02-81f3-a11dc56ee2c2"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "4455d84f-151a-4407-b953-1f2017561c54",
+              "__enabled": true,
+              "Flags": 0,
+              "BodyGroups": 1,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": null,
+              "Materials": null,
+              "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            }
+          }
+        ],
         "RemovedObjects": [],
         "PropertyOverrides": [
           {
@@ -1450,9 +1317,8 @@
       "__PrefabIdToInstanceId": {
         "4f464588-2a74-403b-a9b4-047f48343df3": "7ae05a7d-f3a9-4e0b-b437-3f79344a8968",
         "55c34504-f38d-49cb-9d92-85b0d829a6e0": "f46d9172-4df3-41dc-8d96-f4ee6d8e8d25",
-        "3acb658c-95ef-4a2f-b4bf-2cd5885b05ce": "8d2b9f28-b6bf-4ad6-831f-dc7d0c43da57",
-        "bc97e123-c466-43a5-a103-bcd1b445fc90": "565ec398-0292-44cc-a394-2134afb18e0a",
-        "066cde83-221f-4ccc-8d1f-669f6c005863": "8d632da4-435d-48e4-a5dd-1dbea17ddde7"
+        "032683d3-8e31-4413-924e-a9d7526a04ae": "b51bdd7c-033b-4771-a626-0cdf96b1e385",
+        "a8e867d1-5c33-4c02-81f3-a11dc56ee2c2": "e87552a6-ef81-4a06-a55d-6956782fa6c6"
       }
     }
   ],
@@ -1497,7 +1363,7 @@
   "Title": "minimal",
   "Description": null,
   "__references": [
-    "facepunch.w_usp#152497",
+    "facepunch.ammobox9mm#142897",
     "facepunch.wooden_crate#143950"
   ],
   "__version": 3

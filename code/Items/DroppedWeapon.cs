@@ -1,5 +1,18 @@
-public sealed class DroppedWeapon : Component, Component.IPressable
+public sealed class DroppedWeapon : Component, Component.IPressable, Component.ITriggerListener
 {
+	/// <summary>
+	/// How long after being dropped before it can be auto-picked up by walking over it.
+	/// Prevents immediately re-picking up a weapon you just dropped.
+	/// </summary>
+	[Property] public float WalkoverDelay { get; set; } = 1.0f;
+
+	private TimeSince _timeSinceDropped = 0;
+
+	protected override void OnEnabled()
+	{
+		_timeSinceDropped = 0;
+	}
+
 	IPressable.Tooltip? IPressable.GetTooltip( IPressable.Event e )
 	{
 		var weapon = GetComponent<BaseCarryable>();
@@ -30,6 +43,22 @@ public sealed class DroppedWeapon : Component, Component.IPressable
 
 		TakeIntoInventory( inventory );
 	}
+
+	void ITriggerListener.OnTriggerEnter( GameObject other )
+	{
+		if ( !Networking.IsHost ) return;
+		if ( _timeSinceDropped < WalkoverDelay ) return;
+
+		var player = other.GetComponentInParent<Player>( true );
+		if ( !player.IsValid() ) return;
+
+		var inventory = player.GetComponent<PlayerInventory>();
+		if ( !inventory.IsValid() ) return;
+
+		TakeIntoInventory( inventory );
+	}
+
+	void ITriggerListener.OnTriggerExit( GameObject other ) { }
 
 	private void TakeIntoInventory( PlayerInventory inventory )
 	{

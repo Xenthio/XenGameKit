@@ -283,6 +283,18 @@
         "OnComponentStart": null,
         "OnComponentUpdate": null,
         "RespawnDelay": 5
+      },
+      {
+        "__type": "AmmoInventory",
+        "__guid": "e1194288-4cc5-490a-8ffd-30f9472d7f81",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
       }
     ],
     "Children": [
