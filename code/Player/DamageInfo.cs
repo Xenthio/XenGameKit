@@ -48,6 +48,8 @@ public static class DamageTags
 	public const string Fall = "fall";
 	public const string GibAlways = "gib_always";
 	public const string FullSelfDamage = "full_self_damage";
+	public const string Melee = "melee";
+	public const string Bullet = "bullet";
 }
 
 public static class DamageExtensions

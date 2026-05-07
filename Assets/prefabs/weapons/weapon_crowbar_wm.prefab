@@ -1,45 +1,123 @@
 {
-    "RootObject": {
-        "__guid": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
-        "__version": 2,
-        "Flags": 0,
-        "Name": "weapon_crowbar_wm",
-        "Position": "0,0,0",
-        "Rotation": "0,0,0,1",
-        "Scale": "1,1,1",
-        "Tags": "",
-        "Enabled": true,
-        "Components": [
-            {
-                "__type": "WorldModel",
-                "__guid": "1f34e39e-205e-4312-82c4-717a49369396",
-                "__enabled": true,
-                "Renderer": {
-                    "_type": "component",
-                    "component_id": "00000000-0000-0000-0001-000000000001",
-                    "go": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
-                    "component_type": "SkinnedModelRenderer"
-                },
-                "EjectBrass": null,
-                "EjectTransform": null
-            },
-            {
-                "__type": "Sandbox.SkinnedModelRenderer",
-                "__guid": "00000000-0000-0000-0001-000000000001",
-                "__enabled": true,
-                "Model": "models/weapons/w_crowbar.vmdl",
-                "CreateAttachments": true,
-                "PlaybackRate": 1,
-                "RenderType": "On",
-                "Tint": "1,1,1,1"
-            }
-        ],
-        "Children": []
-    },
-    "ShowInMenu": false,
-    "ResourceVersion": 2,
+  "RootObject": {
+    "__guid": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
     "__version": 2,
-    "__references": [
-        "facepunch.w_crowbar"
-    ]
+    "Flags": 0,
+    "Name": "weapon_crowbar_wm",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "WorldModel",
+        "__guid": "1f34e39e-205e-4312-82c4-717a49369396",
+        "__enabled": true,
+        "Flags": 0,
+        "DeploySound": null,
+        "EjectBrass": null,
+        "EjectTransform": null,
+        "MagazineDropPrefab": null,
+        "MagazineDropTime": 0.2,
+        "MagazineTransform": null,
+        "MuzzleEffect": null,
+        "MuzzleTransform": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Renderer": {
+          "_type": "component",
+          "component_id": "00000000-0000-0000-0001-000000000001",
+          "go": "e7bd4fc0-ee50-4878-907d-a178b4df572a",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "TracerEffect": null
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "00000000-0000-0000-0001-000000000001",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 18446744073709551615,
+        "BoneMergeTarget": null,
+        "CreateAttachments": true,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/weapons/sbox_melee_crowbar/w_crowbar.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.w_crowbar#144899"
+  ],
+  "__version": 2
 }

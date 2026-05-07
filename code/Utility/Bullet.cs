@@ -107,6 +107,39 @@ public static class Bullet
 			tr.Body.ApplyImpulseAt( tr.HitPosition, direction * info.Force * tr.Body.Mass );
 	}
 
+	/// <summary>
+	/// Broadcast an impact effect at a hit point. Use this from melee weapons, explosions,
+	/// or anything else that needs surface decals/particles without firing a bullet.
+	/// </summary>
+	[Rpc.Broadcast]
+	public static void SpawnImpactEffect(
+		Vector3 hitPoint,
+		Vector3 normal,
+		GameObject hitObject,
+		Surface hitSurface,
+		GameObject impactOverride = null )
+	{
+		if ( Application.IsDedicatedServer ) return;
+		if ( !hitObject.IsValid() ) return;
+
+		var prefab = impactOverride;
+		if ( !prefab.IsValid() && hitSurface.IsValid() )
+		{
+			prefab = hitSurface.PrefabCollection.BulletImpact
+				?? hitSurface.GetBaseSurface()?.PrefabCollection.BulletImpact;
+		}
+
+		if ( !prefab.IsValid() ) return;
+
+		var rot = Rotation.LookAt( normal * -1f, Vector3.Random );
+		var impact = prefab.Clone( new CloneConfig
+		{
+			Transform    = new Transform( hitPoint, rot ),
+			StartEnabled = true,
+		} );
+		impact.SetParent( hitObject, true );
+	}
+
 	[Rpc.Broadcast]
 	static void BroadcastEffects(
 		GameObject weapon,

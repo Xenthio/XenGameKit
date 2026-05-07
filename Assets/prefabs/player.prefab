@@ -130,6 +130,7 @@
         "AccurateDownwardsTraceSampling": true,
         "AirAcceleration": 10,
         "AirControl": 30,
+        "AirSpeedCap": 30,
         "AllDirectionsTraceDistance": 8192,
         "BaseAcceleration": 10,
         "BaseFriction": 8,
@@ -295,6 +296,27 @@
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
         "OnComponentUpdate": null
+      },
+      {
+        "__type": "PlayerFlashlight",
+        "__guid": "5b4adbb9-ef36-4a27-9be0-6d643fc71c5f",
+        "__enabled": true,
+        "Flags": 0,
+        "FlashlightAction": "Flashlight",
+        "ForwardBias": 0.1,
+        "LightObject": {
+          "_type": "gameobject",
+          "go": "af7cfe3a-285f-4bf4-ad8d-c9f22afb060a"
+        },
+        "MaxForwardOffset": 64,
+        "MinForwardOffset": 8,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "TraceRange": 1600
       }
     ],
     "Children": [
@@ -2134,7 +2156,50 @@
         "NetworkTransmit": true,
         "OwnerTransfer": 1,
         "Components": [],
-        "Children": []
+        "Children": [
+          {
+            "__guid": "af7cfe3a-285f-4bf4-ad8d-c9f22afb060a",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "flashlight",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": false,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.SpotLight",
+                "__guid": "2d4b304a-9a34-49d0-aabc-961862a84c1a",
+                "__enabled": true,
+                "Flags": 0,
+                "Attenuation": 1,
+                "ConeInner": 20,
+                "ConeOuter": 35,
+                "Cookie": "textures/lightcookies/lightcookies_01.vtex",
+                "FogMode": "Enabled",
+                "FogStrength": 1,
+                "LightColor": "0.85,0.9,1,1",
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Radius": 1600,
+                "ShadowBias": 0.0005,
+                "ShadowHardness": 0,
+                "Shadows": true
+              }
+            ],
+            "Children": []
+          }
+        ]
       },
       {
         "__guid": "ad5da0ce-9ace-4e38-9b46-54d5d127c326",

@@ -153,6 +153,12 @@ public sealed partial class ViewModel : WeaponModel, ICameraSetup
 		}
 	}
 
+	public override void OnMeleeAttack( bool hasHit )
+	{
+		Renderer?.Set( "b_attack", true );
+		Renderer?.Set( "b_attack_has_hit", hasHit );
+	}
+
 	public override void CreateRangedEffects( BaseWeapon weapon, Vector3 hitPoint, Vector3? origin )
 	{
 		DoTracerEffect( hitPoint, origin );

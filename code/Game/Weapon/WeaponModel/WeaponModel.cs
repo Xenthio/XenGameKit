@@ -112,5 +112,11 @@ public abstract class WeaponModel : Component
 
 	public virtual void OnAttack() { }
 
+	/// <summary>
+	/// Called after a melee swing resolves. hasHit=true plays the solid-hit
+	/// animation variant (b_attack_has_hit); false plays the miss/air swing.
+	/// </summary>
+	public virtual void OnMeleeAttack( bool hasHit ) { }
+
 	public virtual void CreateRangedEffects( BaseWeapon weapon, Vector3 hitPoint, Vector3? origin ) { }
 }

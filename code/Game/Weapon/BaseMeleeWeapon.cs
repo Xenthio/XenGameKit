@@ -33,11 +33,19 @@ public class BaseMeleeWeapon : BaseCarryable
 	/// </summary>
 	[Property, Group( "Melee" )] public GameObject ImpactEffectOverride { get; set; }
 
+	/// <summary>
+	/// View punch on a successful hit (pitch, yaw). Matches HL2 crowbar feel.
+	/// Set to zero to disable.
+	/// </summary>
+	[Property, Group( "Melee" )] public Vector2 HitViewPunch { get; set; } = new Vector2( 1.5f, -1.5f );
+
 	protected TimeUntil TimeUntilNextSwingAllowed;
 
 	public override void OnControl( Player player )
 	{
-		if ( Input.Pressed( "attack1" ) && CanSwing() )
+		// Hold to autoswing — same as Source's ItemPostFrame IN_ATTACK check.
+		// SwingRate throttles the rate; no need for a separate press-only mode.
+		if ( Input.Down( "attack1" ) && CanSwing() )
 			Swing();
 	}
 
@@ -50,28 +58,76 @@ public class BaseMeleeWeapon : BaseCarryable
 	{
 		TimeUntilNextSwingAllowed = SwingRate;
 
-		// Fire the animation event on all clients
-		TriggerSwingAnimation();
-
 		if ( !Networking.IsHost ) return;
 
 		var tr = DoTrace();
-		if ( tr.Hit && tr.GameObject.IsValid() )
+		bool hit = tr.Hit && tr.GameObject.IsValid();
+
+		// Broadcast animation with hit result so the animgraph can pick the right variant
+		BroadcastSwingAnimation( hit );
+
+		if ( hit )
 			OnHit( tr );
 		else
 			OnMiss();
 	}
 
+	/// <summary>
+	/// Source-accurate two-pass melee trace, matching CBaseHLBludgeonWeapon::Swing.
+	///
+	/// Pass 1: line trace from eye along aim direction for Range units.
+	/// Pass 2 (if pass 1 misses): hull trace (box, HullSize in each axis) along
+	///   a shortened distance, with a dot-product facing check to reject grazes.
+	///
+	/// This is why the HL2 crowbar feels precise on close targets but still
+	/// catches things slightly off-centre — the hull fallback covers the gap.
+	/// </summary>
+	[Property, Group( "Melee" )] public float HullSize { get; set; } = 16f;  // BLUDGEON_HULL_DIM
+
 	protected virtual SceneTraceResult DoTrace()
 	{
-		var ray = Owner?.EyeTransform.ForwardRay ?? new Ray( WorldPosition, WorldRotation.Forward );
-		return Scene.Trace
-			.Ray( ray.Position, ray.Position + ray.Forward * Range )
+		var eye = Owner?.EyeTransform ?? new Transform( WorldPosition, WorldRotation );
+		var start = eye.Position;
+		var dir   = eye.Rotation.Forward;
+		var end   = start + dir * Range;
+
+		// Pass 1: line trace
+		var tr = Scene.Trace
+			.Ray( start, end )
 			.IgnoreGameObjectHierarchy( Owner?.GameObject ?? GameObject )
 			.WithoutTags( "playercontroller" )
-			.Radius( TraceRadius )
 			.UseHitboxes()
 			.Run();
+
+		if ( tr.Hit ) return tr;
+
+		// Pass 2: hull trace fallback (misses on the line trace).
+		// Source backs the end off by the hull diagonal (sqrt(3)*HullSize) so the
+		// hull tip stays at roughly the same world reach as the line trace.
+		var hullRadius = 1.732f * HullSize;
+		var hullEnd   = start + dir * MathF.Max( Range - hullRadius, 0f );
+		var hullMins  = Vector3.One * -HullSize;
+		var hullMaxs  = Vector3.One *  HullSize;
+
+		var hullTr = Scene.Trace
+			.Box( new BBox( hullMins, hullMaxs ), start, hullEnd )
+			.IgnoreGameObjectHierarchy( Owner?.GameObject ?? GameObject )
+			.WithoutTags( "playercontroller" )
+			.UseHitboxes()
+			.Run();
+
+		if ( !hullTr.Hit || !hullTr.GameObject.IsValid() ) return hullTr;
+
+		// Dot-product check: must be at least roughly facing the hit object
+		// (Source uses 0.70721f ≈ cos(45°))
+		var toTarget = (hullTr.GameObject.WorldPosition - start).Normal;
+		if ( toTarget.Dot( dir ) < 0.70721f )
+		{
+			// Force a miss result
+			return tr;
+		}
+
+		return hullTr;
 	}
 
 	protected virtual void OnHit( SceneTraceResult tr )
@@ -92,60 +148,30 @@ public class BaseMeleeWeapon : BaseCarryable
 		if ( tr.Body.IsValid() && HitForce > 0f )
 			tr.Body.ApplyImpulseAt( tr.HitPosition, tr.Direction * HitForce * tr.Body.Mass );
 
-		// Effects
-		BroadcastHitEffects( tr.EndPosition, tr.Normal, tr.GameObject, tr.Surface );
+		// Impact decal + sound — reuse the bullet effect system
+		Bullet.SpawnImpactEffect( tr.HitPosition, tr.Normal, tr.GameObject, tr.Surface, ImpactEffectOverride );
+		if ( HitSound.IsValid() ) BroadcastSound( HitSound, tr.HitPosition );
 	}
 
 	protected virtual void OnMiss()
 	{
-		BroadcastMissEffects();
+		if ( MissSound.IsValid() ) BroadcastSound( MissSound, WorldPosition );
 	}
 
 	[Rpc.Broadcast]
-	void TriggerSwingAnimation()
+	void BroadcastSwingAnimation( bool hasHit )
 	{
 		if ( Application.IsDedicatedServer ) return;
-
-		// Tell the WeaponModel to play attack
 		var model = GetComponentInChildren<WeaponModel>();
 		if ( model.IsValid() )
-			model.GameObject.RunEvent<WeaponModel>( x => x.OnAttack() );
+			model.GameObject.RunEvent<WeaponModel>( x => x.OnMeleeAttack( hasHit ) );
 	}
 
 	[Rpc.Broadcast]
-	void BroadcastHitEffects( Vector3 hitPoint, Vector3 normal, GameObject hitObject, Surface hitSurface )
+	void BroadcastSound( SoundEvent sound, Vector3 position )
 	{
 		if ( Application.IsDedicatedServer ) return;
-
-		if ( HitSound.IsValid() )
-			Sound.Play( HitSound, hitPoint );
-
-		// Impact effect — override, then surface lookup
-		var prefab = ImpactEffectOverride;
-		if ( !prefab.IsValid() && hitSurface.IsValid() )
-		{
-			prefab = hitSurface.PrefabCollection.BulletImpact
-				?? hitSurface.GetBaseSurface()?.PrefabCollection.BulletImpact;
-		}
-
-		if ( !prefab.IsValid() || !hitObject.IsValid() ) return;
-
-		var rot = Rotation.LookAt( normal * -1f, Vector3.Random );
-		var impact = prefab.Clone( new CloneConfig
-		{
-			Transform    = new Transform( hitPoint, rot ),
-			StartEnabled = true,
-		} );
-		impact.SetParent( hitObject, true );
-	}
-
-	[Rpc.Broadcast]
-	void BroadcastMissEffects()
-	{
-		if ( Application.IsDedicatedServer ) return;
-
-		if ( MissSound.IsValid() )
-			Sound.Play( MissSound, WorldPosition );
+		Sound.Play( sound, position );
 	}
 
 	public override void DrawHud( HudPainter painter, Vector2 crosshair )
