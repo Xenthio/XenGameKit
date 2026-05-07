@@ -9,30 +9,6 @@ A modular, layered base for making games in s&box. Built to restore the quality-
 - Feel familiar to people who make stuff for the sandbox gamemode, so new modders have a familiar environment
 - Bridge the gap for Source Engine modders, making them feel at home in s&box's scene system (GameObject/Component)
 
-## Conventions
-
-### Prefab Layout
-```
-Assets/
-  prefabs/
-    weapons/
-      weapon_glock.prefab       ← weapon definition, world item, and pickup in one
-      weapon_glock_vm.prefab    ← viewmodel (1st person)
-      weapon_glock_wm.prefab    ← worldmodel (3rd person, parented to skeleton bone)
-    entities/
-      npc_zombie.prefab
-      prop_barrel.prefab
-      item_healthkit.prefab
-    player.prefab
-```
-
-### Networking Model
-Server authoritative. The host owns all game state. Clients request actions via `[Rpc.Host]`, the host validates and replicates results via `[Rpc.Broadcast]` or `[Sync]`. Player movement runs locally (no prediction yet).
-
-### Console Commands
-Familiar Source/GMod-style commands are implemented where appropriate:
-- `ent_create <name>` — spawn a prefab by name (e.g. `ent_create weapon_glock`)
-
 ## Project Structure
 
 XenGameKit is separated into tiers for separation of concerns. Each tier is designed to be independently usable.
