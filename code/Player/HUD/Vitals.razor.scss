@@ -1,44 +1,46 @@
+@import "Styles/_vars.scss";
+
 Vitals {
 	position: absolute;
 	left: 0px;
 	bottom: 0px;
 	flex-direction: row;
-	gap: 8px;
-	padding: 16px;
+	gap: $widget-gap;
+	padding: $pad-edge;
 
 	.Health {
-		padding: 12px 24px;
+		padding: $widget-pad;
 
 		iconpanel {
-			font-size: 28px;
+			font-size: $hud-size-icon;
 			margin-right: 8px;
-			color: #e05;
+			color: $color-health;
 		}
 
 		label {
-			font-size: 28px;
-			font-weight: bold;
+			font-size: $hud-size-lg;
+			font-weight: $hud-weight-bold;
 		}
 	}
 
 	.Ammo {
-		padding: 12px 24px;
+		padding: $widget-pad;
 		align-items: baseline;
 
 		.clip {
-			font-size: 32px;
-			font-weight: bold;
+			font-size: $hud-size-xl;
+			font-weight: $hud-weight-bold;
 		}
 
 		.divider {
-			font-size: 20px;
-			color: #aaa;
+			font-size: $hud-size-md;
+			color: $hud-color-dim;
 			margin: 0 4px;
 		}
 
 		.reserve {
-			font-size: 20px;
-			color: #aaa;
+			font-size: $hud-size-md;
+			color: $hud-color-dim;
 		}
 	}
 }

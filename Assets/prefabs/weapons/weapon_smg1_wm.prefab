@@ -1,0 +1,76 @@
+{
+  "RootObject": {
+    "__guid": "10fff240-49ad-4df6-b0f4-072f74f7e064",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weapon_smg1_wm",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "Components": [
+      {
+        "__type": "WorldModel",
+        "__guid": "0062614d-cb8c-4caf-a40d-e1cf756e341d",
+        "__enabled": true,
+        "Renderer": {
+          "_type": "component",
+          "component_id": "0da60c63-83d1-46c4-9b68-f11e4fbc8a8d",
+          "go": "10fff240-49ad-4df6-b0f4-072f74f7e064",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "EjectBrass": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/eject_rifle.prefab"
+        },
+        "EjectTransform": {
+          "_type": "gameobject",
+          "go": "42683d3e-173f-4459-919e-eacffd6d3704"
+        }
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "0da60c63-83d1-46c4-9b68-f11e4fbc8a8d",
+        "__enabled": true,
+        "Model": "models/weapons/sbox_smg_mp5/w_mp5.vmdl",
+        "CreateAttachments": true,
+        "PlaybackRate": 1,
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "f02432a0-5ff2-4e61-bfc2-258ad616ab08",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "muzzle",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Enabled": true,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "42683d3e-173f-4459-919e-eacffd6d3704",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "eject",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Enabled": true,
+        "Components": [],
+        "Children": []
+      }
+    ]
+  },
+  "ShowInMenu": false,
+  "ResourceVersion": 2,
+  "__references": [
+    "facepunch.w_mp5#145410"
+  ],
+  "__version": 2
+}

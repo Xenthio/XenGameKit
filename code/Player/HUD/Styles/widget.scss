@@ -1,6 +1,16 @@
+@import "./_vars.scss";
+
+// Base raised widget — used by Vitals and any other HUD panel that needs the dark card look.
 .Widget {
-	background-color: #333;
-	border-radius: 8px;
+	background-color: $widget-bg;
+	border-radius: $widget-radius;
 	align-items: center;
-	padding: 12px;
+	padding: $widget-pad;
+}
+
+.Widget--tight {
+	background-color: $widget-bg;
+	border-radius: $widget-radius;
+	align-items: center;
+	padding: $widget-pad-tight;
 }

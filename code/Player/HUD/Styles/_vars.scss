@@ -1,0 +1,34 @@
+// ─── XenGameKit HUD — shared design tokens ───────────────────────────────────
+// Import this in every .razor.scss that needs HUD styling.
+
+// Typography
+$hud-font:          Poppins;
+$hud-weight:        400;
+$hud-weight-bold:   700;
+$hud-color:         white;
+$hud-color-dim:     #aaa;
+$hud-color-faint:   #666;
+
+// Font sizes
+$hud-size-xl:       32px;   // clip count (big)
+$hud-size-lg:       28px;   // health, weapon name
+$hud-size-md:       20px;   // reserve ammo, secondary labels
+$hud-size-sm:       14px;   // slot numbers, small labels
+$hud-size-icon:     28px;   // iconpanel
+
+// Widget chrome
+$widget-bg:         rgba( 30, 30, 30, 0.85 );
+$widget-radius:     8px;
+$widget-pad:        12px 24px;
+$widget-pad-tight:  8px 16px;
+$widget-gap:        8px;
+
+// Accent colours
+$color-health:      #ee0055;
+$color-armour:      #2299ff;
+$color-active:      rgba( 255, 255, 255, 0.65 );
+
+// Spacing
+$pad:               12px;
+$pad-md:            24px;
+$pad-edge:          16px;   // distance from screen edge

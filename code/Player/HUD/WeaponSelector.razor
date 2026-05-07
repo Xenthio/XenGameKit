@@ -1,0 +1,82 @@
+@using Sandbox;
+@using Sandbox.UI;
+@using Player = global::Player;
+
+<root class="@(Visible ? "visible" : "")">
+	@foreach ( var slot in OccupiedSlots )
+	{
+		var weapon = slot.Weapon;
+		bool isActive = slot.Weapon == ActiveWeapon;
+
+		<div class="Slot @(isActive ? "active" : "")">
+			<label class="slot-number">@(slot.Index + 1)</label>  @* slot.Index == WeaponBucket int value *@
+			<label class="weapon-name">@weapon.DisplayName</label>
+			@if ( weapon is BaseWeapon bw )
+			{
+				@if ( bw.UsesClips )
+				{
+					<div class="ammo">
+						<label class="clip">@bw.ClipContents</label>
+						<label class="divider"> / </label>
+						<label class="reserve">@bw.ReserveAmmo</label>
+					</div>
+				}
+				else if ( bw.UsesAmmo )
+				{
+					<div class="ammo">
+						<label class="clip">@bw.ReserveAmmo</label>
+					</div>
+				}
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	// How long (seconds) the selector stays visible after last weapon switch
+	const float FadeDelay = 3.0f;
+
+	Player LocalPlayer => Player.FindLocalPlayer();
+	PlayerInventory Inventory => LocalPlayer?.GetComponent<PlayerInventory>();
+	BaseCarryable ActiveWeapon => Inventory?.ActiveWeapon;
+
+	bool Visible => _timeUntilHide > 0;
+	TimeUntil _timeUntilHide;
+
+	// Track last known active weapon to detect switches
+	BaseCarryable _lastWeapon;
+
+	record SlotEntry( int Index, BaseCarryable Weapon );
+
+	IEnumerable<SlotEntry> OccupiedSlots
+	{
+		get
+		{
+			var inv = Inventory;
+			if ( inv is null ) yield break;
+
+			foreach ( var w in inv.Weapons.OrderBy( x => x.InventorySlot ) )
+				yield return new SlotEntry( w.InventorySlot, w );
+		}
+	}
+
+	public override void Tick()
+	{
+		var current = ActiveWeapon;
+		if ( current != _lastWeapon )
+		{
+			_lastWeapon = current;
+			_timeUntilHide = FadeDelay;
+			StateHasChanged();
+		}
+	}
+
+	protected override int BuildHash() => System.HashCode.Combine(
+		ActiveWeapon,
+		Visible,
+		Inventory?.Weapons.Count(),
+		(ActiveWeapon as BaseWeapon)?.ClipContents,
+		(ActiveWeapon as BaseWeapon)?.ReserveAmmo
+	);
+}

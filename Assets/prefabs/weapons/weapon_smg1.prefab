@@ -1,9 +1,9 @@
 {
     "RootObject": {
-        "__guid": "b641a718-ca83-4188-91ee-1c604b1cb53a",
+        "__guid": "b9c41c88-c08e-4e78-bb31-1cb2f974fe75",
         "__version": 2,
         "Flags": 0,
-        "Name": "weapon_glock",
+        "Name": "weapon_smg1",
         "Position": "0,0,0",
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
@@ -17,34 +17,34 @@
         "Components": [
             {
                 "__type": "IronSightsWeapon",
-                "__guid": "c3ed7c69-40b6-49db-bf61-9ce5965520b3",
+                "__guid": "4774da97-565d-4f13-8143-38ea62303749",
                 "__enabled": true,
                 "Flags": 0,
-                "AimConeBase": "0.5,0.25",
-                "AimConeRecovery": 0.2,
-                "AimConeSpread": "3,3",
-                "AimScale": 0.2,
-                "AmmoType": "resource/ammotypes/9mm.ammo",
+                "AimConeBase": "0.600000024,0.300000012",
+                "AimConeRecovery": 0.25,
+                "AimConeSpread": "4,4",
+                "AimScale": 0.25,
+                "AmmoType": "resource/ammotypes/smg.ammo",
                 "BulletRadius": 1,
                 "CanCancelReload": true,
-                "ClipContents": 17,
-                "ClipMaxSize": 17,
-                "Damage": 12,
+                "ClipContents": 30,
+                "ClipMaxSize": 30,
+                "Damage": 8,
                 "DeployTime": 0.5,
                 "DisplayIcon": null,
-                "DisplayName": "Glock",
+                "DisplayName": "MP5",
                 "DroppedGameObject": {
                     "_type": "gameobject",
-                    "go": "1f838394-9b8a-44e7-ad84-84a93c64a053"
+                    "go": "da54f1c6-b646-4cf2-832b-5630a1ad1424"
                 },
-                "HoldType": "Pistol",
+                "HoldType": "Rifle",
                 "HolsterTime": 0,
                 "ImpactEffectOverride": null,
                 "IncrementalReloading": false,
-                "MaxReserveAmmo": 300,
+                "MaxReserveAmmo": 225,
                 "MuzzleGameObject": {
                     "_type": "gameobject",
-                    "go": "b1308d16-8440-428c-8187-267a413c71b9"
+                    "go": "1c2ca32e-5b29-47e1-b2fa-0cfaa4e23e21"
                 },
                 "OnComponentDestroy": null,
                 "OnComponentDisabled": null,
@@ -54,29 +54,29 @@
                 "OnComponentUpdate": null,
                 "ParentBone": "hold_r",
                 "Range": 4096,
-                "RecoilPitch": "-0.300000012,-0.100000001",
+                "RecoilPitch": "-0.25,-0.0500000007",
                 "RecoilYaw": "-0.100000001,0.100000001",
-                "ReloadTime": 1.5,
+                "ReloadTime": 2.5,
                 "ReserveAmmo": 0,
                 "ShootForce": 80,
                 "ShootSound": "sounds/weapons/glock/glock_shoot.sound",
-                "StartingAmmo": 51,
+                "StartingAmmo": 90,
                 "UsesAmmo": true,
                 "UsesClips": true,
-                "Value": 2,
+                "Value": 3,
                 "ViewModelPrefab": {
                     "_type": "gameobject",
-                    "prefab": "prefabs/weapons/weapon_glock_vm.prefab"
+                    "prefab": "prefabs/weapons/weapon_smg1_vm.prefab"
                 },
                 "WorldModelPrefab": {
                     "_type": "gameobject",
-                    "prefab": "prefabs/weapons/weapon_glock_wm.prefab"
+                    "prefab": "prefabs/weapons/weapon_smg1_wm.prefab"
                 },
-                "Bucket": 1
+                "Bucket": 2
             },
             {
                 "__type": "DroppedWeapon",
-                "__guid": "c77ce8a6-1f12-453c-a8a2-61b74024a31e",
+                "__guid": "a51b18c4-d494-418e-acc5-e6247642bc58",
                 "__enabled": true,
                 "Flags": 0,
                 "OnComponentDestroy": null,
@@ -88,15 +88,36 @@
                 "WalkoverDelay": 1
             },
             {
+                "__type": "Sandbox.Prop",
+                "__guid": "00e763a2-0a00-454c-97f3-e84e6e6aea3d",
+                "__enabled": true,
+                "Flags": 0,
+                "BodyGroups": 11,
+                "Health": 0,
+                "IsStatic": false,
+                "MaterialGroup": null,
+                "Model": "models/weapons/sbox_smg_mp5/w_mp5.vmdl",
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "OnPropBreak": null,
+                "OnPropTakeDamage": null,
+                "StartAsleep": false,
+                "Tint": "1,1,1,1"
+            },
+            {
                 "__type": "Sandbox.ModelCollider",
-                "__guid": "d33b92b5-8580-4256-be09-b34f33c5a457",
+                "__guid": "f9c4b37a-1792-433b-aa55-82ead7fde659",
                 "__enabled": true,
                 "Flags": 0,
                 "ColliderFlags": 0,
                 "Elasticity": null,
                 "Friction": null,
                 "IsTrigger": false,
-                "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
+                "Model": "models/weapons/sbox_smg_mp5/w_mp5.vmdl",
                 "OnComponentDestroy": null,
                 "OnComponentDisabled": null,
                 "OnComponentEnabled": null,
@@ -114,7 +135,7 @@
             },
             {
                 "__type": "Sandbox.Rigidbody",
-                "__guid": "0391e9ea-fed8-47ce-99ff-84f7d15550ff",
+                "__guid": "fda1d7c1-903d-4e5a-9f09-3e3aafd6b871",
                 "__enabled": true,
                 "Flags": 0,
                 "AngularDamping": 0,
@@ -133,7 +154,7 @@
                     "Roll": false
                 },
                 "MassCenterOverride": "0,0,0",
-                "MassOverride": 0,
+                "MassOverride": 2.8,
                 "MinImpactDamageSpeed": 500,
                 "MotionEnabled": true,
                 "OnComponentDestroy": null,
@@ -148,7 +169,7 @@
             },
             {
                 "__type": "Sandbox.BoxCollider",
-                "__guid": "3494a0bc-09fe-457e-b5a3-b109286731b7",
+                "__guid": "8b026a9d-1081-42da-b80e-bd8171828f10",
                 "__enabled": true,
                 "Flags": 0,
                 "Center": "0,0,4",
@@ -175,7 +196,7 @@
         ],
         "Children": [
             {
-                "__guid": "1f838394-9b8a-44e7-ad84-84a93c64a053",
+                "__guid": "da54f1c6-b646-4cf2-832b-5630a1ad1424",
                 "__version": 2,
                 "Flags": 0,
                 "Name": "standalone_wm",
@@ -192,7 +213,7 @@
                 "Components": [
                     {
                         "__type": "WorldModel",
-                        "__guid": "f4894998-edce-453f-9289-005c6732028e",
+                        "__guid": "639aa21d-3304-4ec3-99a9-671fde11d0b0",
                         "__enabled": true,
                         "Flags": 0,
                         "DeploySound": null,
@@ -214,7 +235,7 @@
                     },
                     {
                         "__type": "Sandbox.SkinnedModelRenderer",
-                        "__guid": "18355607-b222-4aaa-a2ff-8fa40bc7e9fe",
+                        "__guid": "03f31d5f-6932-4d39-8509-12ba302347ea",
                         "__enabled": true,
                         "Flags": 0,
                         "AnimationGraph": null,
@@ -226,7 +247,7 @@
                         "MaterialGroup": null,
                         "MaterialOverride": null,
                         "Materials": null,
-                        "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
+                        "Model": "models/weapons/sbox_smg_mp5/w_mp5.vmdl",
                         "Morphs": {},
                         "OnComponentDestroy": null,
                         "OnComponentDisabled": null,
@@ -260,7 +281,7 @@
                 ],
                 "Children": [
                     {
-                        "__guid": "b1308d16-8440-428c-8187-267a413c71b9",
+                        "__guid": "1c2ca32e-5b29-47e1-b2fa-0cfaa4e23e21",
                         "__version": 2,
                         "Flags": 8,
                         "Name": "muzzle",
@@ -278,7 +299,7 @@
                         "Children": []
                     },
                     {
-                        "__guid": "603e7a3e-7286-4095-ae57-fe3816b25679",
+                        "__guid": "56d2e636-5af6-4d2c-acf0-4384ccd3962f",
                         "__version": 2,
                         "Flags": 8,
                         "Name": "eject",
@@ -326,7 +347,7 @@
     "MenuIcon": null,
     "DontBreakAsTemplate": false,
     "__references": [
-        "facepunch.w_usp#152497"
+        "facepunch.w_mp5#145410"
     ],
     "__version": 2
 }

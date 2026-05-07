@@ -629,7 +629,8 @@
         "f4894998-edce-453f-9289-005c6732028e": "3f8d8448-5ea2-4567-ab9a-2dbd18af917b",
         "18355607-b222-4aaa-a2ff-8fa40bc7e9fe": "8400f569-1e51-4fe5-963d-60d61aaf7321",
         "b1308d16-8440-428c-8187-267a413c71b9": "da0764e0-97eb-4d20-b6bd-acaa004ed994",
-        "603e7a3e-7286-4095-ae57-fe3816b25679": "9b02343b-5344-465e-919c-bbaf3b7560ba"
+        "603e7a3e-7286-4095-ae57-fe3816b25679": "9b02343b-5344-465e-919c-bbaf3b7560ba",
+        "3494a0bc-09fe-457e-b5a3-b109286731b7": "08efd2d2-491e-4a5f-9ccc-f4f9aea7ada2"
       }
     },
     {
@@ -1141,27 +1142,143 @@
       "__version": 2,
       "__Prefab": "prefabs/entities/item_healthkit.prefab",
       "__PrefabInstancePatch": {
-        "AddedObjects": [],
-        "RemovedObjects": [
+        "AddedObjects": [
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "e9c1b3af-ee67-4942-9297-e1e4ee7ac0b9"
+              "IdValue": "6f5bd194-d996-4a27-bbba-498b7ac24cbb"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "3f0c3c4a-8779-4eed-b3c0-b05ed9209e52"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "c670b5e9-2f6c-4381-aee2-eaf188378c31"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "6f5bd194-d996-4a27-bbba-498b7ac24cbb",
+              "__enabled": true,
+              "Flags": 0,
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": null,
+              "Materials": null,
+              "Model": "models/props/health_pickup/health_pickup.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
             }
           },
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "36169503-56b1-49f2-be39-5a018b5f42a1"
+              "IdValue": "93751a61-fbab-4723-8a1b-0688376d3cad"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "3f0c3c4a-8779-4eed-b3c0-b05ed9209e52"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "6f5bd194-d996-4a27-bbba-498b7ac24cbb"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelCollider",
+              "__guid": "93751a61-fbab-4723-8a1b-0688376d3cad",
+              "__enabled": true,
+              "Flags": 0,
+              "ColliderFlags": 0,
+              "Elasticity": null,
+              "Friction": null,
+              "IsTrigger": false,
+              "Model": "models/props/health_pickup/health_pickup.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OnObjectTriggerEnter": null,
+              "OnObjectTriggerExit": null,
+              "OnTriggerEnter": null,
+              "OnTriggerExit": null,
+              "RollingResistance": null,
+              "Static": false,
+              "Surface": null,
+              "SurfaceVelocity": "0,0,0"
             }
           },
           {
             "Id": {
               "Type": "Component",
-              "IdValue": "7908f097-38a4-4ac8-901b-015a2fe2dc6d"
+              "IdValue": "1efc6070-3dae-490b-9541-bb63491f185a"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "3f0c3c4a-8779-4eed-b3c0-b05ed9209e52"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "93751a61-fbab-4723-8a1b-0688376d3cad"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.Rigidbody",
+              "__guid": "1efc6070-3dae-490b-9541-bb63491f185a",
+              "__enabled": true,
+              "Flags": 0,
+              "AngularDamping": 0,
+              "EnableImpactDamage": true,
+              "EnhancedCcd": false,
+              "Gravity": true,
+              "GravityScale": 1,
+              "ImpactDamage": 0,
+              "LinearDamping": 0,
+              "Locking": {
+                "X": false,
+                "Y": false,
+                "Z": false,
+                "Pitch": false,
+                "Yaw": false,
+                "Roll": false
+              },
+              "MassCenterOverride": "0,0,0",
+              "MassOverride": 5,
+              "MinImpactDamageSpeed": 500,
+              "MotionEnabled": true,
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "OverrideMassCenter": false,
+              "RigidbodyFlags": 0,
+              "StartAsleep": false
             }
           }
         ],
+        "RemovedObjects": [],
         "PropertyOverrides": [
           {
             "Target": {
@@ -1320,6 +1437,84 @@
         "032683d3-8e31-4413-924e-a9d7526a04ae": "b51bdd7c-033b-4771-a626-0cdf96b1e385",
         "a8e867d1-5c33-4c02-81f3-a11dc56ee2c2": "e87552a6-ef81-4a06-a55d-6956782fa6c6"
       }
+    },
+    {
+      "__guid": "47fd960b-6210-4037-924e-ae1b448a7b8a",
+      "__version": 2,
+      "__Prefab": "prefabs/weapons/weapon_smg1.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [
+          {
+            "Id": {
+              "Type": "Component",
+              "IdValue": "8f093a79-efc8-4d01-b226-10dd8d61a30b"
+            },
+            "Parent": {
+              "Type": "GameObject",
+              "IdValue": "b9c41c88-c08e-4e78-bb31-1cb2f974fe75"
+            },
+            "PreviousElement": {
+              "Type": "Component",
+              "IdValue": "8b026a9d-1081-42da-b80e-bd8171828f10"
+            },
+            "ContainerProperty": "Components",
+            "IsContainerArray": true,
+            "Data": {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "8f093a79-efc8-4d01-b226-10dd8d61a30b",
+              "__enabled": true,
+              "Flags": 0,
+              "BodyGroups": 11,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": null,
+              "Materials": null,
+              "Model": "models/weapons/sbox_smg_mp5/w_mp5.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "1,1,1,1"
+            }
+          }
+        ],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "b9c41c88-c08e-4e78-bb31-1cb2f974fe75"
+            },
+            "Property": "Position",
+            "Value": "127.999985,-63.9999924,0.00445365906"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "b9c41c88-c08e-4e78-bb31-1cb2f974fe75": "47fd960b-6210-4037-924e-ae1b448a7b8a",
+        "4774da97-565d-4f13-8143-38ea62303749": "289f995e-66f6-4e83-a0ab-6be8a00e3bfc",
+        "a51b18c4-d494-418e-acc5-e6247642bc58": "d99a03ca-38b2-4e17-a591-7bb7172e1793",
+        "00e763a2-0a00-454c-97f3-e84e6e6aea3d": "4abe7628-9295-403a-9359-5df7d7247ad1",
+        "f9c4b37a-1792-433b-aa55-82ead7fde659": "95a760c6-2abf-42b5-a9de-e07af44e820b",
+        "fda1d7c1-903d-4e5a-9f09-3e3aafd6b871": "b07f7766-776e-4354-b3ec-e28cf9ac0947",
+        "8b026a9d-1081-42da-b80e-bd8171828f10": "68ebc65e-4a0a-40b6-974c-eadf829a1835",
+        "da54f1c6-b646-4cf2-832b-5630a1ad1424": "c81464b2-6195-431f-ae68-058d40623de3",
+        "639aa21d-3304-4ec3-99a9-671fde11d0b0": "6e07910d-c690-423e-bc6a-666c7f8f9acf",
+        "03f31d5f-6932-4d39-8509-12ba302347ea": "418a3607-d171-4c7d-a87d-b0f748b75adb",
+        "1c2ca32e-5b29-47e1-b2fa-0cfaa4e23e21": "f63cd317-d3cd-4035-a992-be0d9e3f66c6",
+        "56d2e636-5af6-4d2c-acf0-4384ccd3962f": "80bdb62e-9dc9-4d57-991f-1403bff8f0ec"
+      }
     }
   ],
   "SceneProperties": {
@@ -1344,14 +1539,14 @@
       "CustomBounds": false
     },
     "GameObjectSystems": {
-      "Sandbox.SelectionSetsSystem": {
-        "Data": {
-          "SelectionSets": []
-        }
-      },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "ce6922af-e250-4e8a-a73c-7cae5e756f93"
+        }
+      },
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
         }
       },
       "Sandbox.MovieMaker.MovieRecorderSystem": {
@@ -1364,6 +1559,8 @@
   "Description": null,
   "__references": [
     "facepunch.ammobox9mm#142897",
+    "facepunch.health_pickup#143311",
+    "facepunch.w_mp5#145410",
     "facepunch.wooden_crate#143950"
   ],
   "__version": 3

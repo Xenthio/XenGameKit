@@ -1,0 +1,227 @@
+{
+  "RootObject": {
+    "__guid": "cc20445e-e8d4-4d04-a8ff-6e6eaf928540",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weapon_smg1_vm",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "ViewModel",
+        "__guid": "a2d16178-208b-4ab8-9bd2-178aceecc14d",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationSpeed": 1,
+        "DeploySound": null,
+        "EjectBrass": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/eject_rifle.prefab"
+        },
+        "EjectTransform": {
+          "_type": "gameobject",
+          "go": "96ffbed3-6a08-4d1a-aafc-92e683b4b92d"
+        },
+        "IncrementalAnimationSpeed": 3,
+        "IncrementalReloadFinishSounds": [],
+        "IncrementalReloadSoundEvents": [],
+        "IncrementalReloadStartSounds": [],
+        "InertiaScale": "2,2",
+        "IsIncremental": false,
+        "IsThrowable": false,
+        "MagazineDropPrefab": null,
+        "MagazineDropTime": 0.2,
+        "MagazineTransform": null,
+        "MuzzleEffect": null,
+        "MuzzleTransform": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "ReloadSoundEvents": [],
+        "Renderer": {
+          "_type": "component",
+          "component_id": "c0f61cf8-bc04-42e1-aa4f-3c7ec21214be",
+          "go": "cc20445e-e8d4-4d04-a8ff-6e6eaf928540",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "ThrowableType": "HEGrenade",
+        "TracerEffect": null,
+        "UseFastAnimations": false
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "c0f61cf8-bc04-42e1-aa4f-3c7ec21214be",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 18446744073709551615,
+        "BoneMergeTarget": null,
+        "CreateAttachments": true,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/weapons/sbox_smg_mp5/v_mp5.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": false,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "71b7b542-28bc-47d6-a1f7-14a3540931fc",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 29,
+        "BoneMergeTarget": {
+          "_type": "component",
+          "component_id": "c0f61cf8-bc04-42e1-aa4f-3c7ec21214be",
+          "go": "cc20445e-e8d4-4d04-a8ff-6e6eaf928540",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "CreateAttachments": false,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/first_person/v_first_person_arms_human.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": false,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "545f1b27-22c2-4fd6-86f7-cfe86f04d19f",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "muzzle",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "96ffbed3-6a08-4d1a-aafc-92e683b4b92d",
+        "__version": 2,
+        "Flags": 8,
+        "Name": "eject",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.v_first_person_arms_human#205798"
+  ],
+  "__version": 2
+}

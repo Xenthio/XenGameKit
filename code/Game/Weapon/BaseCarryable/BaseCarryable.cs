@@ -17,12 +17,45 @@ public record struct TraceAttackInfo( GameObject Target, float Damage, TagSet Ta
 	}
 }
 
+/// <summary>
+/// Determines which inventory slot/bucket a carryable prefers to occupy.
+/// Mirrors Source Engine's weapon bucket system — weapons of the same type share a bucket,
+/// and multiple weapons in the same bucket are cycled with repeated slot-key presses.
+/// 
+/// Convention (matches GoldSrc/Source defaults):
+///   0 = Melee / Crowbar
+///   1 = Pistols / Handguns
+///   2 = SMGs / Automatics
+///   3 = Rifles / Shotguns
+///   4 = Heavy / RPGs
+///   5 = Throwables / Grenades
+/// 
+/// Override PreferredBucket on a derived class to hard-code the bucket,
+/// or set it as a [Property] per-prefab for maximum flexibility.
+/// </summary>
+public enum WeaponBucket
+{
+	Melee       = 0,
+	Pistol      = 1,
+	SMG         = 2,
+	Rifle       = 3,
+	Heavy       = 4,
+	Throwable   = 5,
+}
+
 public partial class BaseCarryable : Component
 {
 	[Property, Feature( "Inventory" )] public string DisplayName { get; set; } = "My Weapon";
 	[Property, Feature( "Inventory" ), TextArea] public Texture DisplayIcon { get; set; }
 	[Property, Feature( "Inventory" )] public int Value { get; set; } = 0;
 	[Property, Feature( "Inventory" )] public float HolsterTime { get; set; } = 0f;
+
+	/// <summary>
+	/// Which slot/bucket this weapon prefers in the inventory.
+	/// Used by PlayerInventory to determine where to place this weapon on pickup.
+	/// Multiple weapons can share a bucket — slot-key presses cycle through them.
+	/// </summary>
+	[Property, Feature( "Inventory" )] public WeaponBucket Bucket { get; set; } = WeaponBucket.Melee;
 
 	public GameObject ViewModel { get; protected set; }
 	public GameObject WorldModel { get; protected set; }

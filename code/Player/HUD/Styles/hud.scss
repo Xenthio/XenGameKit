@@ -1,14 +1,23 @@
-$text-color: white;
-$text-font: Poppins;
-$text-weight: 400;
-$text-size: 25px;
-
+@import "./_vars.scss";
 @import "./layout.scss";
-@import "./widget.scss";
+
+// Base widget used by all HUD panels
+.Widget {
+	background-color: $widget-bg;
+	border-radius: $widget-radius;
+	align-items: center;
+	padding: $widget-pad;
+}
+
+.Widget--tight {
+	background-color: $widget-bg;
+	border-radius: $widget-radius;
+	align-items: center;
+	padding: $widget-pad-tight;
+}
 
 HUD {
-	color: $text-color;
-	font-family: $text-font;
-	font-weight: $text-weight;
-	font-size: $text-size;
+	color: $hud-color;
+	font-family: $hud-font;
+	font-weight: $hud-weight;
 }

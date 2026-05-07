@@ -36,16 +36,32 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 		return Weapons.Where( x => x.InventorySlot == slot ).ToList();
 	}
 
+	/// <summary>
+	/// Returns the preferred slot index for a weapon based on its Bucket.
+	/// If the weapon's natural bucket slot is occupied, falls back to the first free slot.
+	/// Returns -1 if the inventory is full.
+	/// </summary>
+	public int FindSlotForWeapon( BaseCarryable weapon )
+	{
+		int preferred = (int)weapon.Bucket;
+		if ( preferred >= 0 && preferred < MaxSlots )
+		{
+			// Bucket slots support stacking (multiple weapons in the same bucket)
+			// so a bucket is never truly "occupied" — always accept into preferred slot.
+			return preferred;
+		}
+		return FindEmptySlot();
+	}
+
+	/// <summary>
+	/// Returns the first slot index that has no weapon in it.
+	/// Use FindSlotForWeapon() in preference to this when placing a new pickup.
+	/// </summary>
 	public int FindEmptySlot()
 	{
-		var weapons = Weapons;
+		var usedSlots = new HashSet<int>( Weapons.Select( w => w.InventorySlot ) );
 		for ( int i = 0; i < MaxSlots; i++ )
-		{
-			bool occupied = false;
-			foreach ( var w in weapons )
-				if ( w.InventorySlot == i ) { occupied = true; break; }
-			if ( !occupied ) return i;
-		}
+			if ( !usedSlots.Contains( i ) ) return i;
 		return -1;
 	}
 
@@ -75,16 +91,19 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 
 	void OnControl()
 	{
-		if ( Input.Pressed( "slot1" ) ) SelectSlot( 0 );
-		else if ( Input.Pressed( "slot2" ) ) SelectSlot( 1 );
-		else if ( Input.Pressed( "slot3" ) ) SelectSlot( 2 );
-		else if ( Input.Pressed( "slot4" ) ) SelectSlot( 3 );
-		else if ( Input.Pressed( "slot5" ) ) SelectSlot( 4 );
+		// Slot keys map directly to WeaponBucket values:
+		// 1 = Melee, 2 = Pistol, 3 = SMG, 4 = Rifle, 5 = Heavy, 6 = Throwable
+		if ( Input.Pressed( "Slot1" ) ) SelectSlot( (int)WeaponBucket.Melee );
+		else if ( Input.Pressed( "Slot2" ) ) SelectSlot( (int)WeaponBucket.Pistol );
+		else if ( Input.Pressed( "Slot3" ) ) SelectSlot( (int)WeaponBucket.SMG );
+		else if ( Input.Pressed( "Slot4" ) ) SelectSlot( (int)WeaponBucket.Rifle );
+		else if ( Input.Pressed( "Slot5" ) ) SelectSlot( (int)WeaponBucket.Heavy );
+		else if ( Input.Pressed( "Slot6" ) ) SelectSlot( (int)WeaponBucket.Throwable );
 
-		if ( Input.MouseWheel.y > 0 ) SelectNext();
-		else if ( Input.MouseWheel.y < 0 ) SelectPrev();
+		if ( Input.Pressed( "SlotNext" ) || Input.MouseWheel.y < 0 ) SelectNext();
+		else if ( Input.Pressed( "SlotPrev" ) || Input.MouseWheel.y > 0 ) SelectPrev();
 
-		if ( Input.Pressed( "drop" ) && ActiveWeapon.IsValid() )
+		if ( Input.Pressed( "Drop" ) && ActiveWeapon.IsValid() )
 			Drop( ActiveWeapon );
 	}
 
@@ -163,15 +182,14 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 			return false;
 		}
 
-		var slot = FindEmptySlot();
-		if ( slot < 0 ) return false;
-
-		return Pickup( prefab, slot, notice );
+		return Pickup( prefab, notice );
 	}
 
 	public bool Pickup( GameObject prefab, bool notice = true )
 	{
-		var slot = FindEmptySlot();
+		var baseCarry = prefab.Components.Get<BaseCarryable>( true );
+		if ( !baseCarry.IsValid() ) return false;
+		var slot = FindSlotForWeapon( baseCarry );
 		if ( slot < 0 ) return false;
 		return Pickup( prefab, slot, notice );
 	}
@@ -248,7 +266,9 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 
 	public void Take( BaseCarryable item, bool includeNotices )
 	{
-		var existing = Weapons.FirstOrDefault( x => x.GetType() == item.GetType() );
+		// Match by display name, not C# type — two weapons can share the same class
+		// (e.g. both Glock and MP5 are IronSightsWeapon) and must be treated as distinct.
+		var existing = Weapons.FirstOrDefault( x => x.GameObject.Name == item.GameObject.Name );
 		if ( existing.IsValid() )
 		{
 			if ( existing is BaseWeapon existingWeapon && item is BaseWeapon pickupWeapon && existingWeapon.UsesAmmo )
@@ -263,7 +283,7 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 			return;
 		}
 
-		var slot = FindEmptySlot();
+		var slot = FindSlotForWeapon( item );
 		if ( slot < 0 ) return;
 
 		item.GameObject.SetParent( GameObject, false );

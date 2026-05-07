@@ -5,7 +5,7 @@
   "Decibels": 70,
   "SelectionMode": "Random",
   "Sounds": [
-    "weapons/glock/reload/pistol_mag_in.vsnd"
+    "sounds/weapons/glock/pistol_mag_in.vsnd"
   ],
   "Occlusion": true,
   "AirAbsorption": true,

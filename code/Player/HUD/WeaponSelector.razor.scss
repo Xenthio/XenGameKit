@@ -1,0 +1,69 @@
+@import "Styles/_vars.scss";
+
+WeaponSelector {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	padding: $pad-edge;
+	flex-direction: column;
+	gap: $widget-gap;
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+
+	&.visible {
+		opacity: 1;
+	}
+
+	.Slot {
+		// Same chrome as .Widget
+		background-color: $widget-bg;
+		border-radius: $widget-radius;
+		padding: $widget-pad-tight;
+
+		flex-direction: row;
+		align-items: center;
+		gap: 12px;
+		opacity: 0.5;
+		transition: opacity 0.15s ease-in-out;
+
+		&.active {
+			opacity: 1;
+			border: 1px solid $color-active;
+		}
+
+		.slot-number {
+			font-size: $hud-size-sm;
+			color: $hud-color-dim;
+			font-weight: $hud-weight-bold;
+			min-width: 12px;
+		}
+
+		.weapon-name {
+			font-size: $hud-size-lg;
+			font-weight: $hud-weight-bold;
+			color: $hud-color;
+		}
+
+		.ammo {
+			align-items: baseline;
+			flex-direction: row;
+			margin-left: 4px;
+
+			.clip {
+				font-size: $hud-size-xl;
+				font-weight: $hud-weight-bold;
+			}
+
+			.divider {
+				font-size: $hud-size-md;
+				color: $hud-color-dim;
+				margin: 0 4px;
+			}
+
+			.reserve {
+				font-size: $hud-size-md;
+				color: $hud-color-dim;
+			}
+		}
+	}
+}
