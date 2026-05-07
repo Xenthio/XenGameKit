@@ -1,8 +1,6 @@
-Set ShootSound on IronSightsWeapon
-Set ShootSound on DroppedWeapon
 {
   "RootObject": {
-    "__guid": "a1000001-0000-0000-0000-000000000001",
+    "__guid": "b641a718-ca83-4188-91ee-1c604b1cb53a",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_glock",
@@ -19,14 +17,14 @@ Set ShootSound on DroppedWeapon
     "Components": [
       {
         "__type": "IronSightsWeapon",
-        "__guid": "a1000001-0000-0000-0000-000000000002",
+        "__guid": "c3ed7c69-40b6-49db-bf61-9ce5965520b3",
         "__enabled": true,
         "Flags": 0,
         "AimConeBase": "0.5,0.25",
         "AimConeRecovery": 0.2,
         "AimConeSpread": "3,3",
         "AimScale": 0.2,
-        "AmmoType": "resource/ammotypes/9mm.ammo",
+        "AmmoType": null,
         "BulletRadius": 1,
         "CanCancelReload": true,
         "ClipContents": 17,
@@ -37,7 +35,7 @@ Set ShootSound on DroppedWeapon
         "DisplayName": "Glock",
         "DroppedGameObject": {
           "_type": "gameobject",
-          "go": "a1000001-0000-0000-0000-000000000010"
+          "go": "1f838394-9b8a-44e7-ad84-84a93c64a053"
         },
         "HoldType": "Pistol",
         "HolsterTime": 0,
@@ -58,7 +56,7 @@ Set ShootSound on DroppedWeapon
         "ReloadTime": 1.5,
         "ReserveAmmo": 0,
         "ShootForce": 80,
-        "ShootSound": "sounds/weapons/glock/glock_shoot.sound",
+        "ShootSound": "sounds/weapons/glock/shoot.sound",
         "StartingAmmo": 51,
         "UsesAmmo": true,
         "UsesClips": true,
@@ -74,7 +72,7 @@ Set ShootSound on DroppedWeapon
       },
       {
         "__type": "DroppedWeapon",
-        "__guid": "a1000001-0000-0000-0000-000000000003",
+        "__guid": "c77ce8a6-1f12-453c-a8a2-61b74024a31e",
         "__enabled": true,
         "Flags": 0,
         "OnComponentDestroy": null,
@@ -82,12 +80,11 @@ Set ShootSound on DroppedWeapon
         "OnComponentEnabled": null,
         "OnComponentFixedUpdate": null,
         "OnComponentStart": null,
-        "OnComponentUpdate": null,
-        "ShootSound": "sounds/weapons/glock/glock_shoot.sound"
+        "OnComponentUpdate": null
       },
       {
         "__type": "Sandbox.ModelCollider",
-        "__guid": "a1000001-0000-0000-0000-000000000004",
+        "__guid": "d33b92b5-8580-4256-be09-b34f33c5a457",
         "__enabled": true,
         "Flags": 0,
         "ColliderFlags": 0,
@@ -112,7 +109,7 @@ Set ShootSound on DroppedWeapon
       },
       {
         "__type": "Sandbox.Rigidbody",
-        "__guid": "a1000001-0000-0000-0000-000000000005",
+        "__guid": "0391e9ea-fed8-47ce-99ff-84f7d15550ff",
         "__enabled": true,
         "Flags": 0,
         "AngularDamping": 0,
@@ -147,7 +144,7 @@ Set ShootSound on DroppedWeapon
     ],
     "Children": [
       {
-        "__guid": "a1000001-0000-0000-0000-000000000010",
+        "__guid": "1f838394-9b8a-44e7-ad84-84a93c64a053",
         "__version": 2,
         "Flags": 0,
         "Name": "standalone_wm",
@@ -164,12 +161,15 @@ Set ShootSound on DroppedWeapon
         "Components": [
           {
             "__type": "WorldModel",
-            "__guid": "a1000001-0000-0000-0000-000000000011",
+            "__guid": "f4894998-edce-453f-9289-005c6732028e",
             "__enabled": true,
             "Flags": 0,
             "DeploySound": null,
             "EjectBrass": null,
             "EjectTransform": null,
+            "MagazineDropPrefab": null,
+            "MagazineDropTime": 0.2,
+            "MagazineTransform": null,
             "MuzzleEffect": null,
             "MuzzleTransform": null,
             "OnComponentDestroy": null,
@@ -178,17 +178,12 @@ Set ShootSound on DroppedWeapon
             "OnComponentFixedUpdate": null,
             "OnComponentStart": null,
             "OnComponentUpdate": null,
-            "Renderer": {
-              "_type": "component",
-              "component_id": "a1000001-0000-0000-0000-000000000012",
-              "go": "a1000001-0000-0000-0000-000000000010",
-              "component_type": "SkinnedModelRenderer"
-            },
+            "Renderer": null,
             "TracerEffect": null
           },
           {
             "__type": "Sandbox.SkinnedModelRenderer",
-            "__guid": "a1000001-0000-0000-0000-000000000012",
+            "__guid": "18355607-b222-4aaa-a2ff-8fa40bc7e9fe",
             "__enabled": true,
             "Flags": 0,
             "AnimationGraph": null,
@@ -234,7 +229,7 @@ Set ShootSound on DroppedWeapon
         ],
         "Children": [
           {
-            "__guid": "a1000001-0000-0000-0000-000000000013",
+            "__guid": "b1308d16-8440-428c-8187-267a413c71b9",
             "__version": 2,
             "Flags": 8,
             "Name": "muzzle",
@@ -252,7 +247,7 @@ Set ShootSound on DroppedWeapon
             "Children": []
           },
           {
-            "__guid": "a1000001-0000-0000-0000-000000000014",
+            "__guid": "603e7a3e-7286-4095-ae57-fe3816b25679",
             "__version": 2,
             "Flags": 8,
             "Name": "eject",
@@ -271,34 +266,13 @@ Set ShootSound on DroppedWeapon
           }
         ]
       }
-    ],
-    "__properties": {
-      "NetworkInterpolation": true,
-      "TimeScale": 1,
-      "WantsSystemScene": true,
-      "Metadata": {},
-      "NavMesh": {
-        "Enabled": false,
-        "IncludeStaticBodies": true,
-        "IncludeKeyframedBodies": true,
-        "EditorAutoUpdate": false,
-        "AgentHeight": 64,
-        "AgentRadius": 16,
-        "AgentStepSize": 18,
-        "AgentMaxSlope": 40,
-        "ExcludedBodies": "",
-        "IncludedBodies": "",
-        "DeferGeneration": false,
-        "CustomBounds": false
-      }
-    },
-    "__variables": []
+    ]
   },
   "ResourceVersion": 2,
-  "ShowInMenu": true,
-  "MenuPath": "XenGameKit/Weapons/Glock",
+  "ShowInMenu": false,
+  "MenuPath": null,
   "MenuIcon": null,
-  "DontBreakAsTemplate": true,
+  "DontBreakAsTemplate": false,
   "__references": [
     "facepunch.w_usp#152497"
   ],
