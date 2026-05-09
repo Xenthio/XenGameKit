@@ -62,11 +62,12 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 
 	/// <summary>
 	/// Switch to first-person camera. Source-style command.
+	/// Runs on the calling client — camera mode is client-side.
 	/// </summary>
-	[ConCmd( "firstperson", ConVarFlags.Server )]
-	public static void FirstPerson( Connection source )
+	[ConCmd( "firstperson" )]
+	public static void FirstPerson()
 	{
-		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		var player = Player.FindLocalPlayer();
 		if ( player.IsValid() )
 		{
 			player.WalkController.CameraMode = XMovement.PlayerWalkControllerComplex.CameraModes.FirstPerson;
@@ -76,11 +77,12 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 
 	/// <summary>
 	/// Switch to third-person camera. Source-style command.
+	/// Runs on the calling client — camera mode is client-side.
 	/// </summary>
-	[ConCmd( "thirdperson", ConVarFlags.Server )]
-	public static void ThirdPerson( Connection source )
+	[ConCmd( "thirdperson" )]
+	public static void ThirdPerson()
 	{
-		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		var player = Player.FindLocalPlayer();
 		if ( player.IsValid() )
 		{
 			player.WalkController.CameraMode = XMovement.PlayerWalkControllerComplex.CameraModes.ThirdPerson;

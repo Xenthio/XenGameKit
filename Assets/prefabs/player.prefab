@@ -144,7 +144,7 @@
         "Gravity": "0,0,800",
         "GroundAngle": 46,
         "Height": 72,
-        "IgnoreLayers": "water,effect,particle",
+        "IgnoreLayers": "water,effect,particle,item",
         "IsOnGround": false,
         "Mass": 85,
         "MovementFrequency": "PerFixedUpdate",
@@ -317,6 +317,27 @@
         "OnComponentStart": null,
         "OnComponentUpdate": null,
         "TraceRange": 1600
+      },
+      {
+        "__type": "PlayerPropCarry",
+        "__guid": "b56ae8d3-f016-4728-9ee1-d964985bd692",
+        "__enabled": true,
+        "Flags": 0,
+        "Damping": 6,
+        "HoldDistance": 72,
+        "MaxCarryAngular": 180,
+        "MaxCarrySpeed": 600,
+        "MaxErrorDistance": 200,
+        "MaxMass": 35,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "PickupRange": 85,
+        "SpringStrength": 25,
+        "ThrowForce": 800
       }
     ],
     "Children": [

@@ -138,7 +138,7 @@
           "Flags": 0,
           "__version": 1,
           "FalloffRange": 0.75,
-          "Intensity": 0.15,
+          "Intensity": 0.3,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -238,6 +238,9 @@
       "CustomBounds": false
     },
     "GameObjectSystems": {
+      "Sandbox.MovieMaker.MovieRecorderSystem": {
+        "DisableClientRecording": false
+      },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "eebf950b-129c-4757-80cd-db7b51509810"
@@ -247,9 +250,6 @@
         "Data": {
           "SelectionSets": []
         }
-      },
-      "Sandbox.MovieMaker.MovieRecorderSystem": {
-        "DisableClientRecording": false
       }
     }
   },

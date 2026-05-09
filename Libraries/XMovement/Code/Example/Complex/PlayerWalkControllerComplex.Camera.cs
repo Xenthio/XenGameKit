@@ -89,12 +89,22 @@ public partial class PlayerWalkControllerComplex : Component
 		}
 		if ( CameraMode == CameraModes.ThirdPerson )
 		{
-			var fraction = 1f;
 			var start = Head.WorldPosition;
-			var end = Head.WorldPosition + (ThirdPersonOffset * Head.WorldRotation);
-			var tr = Scene.Trace.Ray( start, end ).IgnoreDynamic().Run();
-			fraction = tr.Fraction;
-			Camera.LocalPosition = ThirdPersonOffset * fraction;
+			var end = start + (ThirdPersonOffset * Head.WorldRotation);
+			var tr = Scene.Trace.Ray( start, end ).IgnoreDynamic().Radius( 6f ).Run();
+			var camPos = tr.EndPosition;
+
+			if ( UseSceneCamera )
+			{
+				// Scene camera has no parent — drive world pos/rot directly
+				Camera.WorldPosition = camPos;
+				Camera.WorldRotation = Rotation.LookAt( start - camPos, Vector3.Up );
+			}
+			else
+			{
+				// Owned camera is parented to Head — use local position
+				Camera.LocalPosition = ThirdPersonOffset * tr.Fraction;
+			}
 		}
 		if ( CameraMode == CameraModes.FirstPerson )
 		{

@@ -154,6 +154,9 @@ public static class Bullet
 	{
 		if ( Application.IsDedicatedServer ) return;
 
+		// Cache owner for re-use below
+		var ownerPlayer = weapon.IsValid() ? weapon.GetComponentInParent<Player>( true ) : null;
+
 		// Weapon model effects — RunEvent broadcasts to ALL WeaponModel components (hits both ViewModel and WorldModel)
 		if ( weapon.IsValid() )
 		{
@@ -163,6 +166,9 @@ public static class Bullet
 				weaponModel.GameObject.RunEvent<WeaponModel>( x => x.OnAttack() );
 				weaponModel.GameObject.RunEvent<WeaponModel>( x => x.CreateRangedEffects( weapon.GetComponent<BaseWeapon>(), hitPoint, origin ) );
 			}
+
+			// Drive the player body's attack animation (3rd person anim + muzzleflash timing)
+			ownerPlayer?.WalkController?.BodyModelRenderer?.Set( "b_attack", true );
 		}
 
 		// Shoot sound
@@ -170,7 +176,6 @@ public static class Bullet
 		{
 			var snd = weapon.PlaySound( shootSound );
 			// De-spatialize for the local shooter
-			var ownerPlayer = weapon.GetComponentInParent<Player>( true );
 			if ( ownerPlayer.IsValid() && ownerPlayer.IsLocalPlayer && snd.IsValid() )
 				snd.SpacialBlend = 0;
 		}

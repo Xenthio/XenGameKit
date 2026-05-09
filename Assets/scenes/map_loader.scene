@@ -3,23 +3,25 @@
   "GameObjects": [
     {
       "__guid": "9e1f4521-d158-417a-b907-fa362a0c404a",
-      "__version": 1,
+      "__version": 2,
       "Flags": 0,
       "Name": "Map",
-      "Position": "149.3263,149.3264,-211.1794",
+      "Position": "0,0,0",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
       "Enabled": true,
       "NetworkMode": 2,
-      "NetworkInterpolation": true,
+      "NetworkFlags": 0,
       "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
       "OwnerTransfer": 1,
       "Components": [
         {
           "__type": "Sandbox.MapInstance",
           "__guid": "a5d2b171-04d8-4300-bce6-b7b785483108",
           "__enabled": true,
+          "Flags": 0,
           "__version": 1,
           "EnableCollision": true,
           "MapName": null,
@@ -53,7 +55,24 @@
       "AgentStepSize": 18,
       "AgentMaxSlope": 40,
       "ExcludedBodies": "",
-      "IncludedBodies": ""
+      "IncludedBodies": "",
+      "DeferGeneration": false,
+      "CustomBounds": false
+    },
+    "GameObjectSystems": {
+      "Sandbox.MovieMaker.MovieRecorderSystem": {
+        "DisableClientRecording": false
+      },
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
+        }
+      },
+      "Sandbox.Clutter.ClutterGridSystem": {
+        "Storage": {
+          "$blob": "49695118-ea7f-4f74-82b2-e1b63efcdd00"
+        }
+      }
     }
   },
   "ResourceVersion": 3,
