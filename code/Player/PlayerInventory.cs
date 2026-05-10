@@ -71,7 +71,7 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 
 		var renderer = Player?.WalkController?.BodyModelRenderer;
 
-		if ( ActiveWeapon.IsValid() )
+		if ( ActiveWeapon.IsValid() && ActiveWeapon != null )
 		{
 			ActiveWeapon.OnFrameUpdate( Player );
 			if ( !IsProxy )

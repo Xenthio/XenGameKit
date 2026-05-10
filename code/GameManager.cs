@@ -100,6 +100,45 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		player?.OnDamage( new DamageInfo( float.MaxValue, (GameObject)null ) );
 	}
 
+	/// <summary>
+	/// Ignite the entity you're aiming at.
+	/// Usage: ignite [durationSeconds]
+	/// </summary>
+	[ConCmd( "ignite", ConVarFlags.Server | ConVarFlags.Cheat )]
+	public static void Ignite( Connection source, float durationSeconds = 10f )
+	{
+		var player = Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.Network.Owner == source );
+		if ( !player.IsValid() )
+			return;
+
+		var tr = Game.ActiveScene.Trace.Ray( player.EyeTransform.ForwardRay, 4096f )
+			.IgnoreGameObjectHierarchy( player.GameObject )
+			.WithoutTags( "player", "playercontroller", "trigger", "weapon" )
+			.Run();
+
+		if ( !tr.Hit || !tr.GameObject.IsValid() )
+		{
+			Log.Warning( "ignite: no valid target" );
+			return;
+		}
+
+		var target = tr.GameObject.Root;
+		var fireComponent = FireSystem.Ignite( target );
+
+		if ( !fireComponent.IsValid() )
+		{
+			Log.Warning( "ignite: failed to create fire component" );
+			return;
+		}
+
+		durationSeconds = Math.Max( 0f, durationSeconds );
+
+		fireComponent.Enabled = true;
+		fireComponent.InfiniteFuel = durationSeconds <= 0f;
+		fireComponent.FuelSeconds = durationSeconds;
+		fireComponent.RemainingFuel = durationSeconds;
+	}
+
 	// -------------------------------------------------------------------------
 	// Prefab resolution
 	// -------------------------------------------------------------------------

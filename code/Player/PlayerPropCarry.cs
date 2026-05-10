@@ -27,6 +27,10 @@ public class PlayerPropCarry : Component
 
 	/// <summary>World units in front of the eye to hold the object.</summary>
 	[Property, Group( "Carry" )] public float HoldDistance { get; set; } = 72f;
+	/// <summary>Minimum hold distance when close to walls/obstacles.</summary>
+	[Property, Group( "Carry" )] public float MinHoldDistance { get; set; } = 24f;
+	/// <summary>How much to pull back from walls when the hold ray hits geometry.</summary>
+	[Property, Group( "Carry" )] public float HoldWallPadding { get; set; } = 8f;
 
 	/// <summary>Spring constant — how aggressively the object chases the hold point.</summary>
 	[Property, Group( "Carry" )] public float SpringStrength { get; set; } = 80f;
@@ -36,12 +40,21 @@ public class PlayerPropCarry : Component
 
 	/// <summary>Angular damping — prevents free spinning.</summary>
 	[Property, Group( "Carry" )] public float AngularDamping { get; set; } = 30f;
+	/// <summary>Mass assigned while an object is held, matching HL2's reduced carry mass idea.</summary>
+	[Property, Group( "Carry" )] public float HeldMass { get; set; } = 1f;
 
 	/// <summary>Max speed the object is allowed to move while being steered (units/s).</summary>
 	[Property, Group( "Carry" )] public float MaxCarrySpeed { get; set; } = 600f;
 
 	/// <summary>Max angular speed while carried (deg/s).</summary>
 	[Property, Group( "Carry" )] public float MaxCarryAngular { get; set; } = 180f;
+
+	/// <summary>If true, rotate held props using HL2-style player-space angle tracking.</summary>
+	[Property, Group( "Carry" )] public bool UseHl2CarryRotation { get; set; } = true;
+	/// <summary>HL2 +USE carry ignores player pitch when resolving held prop orientation.</summary>
+	[Property, Group( "Carry" )] public bool IgnoreCarryPitch { get; set; } = true;
+	/// <summary>Snap carry angles toward major axes like HL2's 30-degree alignment step.</summary>
+	[Property, Group( "Carry" )] public bool AlignCarryAngles { get; set; } = true;
 
 	/// <summary>Objects heavier than this (kg) cannot be picked up.</summary>
 	[Property, Group( "Carry" )] public float MaxMass { get; set; } = 35f;
@@ -68,13 +81,104 @@ public class PlayerPropCarry : Component
 		return delta;
 	}
 
-	// Object-space angles at the moment of grab, preserved throughout the carry
-	private Angles _attachedAnglesLocalSpace;
+	// Player-space angles at the moment of grab, preserved like HL2's m_attachedAnglesPlayerSpace
+	private Angles _attachedAnglesPlayerSpace;
+	// Object-space offset from the grabbed point to the rigidbody origin.
+	private Vector3 _attachedPositionObjectSpace;
+	private Vector3 _lastTargetPosition;
+	private float _contactAmount = 1f;
+	private float _savedMass;
+	private bool _savedUseController;
+	private bool _savedEnableImpactDamage;
+	private float _savedImpactDamage;
+	private float _savedMinImpactDamageSpeed;
+	private BaseCarryable _holsteredWeapon;
+
+	Rotation GetPlayerCarryRotation()
+	{
+		var eyeAngles = Player.WalkController?.EyeAngles ?? Player.EyeTransform.Rotation.Angles();
+		if ( IgnoreCarryPitch )
+			eyeAngles.pitch = 0f;
+
+		return eyeAngles.ToRotation();
+	}
+
+	float GetHeldRadius()
+	{
+		if ( !HeldObject.IsValid() )
+			return 0f;
+
+		var bounds = HeldObject.GameObject.GetBounds();
+		return MathF.Max( 1f, MathF.Max( bounds.Extents.x, MathF.Max( bounds.Extents.y, bounds.Extents.z ) ) );
+	}
+
+	void HolsterActiveWeapon()
+	{
+		var inventory = Player.Components.Get<PlayerInventory>();
+		if ( inventory is null )
+			return;
+
+		_holsteredWeapon = inventory.ActiveWeapon;
+		if ( _holsteredWeapon.IsValid() )
+			inventory.SwitchWeapon( null, true );
+	}
+
+	void RestoreHolsteredWeapon()
+	{
+		var inventory = Player.Components.Get<PlayerInventory>();
+		if ( inventory is null )
+			return;
+
+		if ( _holsteredWeapon.IsValid() && _holsteredWeapon.Owner == Player )
+			inventory.SwitchWeapon( _holsteredWeapon, true );
+		else if ( !inventory.ActiveWeapon.IsValid() )
+			inventory.SwitchWeapon( inventory.Weapons.FirstOrDefault(), true );
+
+		_holsteredWeapon = null;
+	}
+
+	static Rotation AlignCarryRotation( Rotation rotation, float cosineAlignAngle )
+	{
+		var forward = rotation.Forward;
+		var right = rotation.Right;
+		var up = rotation.Up;
+
+		AlignAxis( ref up, cosineAlignAngle );
+		right = Vector3.Cross( up, forward ).Normal;
+		forward = Vector3.Cross( right, up ).Normal;
+
+		AlignAxis( ref right, cosineAlignAngle );
+		forward = Vector3.Cross( right, up ).Normal;
+		up = Vector3.Cross( forward, right ).Normal;
+
+		AlignAxis( ref forward, cosineAlignAngle );
+		right = Vector3.Cross( up, forward ).Normal;
+		up = Vector3.Cross( forward, right ).Normal;
+
+		return Rotation.LookAt( forward, up );
+	}
+
+	static void AlignAxis( ref Vector3 axis, float cosineAlignAngle )
+	{
+		var basis = new[] { Vector3.Right, Vector3.Up, Vector3.Forward };
+		foreach ( var basisAxis in basis )
+		{
+			var dot = axis.Dot( basisAxis );
+			if ( MathF.Abs( dot ) <= cosineAlignAngle )
+				continue;
+
+			axis = basisAxis * MathF.Sign( dot );
+			return;
+		}
+	}
+
 	// Original gravity scale — restored on drop
 	private float _savedGravityScale;
 	// Saved linear/angular damping — we crank these while held
 	private float _savedLinearDamping;
 	private float _savedAngularDamping;
+
+	const float CarryAngleAlignmentCosine = 0.8660254f;
 
 	// -------------------------------------------------------------------------
 	// Update
@@ -102,13 +206,22 @@ public class PlayerPropCarry : Component
 				return;
 			}
 
-			UpdateCarry();
 		}
 		else
 		{
 			if ( usePressed )
 				TryPickup();
 		}
+	}
+
+	protected override void OnFixedUpdate()
+	{
+		base.OnFixedUpdate();
+
+		if ( Player.IsProxy ) return;
+		if ( !IsCarrying ) return;
+
+		UpdateCarry();
 	}
 
 	// -------------------------------------------------------------------------
@@ -141,26 +254,50 @@ public class PlayerPropCarry : Component
 		// Don't grab weapons sitting in the world (they use IPressable for pickup)
 		if ( rb.GetComponent<DroppedWeapon>( true ).IsValid() ) return;
 
-		Attach( rb );
+		Attach( rb, tr.HitPosition );
 	}
 
-	void Attach( Rigidbody rb )
+	void Attach( Rigidbody rb, Vector3 grabPosition )
 	{
 		HeldObject = rb;
 
-		// Record local-space angles relative to eye at grab time
-		var eyeRot = Player.EyeTransform.Rotation;
-		var localRot = eyeRot.Inverse * rb.WorldRotation;
-		_attachedAnglesLocalSpace = localRot.Angles();
+		// Record player-space angles at grab time (mirrors HL2 CGrabController).
+		var carryRot = GetPlayerCarryRotation();
+		var heldRotation = rb.WorldRotation;
+		if ( AlignCarryAngles )
+			heldRotation = AlignCarryRotation( heldRotation, CarryAngleAlignmentCosine );
+
+		_attachedAnglesPlayerSpace = (carryRot.Inverse * heldRotation).Angles();
+
+		var anchorPoint = rb.GameObject.GetBounds().Center;
+		if ( anchorPoint == Vector3.Zero )
+			anchorPoint = grabPosition;
+
+		_attachedPositionObjectSpace = heldRotation.Inverse * (anchorPoint - rb.WorldPosition);
+		_lastTargetPosition = rb.WorldPosition;
+		_contactAmount = 1f;
 
 		// Save and override physics params while held
 		_savedGravityScale    = rb.GravityScale;
 		_savedLinearDamping   = rb.LinearDamping;
 		_savedAngularDamping  = rb.AngularDamping;
+		_savedMass            = rb.PhysicsBody.Mass;
+		_savedUseController   = rb.PhysicsBody.UseController;
+		_savedEnableImpactDamage = rb.EnableImpactDamage;
+		_savedImpactDamage = rb.ImpactDamage;
+		_savedMinImpactDamageSpeed = rb.MinImpactDamageSpeed;
 
-		rb.GravityScale    = 0f;   // gravity compensation — object floats at hold point
-		rb.LinearDamping   = 2f;   // light damping helps stability
-		rb.AngularDamping  = 8f;   // stop spin
+		rb.GravityScale    = 0f; // gravity compensation like HL2 held objects
+		rb.LinearDamping   = MathF.Max( rb.LinearDamping, Damping );
+		rb.AngularDamping  = MathF.Max( rb.AngularDamping, AngularDamping );
+		rb.AngularVelocity = Vector3.Zero;
+		rb.EnableImpactDamage = false;
+		rb.ImpactDamage = 0f;
+		rb.MinImpactDamageSpeed = float.MaxValue;
+		rb.PhysicsBody.UseController = true;
+		rb.PhysicsBody.Mass = HeldMass;
+
+		HolsterActiveWeapon();
 	}
 
 	// -------------------------------------------------------------------------
@@ -170,54 +307,78 @@ public class PlayerPropCarry : Component
 	void UpdateCarry()
 	{
 		if ( !HeldObject.IsValid() ) { HeldObject = null; return; }
+		if ( !HeldObject.MotionEnabled ) { Drop( clearVelocity: false ); return; }
 
-		var eye       = Player.EyeTransform;
-		var targetPos = eye.Position + eye.Forward * HoldDistance;
+		var eye = Player.EyeTransform;
+		var heldRadius = GetHeldRadius();
+		var targetDistance = MathF.Max( HoldDistance, 24f + heldRadius * 2f );
+		var blocked = false;
+		var blockNormal = Vector3.Zero;
 
-		// --- Position spring ---
-		var delta    = targetPos - HeldObject.WorldPosition;
-		var dist     = delta.Length;
+		// HL2-style hold target clamping: if blocked, pull the target back toward player.
+		var holdTrace = Scene.Trace
+			.Ray( eye.Position, eye.Position + eye.Forward * HoldDistance )
+			.IgnoreGameObjectHierarchy( Player.GameObject )
+			.IgnoreGameObjectHierarchy( HeldObject.GameObject )
+			.WithTag( "map" )
+			.WithoutTags( "trigger" )
+			.Run();
 
-		// Safety: too far away → drop (e.g. clipped through wall)
+		if ( holdTrace.Hit )
+		{
+			blocked = true;
+			blockNormal = holdTrace.Normal;
+			var blockedDistance = Math.Max( MinHoldDistance, eye.Position.Distance( holdTrace.HitPosition ) - heldRadius - HoldWallPadding );
+			if ( holdTrace.Distance < heldRadius * 2f )
+				blockedDistance = Math.Max( MinHoldDistance, heldRadius * 0.5f );
+			targetDistance = Math.Min( targetDistance, blockedDistance );
+		}
+
+		var contactTarget = blocked ? 0.1f : 1.0f;
+		var contactStep = Time.Delta * 8f;
+		if ( _contactAmount < contactTarget )
+			_contactAmount = MathF.Min( contactTarget, _contactAmount + contactStep );
+		else
+			_contactAmount = MathF.Max( contactTarget, _contactAmount - contactStep );
+
+		var targetGrabPoint = eye.Position + eye.Forward * targetDistance;
+		var desiredWorldRot = UseHl2CarryRotation
+			? GetPlayerCarryRotation() * _attachedAnglesPlayerSpace.ToRotation()
+			: HeldObject.WorldRotation;
+
+		if ( blocked && UseHl2CarryRotation )
+		{
+			var currentAngles = HeldObject.WorldRotation.Angles();
+			var desiredAngles = desiredWorldRot.Angles();
+			var blend = _contactAmount * _contactAmount * _contactAmount;
+			desiredWorldRot = new Angles(
+				currentAngles.pitch + DeltaAngle( currentAngles.pitch, desiredAngles.pitch ) * blend,
+				currentAngles.yaw + DeltaAngle( currentAngles.yaw, desiredAngles.yaw ) * blend,
+				currentAngles.roll + DeltaAngle( currentAngles.roll, desiredAngles.roll ) * blend
+			).ToRotation();
+		}
+
+		var targetPos = targetGrabPoint - (desiredWorldRot * _attachedPositionObjectSpace);
+
+		if ( blocked )
+		{
+			var slideDelta = targetPos - _lastTargetPosition;
+			var intoWall = blockNormal * slideDelta.Dot( blockNormal );
+			targetPos = _lastTargetPosition + (slideDelta - intoWall);
+		}
+
+		var delta = targetPos - HeldObject.WorldPosition;
+		var dist  = delta.Length;
+
 		if ( dist > MaxErrorDistance )
 		{
 			Drop( clearVelocity: false );
 			return;
 		}
 
-		var vel       = HeldObject.Velocity;
-		var spring    = delta * SpringStrength;
-		var damp      = -vel * Damping;
-		var newVel    = vel + (spring + damp) * Time.Delta;
-
-		// Clamp to max carry speed
-		if ( newVel.Length > MaxCarrySpeed )
-			newVel = newVel.Normal * MaxCarrySpeed;
-
-		HeldObject.Velocity = newVel;
-
-		// --- Rotation: restore local-space angle relative to eye ---
-		// This mirrors CGrabController tracking m_attachedAnglesPlayerSpace.
-		// Drive angular velocity toward the desired orientation using euler delta.
-		var desiredWorldRot = eye.Rotation * _attachedAnglesLocalSpace.ToRotation();
-		var currentAngles   = HeldObject.WorldRotation.Angles();
-		var desiredAngles   = desiredWorldRot.Angles();
-
-		// Wrap each axis delta to [-180, 180]
-		var deltaAngles = new Angles(
-			DeltaAngle( currentAngles.pitch, desiredAngles.pitch ),
-			DeltaAngle( currentAngles.yaw,   desiredAngles.yaw   ),
-			DeltaAngle( currentAngles.roll,  desiredAngles.roll  )
-		);
-
-		var angularVel = new Vector3( deltaAngles.pitch, deltaAngles.yaw, deltaAngles.roll ) * Damping;
-
-		// Clamp angular speed (convert to radians/s)
-		var maxAngRad = MaxCarryAngular * MathF.PI / 180f;
-		if ( angularVel.Length > maxAngRad )
-			angularVel = angularVel.Normal * maxAngRad;
-
-		HeldObject.AngularVelocity = angularVel;
+		var targetTransform = new Transform( targetPos, desiredWorldRot );
+		HeldObject.PhysicsBody.Move( targetTransform, Time.Delta );
+		_lastTargetPosition = targetPos;
 	}
 
 	// -------------------------------------------------------------------------
@@ -237,6 +398,7 @@ public class PlayerPropCarry : Component
 		}
 
 		HeldObject = null;
+		RestoreHolsteredWeapon();
 	}
 
 	void Throw()
@@ -245,12 +407,13 @@ public class PlayerPropCarry : Component
 
 		RestorePhysicsParams();
 
-		// HL2: throw force is scaled a bit by mass so lighter objects go faster
-		var massScale = MathX.Remap( HeldObject.Mass, 0f, MaxMass, 1.2f, 0.8f );
+		// HL2 +USE throw: heavier objects get more launch scaling to avoid tiny props over-flying.
+		var massScale = MathX.Remap( HeldObject.Mass, 0.5f, 15f, 0.5f, 4f );
 		HeldObject.Velocity = Player.EyeTransform.Forward * ThrowForce * massScale;
 		HeldObject.AngularVelocity = Vector3.Zero;
 
 		HeldObject = null;
+		RestoreHolsteredWeapon();
 	}
 
 	void RestorePhysicsParams()
@@ -260,6 +423,11 @@ public class PlayerPropCarry : Component
 		HeldObject.GravityScale   = _savedGravityScale;
 		HeldObject.LinearDamping  = _savedLinearDamping;
 		HeldObject.AngularDamping = _savedAngularDamping;
+		HeldObject.EnableImpactDamage = _savedEnableImpactDamage;
+		HeldObject.ImpactDamage = _savedImpactDamage;
+		HeldObject.MinImpactDamageSpeed = _savedMinImpactDamageSpeed;
+		HeldObject.PhysicsBody.Mass = _savedMass;
+		HeldObject.PhysicsBody.UseController = _savedUseController;
 	}
 
 	// Drop held object if this component or the player is destroyed

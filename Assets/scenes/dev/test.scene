@@ -3065,6 +3065,37 @@
         }
       ],
       "Children": []
+    },
+    {
+      "__guid": "67843d01-7776-46f7-8173-f252c6ae1870",
+      "__version": 2,
+      "__Prefab": "prefabs/weapons/weapon_frag.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "c7000003-0000-0000-0000-000000000001"
+            },
+            "Property": "Position",
+            "Value": "0,127.999985,-1.52587891E-05"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "c7000003-0000-0000-0000-000000000001": "67843d01-7776-46f7-8173-f252c6ae1870",
+        "c7000003-0000-0000-0000-000000000002": "a20376ac-54a2-4cbf-8091-91d5a0ca66c5",
+        "c7000003-0000-0000-0000-000000000003": "f69bd67b-2413-47b0-9d55-02c46ad9f8a2",
+        "c7000003-0000-0000-0000-000000000004": "1fbc2c84-4e79-4837-84a1-582387df69fa",
+        "c7000003-0000-0000-0000-000000000005": "b49b8725-090d-4d26-a13d-9fcbca0a360e",
+        "c7000003-0000-0000-0000-000000000006": "fefeec8b-5611-4dec-ac06-fd633fa8f63f",
+        "c7000003-0000-0000-0000-000000000010": "c3d790ac-4b6f-4989-a9e7-60c3e93f93bb",
+        "c7000003-0000-0000-0000-000000000011": "5b212340-d263-486d-963e-b0ff97c4ddbf",
+        "c7000003-0000-0000-0000-000000000012": "daddbb08-ac2a-4192-abae-321cf24a8ee4"
+      }
     }
   ],
   "SceneProperties": {
@@ -3089,17 +3120,17 @@
       "CustomBounds": false
     },
     "GameObjectSystems": {
+      "Sandbox.Clutter.ClutterGridSystem": {
+        "Storage": {
+          "$blob": "ce6922af-e250-4e8a-a73c-7cae5e756f93"
+        }
+      },
       "Sandbox.MovieMaker.MovieRecorderSystem": {
         "DisableClientRecording": false
       },
       "Sandbox.SelectionSetsSystem": {
         "Data": {
           "SelectionSets": []
-        }
-      },
-      "Sandbox.Clutter.ClutterGridSystem": {
-        "Storage": {
-          "$blob": "ce6922af-e250-4e8a-a73c-7cae5e756f93"
         }
       }
     }
