@@ -73,9 +73,11 @@ public sealed class ParticleNoiseOperator : ParticleController
 		var t = particle.Age * currentFrequency + _timeOffset;
 		var p = particle.Position * Math.Max( 0.0001f, SpatialScale );
 
-		var nx = SampleAxis( p, t, Seed + 101f, currentFrequency );
-		var ny = SampleAxis( p, t, Seed + 202f, currentFrequency );
-		var nz = SampleAxis( p, t, Seed + 303f, currentFrequency );
+		// Each axis scrolls at a different rate so they don't march in lockstep
+		// (same time for all three axes = coherent drift in one direction).
+		var nx = SampleAxis( p, t,           Seed + 101f, currentFrequency );
+		var ny = SampleAxis( p, t * 0.7193f, Seed + 202f, currentFrequency );
+		var nz = SampleAxis( p, t * 1.3071f, Seed + 303f, currentFrequency );
 		var n = new Vector3( nx, ny, nz );
 
 		if ( AffectVelocity )
@@ -99,7 +101,10 @@ public sealed class ParticleNoiseOperator : ParticleController
 
 	float SampleAxis( Vector3 position, float time, float axisSeed, float frequency )
 	{
-		var p = position + new Vector3( axisSeed, axisSeed * 0.17f, axisSeed * 0.31f ) + Vector3.One * time;
+		// Scroll the noise field along a unique diagonal per axis seed to avoid
+		// all three outputs correlating with the same spatial direction.
+		var scrollDir = new Vector3( 1f, axisSeed * 0.00013f % 1f, axisSeed * 0.00021f % 1f ).Normal;
+		var p = position + new Vector3( axisSeed, axisSeed * 0.17f, axisSeed * 0.31f ) + scrollDir * time;
 		var fractal = new Noise.FractalParameters(
 			(int)(5000 + axisSeed),
 			frequency,
