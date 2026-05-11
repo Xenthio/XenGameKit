@@ -216,6 +216,41 @@
         }
       ],
       "Children": []
+    },
+    {
+      "__guid": "aa100001-0000-0000-0000-000000000001",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Prop Systems",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 0,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": false,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "FirePropExtension",
+          "__guid": "aa100001-0000-0000-0000-000000000003",
+          "__enabled": true,
+          "Flags": 0,
+          "GibFireRadius": 128.0,
+          "GibFuelRange": "5,10"
+        },
+        {
+          "__type": "BuoyancyPropExtension",
+          "__guid": "aa100001-0000-0000-0000-000000000004",
+          "__enabled": true,
+          "Flags": 0,
+          "WaterTag": "water",
+          "ExtinguishFraction": 0.5
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {

@@ -1,20 +1,70 @@
 {
   "RootObject": {
-    "__guid": "f16ff890-d922-4ff8-9b0e-5c8a03c9f372",
+    "__guid": "0ed903c4-f114-428d-a954-d75fd94a9481",
     "__version": 2,
     "Flags": 0,
-    "Name": "fire",
+    "Name": "ignite",
     "Position": "0,0,0",
     "Rotation": "0,0,0,1",
     "Scale": "1,1,1",
-    "Tags": "effect,fire,particles",
+    "Tags": "fire",
     "Enabled": true,
     "NetworkMode": 2,
     "NetworkFlags": 0,
     "NetworkOrphaned": 0,
     "NetworkTransmit": true,
     "OwnerTransfer": 1,
-    "Components": [],
+    "Components": [
+      {
+        "__type": "FireComponent",
+        "__guid": "a83f5dd8-771e-49ad-8f77-f4b221780da9",
+        "__enabled": true,
+        "Flags": 0,
+        "AbsorbRate": 1,
+        "AttackTime": 4,
+        "BaseDamagePerSecond": 8,
+        "BurnSound": null,
+        "DamageInterval": 0.2,
+        "DamagePlayers": true,
+        "DamageScaleByHeat": 1,
+        "DealDamage": true,
+        "Enabled": true,
+        "ExtinguishAbsorbScale": 0.75,
+        "FireSize": 64,
+        "FuelSeconds": 10,
+        "GrowthRate": 1,
+        "IncomingHeatScale": 0.25,
+        "InfiniteFuel": true,
+        "InitialHeatAbsorb": 8,
+        "MaxHeat": 100,
+        "MaxHeatAbsorb": 64,
+        "MinimumDamageRadius": 16,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RequireLineOfSight": true,
+        "SpreadHeatScale": 0.2,
+        "StartLit": true
+      },
+      {
+        "__type": "TemporaryEffect",
+        "__guid": "bc8426a1-5362-4849-89b5-20888b543c20",
+        "__enabled": true,
+        "Flags": 0,
+        "BecomeOrphan": true,
+        "DestroyAfterSeconds": 8,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "WaitForChildEffects": true
+      }
+    ],
     "Children": [
       {
         "__guid": "2864160d-23d7-427f-b865-0efa908fb3e1",
@@ -24,7 +74,7 @@
         "Position": "0,0,0",
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
-        "Tags": "",
+        "Tags": "particles",
         "Enabled": true,
         "NetworkMode": 2,
         "NetworkFlags": 0,
@@ -382,19 +432,19 @@
                   "DstName": "b"
                 },
                 {
-                  "Id": 329,
+                  "Id": 334,
                   "Value": -1,
                   "DstId": 11,
                   "DstName": "x"
                 },
                 {
-                  "Id": 330,
+                  "Id": 335,
                   "Value": -1,
                   "DstId": 11,
                   "DstName": "y"
                 },
                 {
-                  "Id": 331,
+                  "Id": 336,
                   "Value": 1,
                   "DstId": 11,
                   "DstName": "z"
@@ -418,7 +468,7 @@
                   "DstName": "_target"
                 },
                 {
-                  "Id": 332,
+                  "Id": 337,
                   "Value": -1,
                   "DstId": 320,
                   "DstName": "_value"
@@ -442,7 +492,7 @@
                   "DstName": "_target"
                 },
                 {
-                  "Id": 333,
+                  "Id": 338,
                   "Value": 1,
                   "DstId": 328,
                   "DstName": "_value"
@@ -542,7 +592,7 @@
             "RateOverDistance": 0,
             "Target": {
               "_type": "gameobject",
-              "go": "12bc0c7b-97e2-4b35-94d7-08faf8044f33"
+              "go": "4d94eaa2-9931-4ce8-b665-78c4b4fb5b37"
             }
           },
           {
@@ -765,7 +815,7 @@
         "Position": "0,0,0",
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
-        "Tags": "",
+        "Tags": "particles",
         "Enabled": true,
         "NetworkMode": 2,
         "NetworkFlags": 0,
@@ -1112,7 +1162,7 @@
             "RateOverDistance": 0,
             "Target": {
               "_type": "gameobject",
-              "go": "12bc0c7b-97e2-4b35-94d7-08faf8044f33"
+              "go": "4d94eaa2-9931-4ce8-b665-78c4b4fb5b37"
             }
           }
         ],
@@ -1126,7 +1176,7 @@
         "Position": "0,0,0",
         "Rotation": "0,0,0,1",
         "Scale": "1,1,1",
-        "Tags": "",
+        "Tags": "particles",
         "Enabled": true,
         "NetworkMode": 2,
         "NetworkFlags": 0,
@@ -1326,7 +1376,7 @@
             "RateOverDistance": 0,
             "Target": {
               "_type": "gameobject",
-              "go": "12bc0c7b-97e2-4b35-94d7-08faf8044f33"
+              "go": "53be4f10-82e3-4199-a32d-6f76ee1a9880"
             }
           },
           {
@@ -1542,7 +1592,77 @@
         "Children": []
       },
       {
-        "__guid": "0f0d0532-743a-4217-b560-3d9c0cdc134d",
+        "__guid": "6863192b-b158-44e3-84df-efbac8194b15",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "fire_sound",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SoundBoxComponent",
+            "__guid": "4d8b0ab5-85c5-49dc-854d-15a11455a018",
+            "__enabled": true,
+            "Flags": 0,
+            "Distance": 512,
+            "DistanceAttenuation": false,
+            "DistanceAttenuationOverride": false,
+            "Falloff": [
+              {
+                "x": 0,
+                "y": 1,
+                "in": 3.1415927,
+                "out": -3.1415927,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 1,
+                "y": 0,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              }
+            ],
+            "Force2d": false,
+            "MaxRepeatTime": 1,
+            "MinRepeatTime": 1,
+            "Occlusion": false,
+            "OcclusionOverride": false,
+            "OcclusionRadius": 32,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Pitch": 1,
+            "PlayOnStart": true,
+            "ReflectionOverride": false,
+            "Reflections": false,
+            "Repeat": false,
+            "Scale": "50,50,50",
+            "SoundEvent": "sounds/effects/fire/fire_burn_loop01.sound",
+            "SoundOverride": false,
+            "StopOnNew": false,
+            "TargetMixer": {
+              "Name": "game",
+              "Id": "9ea3a3d2-5d92-42b2-8f49-90635282a083"
+            },
+            "Volume": 1
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "0d8d53f2-751f-4e59-8590-583b49da0a8b",
         "__version": 2,
         "Flags": 6144,
         "Name": "Editor Preview Stuff",
@@ -1559,7 +1679,7 @@
         "Components": [],
         "Children": [
           {
-            "__guid": "12bc0c7b-97e2-4b35-94d7-08faf8044f33",
+            "__guid": "4d94eaa2-9931-4ce8-b665-78c4b4fb5b37",
             "__version": 2,
             "Flags": 4096,
             "Name": "OilDrum",
@@ -1576,7 +1696,7 @@
             "Components": [
               {
                 "__type": "Sandbox.SkinnedModelRenderer",
-                "__guid": "b42076a5-5021-4b8d-a818-bfe47a916aa8",
+                "__guid": "bddda422-fdae-4b2c-a39b-da71425f5131",
                 "__enabled": true,
                 "Flags": 0,
                 "AnimationGraph": null,
@@ -1623,106 +1743,7 @@
             "Children": []
           },
           {
-            "__guid": "7955aaff-ca35-472f-9c26-c7a7bd38b778",
-            "__version": 2,
-            "Flags": 4096,
-            "Name": "OilDrum",
-            "Position": "-128,0,0",
-            "Rotation": "0,0,0,1",
-            "Scale": "1,1,1",
-            "Tags": "",
-            "Enabled": true,
-            "NetworkMode": 2,
-            "NetworkFlags": 0,
-            "NetworkOrphaned": 0,
-            "NetworkTransmit": true,
-            "OwnerTransfer": 1,
-            "Components": [
-              {
-                "__type": "Sandbox.SkinnedModelRenderer",
-                "__guid": "1ec8d5e2-3598-4cd5-b41d-551ffa667e35",
-                "__enabled": true,
-                "Flags": 0,
-                "AnimationGraph": null,
-                "BodyGroups": 18446744073709551615,
-                "BoneMergeTarget": null,
-                "CreateAttachments": false,
-                "CreateBoneObjects": false,
-                "LodOverride": null,
-                "MaterialGroup": null,
-                "MaterialOverride": null,
-                "Materials": null,
-                "Model": "models/sbox_props/oil_drum/oil_drum_explosive.vmdl",
-                "Morphs": {},
-                "OnComponentDestroy": null,
-                "OnComponentDisabled": null,
-                "OnComponentEnabled": null,
-                "OnComponentFixedUpdate": null,
-                "OnComponentStart": null,
-                "OnComponentUpdate": null,
-                "Parameters": {
-                  "bools": {},
-                  "ints": {},
-                  "floats": {},
-                  "vectors": {},
-                  "rotations": {}
-                },
-                "PlaybackRate": 1,
-                "RenderOptions": {
-                  "GameLayer": true,
-                  "OverlayLayer": false,
-                  "BloomLayer": false,
-                  "AfterUILayer": false
-                },
-                "RenderType": "On",
-                "Sequence": {
-                  "Name": null,
-                  "Looping": true,
-                  "Blending": false
-                },
-                "Tint": "1,1,1,1",
-                "UseAnimGraph": true
-              }
-            ],
-            "Children": [
-              {
-                "__guid": "bd218337-8de7-4aa4-bdaf-bf87a2845efb",
-                "__version": 2,
-                "__Prefab": "effects/fire_fast.prefab",
-                "__PrefabInstancePatch": {
-                  "AddedObjects": [],
-                  "RemovedObjects": [],
-                  "PropertyOverrides": [
-                    {
-                      "Target": {
-                        "Type": "GameObject",
-                        "IdValue": "e735a472-e4ad-4c9b-be5f-0d0db6106b6c"
-                      },
-                      "Property": "Position",
-                      "Value": "0,0,20.3765011"
-                    },
-                    {
-                      "Target": {
-                        "Type": "GameObject",
-                        "IdValue": "e735a472-e4ad-4c9b-be5f-0d0db6106b6c"
-                      },
-                      "Property": "Tags",
-                      "Value": ""
-                    }
-                  ],
-                  "MovedObjects": []
-                },
-                "__PrefabIdToInstanceId": {
-                  "e735a472-e4ad-4c9b-be5f-0d0db6106b6c": "bd218337-8de7-4aa4-bdaf-bf87a2845efb",
-                  "239249c6-0cf7-4f2e-b290-292d5c4b3765": "dbd5d038-1562-4322-a698-ad54838fad55",
-                  "c4b193fc-ba6b-429a-a473-630f33a83a79": "101438ff-e472-43b4-81ec-03f015cb1674",
-                  "cf31d1fe-e564-4b17-b163-c975f36d61f0": "307a2da1-b8b4-4e64-8498-25c12125ba09"
-                }
-              }
-            ]
-          },
-          {
-            "__guid": "b0e4b95a-12f3-4c17-b20f-9564e85b5c53",
+            "__guid": "4a7b9a91-4425-4d16-86fc-5bbeadb2c774",
             "__version": 2,
             "Flags": 0,
             "Name": "Block",
@@ -1739,7 +1760,7 @@
             "Components": [
               {
                 "__type": "Sandbox.MeshComponent",
-                "__guid": "d69e2783-7444-452a-869c-e15eaecc2dfd",
+                "__guid": "fb4f5533-2052-4d30-a846-f0e4910b4fe9",
                 "__enabled": true,
                 "Flags": 0,
                 "ColliderFlags": 0,
@@ -1898,7 +1919,7 @@
             "Children": []
           },
           {
-            "__guid": "48bdefa4-b8e8-411f-9680-a37110dfed76",
+            "__guid": "cd6b9d1e-b3a2-48e1-a7f5-06e662cd19fa",
             "__version": 2,
             "Flags": 0,
             "Name": "Spot Light",
@@ -1915,7 +1936,7 @@
             "Components": [
               {
                 "__type": "Sandbox.SpotLight",
-                "__guid": "23a06a1c-0733-4159-b0d3-8c5a1d6c7b69",
+                "__guid": "5907d712-7612-4968-849c-9d776385498e",
                 "__enabled": true,
                 "Flags": 0,
                 "Attenuation": 1,
@@ -1940,7 +1961,7 @@
             "Children": []
           },
           {
-            "__guid": "769c72e5-a24e-41b1-9967-029739839cb0",
+            "__guid": "254fc934-9e99-4bca-8aed-bd5403c673ef",
             "__version": 2,
             "Flags": 0,
             "Name": "LightProbeCubeMap",
@@ -1957,7 +1978,7 @@
             "Components": [
               {
                 "__type": "Sandbox.EnvmapProbe",
-                "__guid": "95775c81-bbdf-4084-8050-b19f265f809c",
+                "__guid": "60156c56-47c0-49fd-8686-6a9ee33402f1",
                 "__enabled": true,
                 "Flags": 0,
                 "__version": 1,
@@ -1989,7 +2010,7 @@
               },
               {
                 "__type": "Sandbox.IndirectLightVolume",
-                "__guid": "825ee4a1-0804-4d09-989c-b8bcb472d96e",
+                "__guid": "48ce6ddd-7c06-4ec2-a977-1b532bf04b22",
                 "__enabled": true,
                 "Flags": 0,
                 "Bounds": {
@@ -2039,12 +2060,11 @@
     "__variables": []
   },
   "ResourceVersion": 2,
-  "ShowInMenu": true,
-  "MenuPath": "XenGameKit/Effects/fire_placeholder",
+  "ShowInMenu": false,
+  "MenuPath": null,
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
   "__references": [
-    "facepunch.fire_particle_fast#60123",
     "facepunch.oildrumexplosive#166080"
   ],
   "__version": 2

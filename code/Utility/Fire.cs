@@ -1,29 +1,49 @@
 /// <summary>
 /// Static fire system. Call FireSystem.Ignite() to add fire to any GameObject.
-/// FireComponent handles all particles, sound, and damage ticking.
+/// Spawns the project-local override of /prefabs/engine/ignite.prefab which
+/// contains FireComponent (our full heat/spread system) instead of the engine's
+/// flat FireDamage. Cross-game compatible: Prop.Ignite() resolves the same path.
 /// </summary>
 public static class FireSystem
 {
-	/// <summary>
-	/// Default fire particle prefab used when creating fires programmatically.
-	/// Set this in GameManager.OnStart() or similar.
-	/// </summary>
-	public static GameObject DefaultFireParticle { get; set; }
-
 	public static FireComponent Ignite( GameObject go )
 	{
 		if ( !go.IsValid() ) return null;
 
-		var fire = go.GetOrAddComponent<FireComponent>();
-		fire.Enabled = true;
+		// Re-use an existing FireComponent if already burning
+		var fire = go.GetComponent<FireComponent>( true );
+		if ( fire.IsValid() )
+		{
+			fire.AddSelfHeat( fire.MaxHeat );
+			return fire;
+		}
 
-		if ( !DefaultFireParticle.IsValid() )
-			DefaultFireParticle = GameObject.GetPrefab( "prefabs/effects/fire.prefab" );
+		// Spawn ignite.prefab (our project override of the engine default).
+		// The prefab contains FireComponent with StartLit=true, so it self-starts.
+		var prefab = ResourceLibrary.Get<PrefabFile>( "/prefabs/engine/ignite.prefab" );
+		if ( prefab == null )
+		{
+			Log.Warning( "FireSystem.Ignite: can't find /prefabs/engine/ignite.prefab" );
+			return null;
+		}
 
-		if ( !fire.FireParticleOverride.IsValid() && DefaultFireParticle.IsValid() )
-			fire.FireParticleOverride = DefaultFireParticle;
+		var cloned = GameObject.Clone( prefab, new CloneConfig { Parent = null, Transform = new global::Transform( go.WorldPosition ), StartEnabled = true } );
 
-		fire.AddSelfHeat( fire.MaxHeat );
+		// Wire all ParticleModelEmitters to target the burning GO
+		cloned.RunEvent<ParticleModelEmitter>( x => x.Target = go );
+
+		// Grab the FireComponent from the spawned prefab instance
+		fire = cloned.GetComponentInChildren<FireComponent>( true );
+		if ( !fire.IsValid() )
+		{
+			Log.Warning( "FireSystem.Ignite: ignite.prefab has no FireComponent" );
+			cloned.Destroy();
+			return null;
+		}
+
+		// Give FireComponent a reference so it can shut down emitters/sound on extinguish
+		fire._igniteInstance = cloned;
+
 		return fire;
 	}
 
@@ -235,9 +255,6 @@ public sealed class FireComponent : Component
 
 	[Property, Group( "Spread" )] public float SpreadHeatScale { get; set; } = 0.2f;
 
-	[Property, Group( "Effects" )] public GameObject FireParticleOverride { get; set; }
-	[Property, Group( "Effects" )] public float ParticleShutdownDelay { get; set; } = 1.0f;
-	[Property, Group( "Effects" )] public SoundEvent BurnSound { get; set; }
 
 	[Sync] public float HeatLevel { get; internal set; } = 0f;
 	[Sync] public bool IsBurning { get; private set; } = false;
@@ -246,10 +263,7 @@ public sealed class FireComponent : Component
 	internal float RemainingFuel { get; set; }
 	internal TimeUntil TimeUntilNextDamageTick { get; set; }
 
-	GameObject _effectInstance;
-	SoundHandle _burnSound;
-	bool _pendingEffectDestroy;
-	float _effectDestroyAt;
+	internal GameObject _igniteInstance; // reference to spawned ignite.prefab GO for shutdown
 
 	protected override void OnStart()
 	{
@@ -267,9 +281,6 @@ public sealed class FireComponent : Component
 	protected override void OnUpdate()
 	{
 		FireSystem.Update( this, Time.Delta );
-
-		if ( _pendingEffectDestroy && Time.Now >= _effectDestroyAt )
-			DestroyEffectNow();
 	}
 
 	protected override void OnDisabled()
@@ -279,7 +290,10 @@ public sealed class FireComponent : Component
 
 	protected override void OnDestroy()
 	{
-		SetBurningState( false );
+		// BecomeOrphan=true on TemporaryEffect means the ignite GO survives
+		// independently — stop emitters so particles and sound finish cleanly.
+		ShutdownIgniteInstance();
+		IsBurning = false;
 	}
 
 	public void AddHeat( float heat ) => FireSystem.AddHeat( this, heat, false );
@@ -301,77 +315,28 @@ public sealed class FireComponent : Component
 
 	internal void SetBurningState( bool burning )
 	{
-		if ( IsBurning == burning )
-			return;
-
+		if ( IsBurning == burning ) return;
 		IsBurning = burning;
-		BroadcastBurnState( burning );
+
+		if ( !burning )
+			ShutdownIgniteInstance();
 	}
 
-	[Rpc.Broadcast]
-	void BroadcastBurnState( bool burning )
+	void ShutdownIgniteInstance()
 	{
-		if ( Application.IsDedicatedServer ) return;
+		if ( !_igniteInstance.IsValid() ) return;
 
-		if ( burning )
-		{
-			_pendingEffectDestroy = false;
+		// Stop all emitters so particles and sound fade out naturally.
+		// TemporaryEffect (BecomeOrphan=true, WaitForChildEffects=true) destroys the GO
+		// once every ParticleEffect empties.
+		foreach ( var emitter in _igniteInstance.GetComponentsInChildren<ParticleModelEmitter>( true ) )
+			emitter.Enabled = false;
 
-			if ( !_effectInstance.IsValid() && FireParticleOverride.IsValid() )
-			{
-				_effectInstance = FireParticleOverride.Clone( new CloneConfig
-				{
-					Parent = GameObject,
-					Transform = new Transform( Vector3.Zero, Rotation.Identity ),
-					StartEnabled = true
-				} );
-			}
+		// Stop the looping sound immediately
+		foreach ( var sound in _igniteInstance.GetComponentsInChildren<SoundBoxComponent>( true ) )
+			sound.Enabled = false;
 
-			if ( _effectInstance.IsValid() )
-			{
-				_effectInstance.Enabled = true;
-
-				foreach ( var emitter in _effectInstance.GetComponentsInChildren<ParticleModelEmitter>( true ) )
-				{
-					emitter.Enabled = true;
-					emitter.Target = GameObject;
-				}
-			}
-
-			if ( BurnSound.IsValid() && !_burnSound.IsValid() )
-				_burnSound = Sound.Play( BurnSound, WorldPosition );
-		}
-		else
-		{
-			if ( _effectInstance.IsValid() )
-			{
-				foreach ( var emitter in _effectInstance.GetComponentsInChildren<ParticleModelEmitter>( true ) )
-					emitter.Enabled = false;
-
-				var delay = Math.Max( 0f, ParticleShutdownDelay );
-				if ( delay <= 0f )
-				{
-					DestroyEffectNow();
-				}
-				else
-				{
-					_pendingEffectDestroy = true;
-					_effectDestroyAt = Time.Now + delay;
-				}
-			}
-
-			if ( _burnSound.IsValid() )
-				_burnSound.Stop();
-		}
-	}
-
-	void DestroyEffectNow()
-	{
-		_pendingEffectDestroy = false;
-		_effectDestroyAt = 0f;
-
-		if ( _effectInstance.IsValid() )
-			_effectInstance.Destroy();
+		_igniteInstance = null;
 	}
 }
 

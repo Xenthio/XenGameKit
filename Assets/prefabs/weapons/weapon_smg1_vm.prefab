@@ -37,8 +37,11 @@
         "InertiaScale": "2,2",
         "IsIncremental": false,
         "IsThrowable": false,
-        "MagazineDropPrefab": null,
-        "MagazineDropTime": 0.2,
+        "MagazineDropPrefab": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/magazine_mp5.prefab"
+        },
+        "MagazineDropTime": 0.65,
         "MagazineTransform": null,
         "MuzzleEffect": {
           "_type": "gameobject",
@@ -227,6 +230,7 @@
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
   "__references": [
+    "facepunch.rifle_muzzleflash#76090",
     "facepunch.v_first_person_arms_human#205798",
     "facepunch.v_mp5#205811"
   ],

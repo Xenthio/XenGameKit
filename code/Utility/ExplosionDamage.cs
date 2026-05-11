@@ -1,8 +1,12 @@
 /// <summary>
-/// Source-like env_explosion wrapper.
-/// Place on a GameObject and call Explode() from game logic or map scripts.
+/// Applies explosion damage and physics force in a radius.
+/// Place on a GameObject and call Explode() — or set ExplodeOnStart = true for fire-and-forget.
+/// Used by explosion_med.prefab to replace the engine's RadiusDamage with our HL2-style system.
 /// </summary>
-public sealed class EnvExplosion : Component
+[Title( "Explosion Damage" )]
+[Category( "Game" )]
+[Icon( "explosion" )]
+public sealed class ExplosionDamage : Component
 {
 	[Property, Group( "Explosion" )] public float Magnitude { get; set; } = 100f;
 	[Property, Group( "Explosion" )] public float RadiusOverride { get; set; } = 0f;
@@ -18,6 +22,16 @@ public sealed class EnvExplosion : Component
 
 	protected override void OnStart()
 	{
+		// If a sibling RadiusDamage exists (set by Prop.CreateExplosion() via RunEvent),
+		// pull its values so the prop's model data (radius, damage, force, attacker) flows through.
+		var rd = GetComponent<RadiusDamage>();
+		if ( rd.IsValid() )
+		{
+			if ( rd.Radius > 0 ) RadiusOverride = rd.Radius;
+			if ( rd.DamageAmount > 0 ) Magnitude = rd.DamageAmount;
+			if ( rd.PhysicsForceScale != 0 ) DamageForce = rd.PhysicsForceScale;
+		}
+
 		if ( ExplodeOnStart )
 			Explode();
 	}
