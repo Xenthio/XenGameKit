@@ -27,6 +27,14 @@
         "EjectTransform": {
           "_type": "gameobject",
           "go": "a2000001-0000-0000-0000-000000000011"
+        },
+        "MuzzleEffect": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/pistol_muzzleflash.prefab"
+        },
+        "MuzzleTransform": {
+          "_type": "gameobject",
+          "go": "a2000001-0000-0000-0000-000000000010"
         }
       },
       {

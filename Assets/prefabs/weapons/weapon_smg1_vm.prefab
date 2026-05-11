@@ -40,8 +40,14 @@
         "MagazineDropPrefab": null,
         "MagazineDropTime": 0.2,
         "MagazineTransform": null,
-        "MuzzleEffect": null,
-        "MuzzleTransform": null,
+        "MuzzleEffect": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/rifle_muzzleflash.prefab"
+        },
+        "MuzzleTransform": {
+          "_type": "gameobject",
+          "go": "545f1b27-22c2-4fd6-86f7-cfe86f04d19f"
+        },
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,

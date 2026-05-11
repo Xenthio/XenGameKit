@@ -37,8 +37,14 @@
         "InertiaScale": "2,2",
         "IsIncremental": false,
         "IsThrowable": false,
-        "MuzzleEffect": null,
-        "MuzzleTransform": null,
+        "MuzzleEffect": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/pistol_muzzleflash.prefab"
+        },
+        "MuzzleTransform": {
+          "_type": "gameobject",
+          "go": "a3000001-0000-0000-0000-000000000010"
+        },
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
         "OnComponentEnabled": null,

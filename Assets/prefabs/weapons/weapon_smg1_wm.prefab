@@ -27,6 +27,14 @@
         "EjectTransform": {
           "_type": "gameobject",
           "go": "42683d3e-173f-4459-919e-eacffd6d3704"
+        },
+        "MuzzleEffect": {
+          "_type": "gameobject",
+          "prefab": "prefabs/effects/rifle_muzzleflash.prefab"
+        },
+        "MuzzleTransform": {
+          "_type": "gameobject",
+          "go": "f02432a0-5ff2-4e61-bfc2-258ad616ab08"
         }
       },
       {
