@@ -195,6 +195,9 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 	{
 		if ( !Scene.WantsSystemScene ) return;
 
+		if ( !FireSystem.DefaultFireParticle.IsValid() )
+			FireSystem.DefaultFireParticle = GameObject.GetPrefab( "prefabs/effects/fire.prefab" );
+
 		Scene.NavMesh.AgentRadius = 20;
 		Scene.NavMesh.AgentHeight = 72;
 		Scene.NavMesh.IsEnabled = true;

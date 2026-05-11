@@ -16,8 +16,10 @@ public static class FireSystem
 
 		var fire = go.GetOrAddComponent<FireComponent>();
 		fire.Enabled = true;
-		
-		// Use default if not already set
+
+		if ( !DefaultFireParticle.IsValid() )
+			DefaultFireParticle = GameObject.GetPrefab( "prefabs/effects/fire.prefab" );
+
 		if ( !fire.FireParticleOverride.IsValid() && DefaultFireParticle.IsValid() )
 			fire.FireParticleOverride = DefaultFireParticle;
 
@@ -234,6 +236,7 @@ public sealed class FireComponent : Component
 	[Property, Group( "Spread" )] public float SpreadHeatScale { get; set; } = 0.2f;
 
 	[Property, Group( "Effects" )] public GameObject FireParticleOverride { get; set; }
+	[Property, Group( "Effects" )] public float ParticleShutdownDelay { get; set; } = 1.0f;
 	[Property, Group( "Effects" )] public SoundEvent BurnSound { get; set; }
 
 	[Sync] public float HeatLevel { get; internal set; } = 0f;
@@ -245,6 +248,8 @@ public sealed class FireComponent : Component
 
 	GameObject _effectInstance;
 	SoundHandle _burnSound;
+	bool _pendingEffectDestroy;
+	float _effectDestroyAt;
 
 	protected override void OnStart()
 	{
@@ -262,6 +267,9 @@ public sealed class FireComponent : Component
 	protected override void OnUpdate()
 	{
 		FireSystem.Update( this, Time.Delta );
+
+		if ( _pendingEffectDestroy && Time.Now >= _effectDestroyAt )
+			DestroyEffectNow();
 	}
 
 	protected override void OnDisabled()
@@ -307,6 +315,8 @@ public sealed class FireComponent : Component
 
 		if ( burning )
 		{
+			_pendingEffectDestroy = false;
+
 			if ( !_effectInstance.IsValid() && FireParticleOverride.IsValid() )
 			{
 				_effectInstance = FireParticleOverride.Clone( new CloneConfig
@@ -315,11 +325,17 @@ public sealed class FireComponent : Component
 					Transform = new Transform( Vector3.Zero, Rotation.Identity ),
 					StartEnabled = true
 				} );
+			}
 
-				// Set the emitter target to the GameObject this fire is on
-				var emitter = _effectInstance.GetComponent<ParticleModelEmitter>();
-				if ( emitter.IsValid() )
+			if ( _effectInstance.IsValid() )
+			{
+				_effectInstance.Enabled = true;
+
+				foreach ( var emitter in _effectInstance.GetComponentsInChildren<ParticleModelEmitter>( true ) )
+				{
+					emitter.Enabled = true;
 					emitter.Target = GameObject;
+				}
 			}
 
 			if ( BurnSound.IsValid() && !_burnSound.IsValid() )
@@ -328,11 +344,34 @@ public sealed class FireComponent : Component
 		else
 		{
 			if ( _effectInstance.IsValid() )
-				_effectInstance.Destroy();
+			{
+				foreach ( var emitter in _effectInstance.GetComponentsInChildren<ParticleModelEmitter>( true ) )
+					emitter.Enabled = false;
+
+				var delay = Math.Max( 0f, ParticleShutdownDelay );
+				if ( delay <= 0f )
+				{
+					DestroyEffectNow();
+				}
+				else
+				{
+					_pendingEffectDestroy = true;
+					_effectDestroyAt = Time.Now + delay;
+				}
+			}
 
 			if ( _burnSound.IsValid() )
 				_burnSound.Stop();
 		}
+	}
+
+	void DestroyEffectNow()
+	{
+		_pendingEffectDestroy = false;
+		_effectDestroyAt = 0f;
+
+		if ( _effectInstance.IsValid() )
+			_effectInstance.Destroy();
 	}
 }
 

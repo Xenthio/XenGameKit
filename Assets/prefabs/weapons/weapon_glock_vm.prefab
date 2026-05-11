@@ -39,7 +39,7 @@
         "IsThrowable": false,
         "MuzzleEffect": {
           "_type": "gameobject",
-          "prefab": "prefabs/effects/pistol_muzzleflash.prefab"
+          "prefab": "prefabs/weapon_effects/pistol_muzzleflash.prefab"
         },
         "MuzzleTransform": {
           "_type": "gameobject",

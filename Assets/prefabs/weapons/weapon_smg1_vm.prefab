@@ -42,7 +42,7 @@
         "MagazineTransform": null,
         "MuzzleEffect": {
           "_type": "gameobject",
-          "prefab": "prefabs/effects/rifle_muzzleflash.prefab"
+          "prefab": "prefabs/weapon_effects/rifle_muzzleflash.prefab"
         },
         "MuzzleTransform": {
           "_type": "gameobject",
