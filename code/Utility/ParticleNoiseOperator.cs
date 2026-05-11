@@ -165,7 +165,7 @@ public sealed class ParticleNoiseOperator : ParticleController
 
 		float freq = Math.Max( 0.01f, Frequency );
 
-		using ( Gizmo.Scope( "NoiseViz", Transform.Zero ) )
+		using ( Gizmo.Scope( "NoiseViz", global::Transform.Zero ) )
 		{
 			for ( int xi = 0; xi <= steps; xi++ )
 			{
