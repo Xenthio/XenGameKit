@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "c7000003-0000-0000-0000-000000000001",
+    "__guid": "8ed93d5e-61f7-477d-92bc-966ff97de590",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_frag",
@@ -17,7 +17,7 @@
     "Components": [
       {
         "__type": "FragGrenadeWeapon",
-        "__guid": "c7000003-0000-0000-0000-000000000002",
+        "__guid": "8ae8b392-3c2e-4bac-8601-1a4b8a398ddc",
         "__enabled": true,
         "Flags": 0,
         "AmmoType": null,
@@ -31,7 +31,7 @@
         "DisplayName": "Frag Grenade",
         "DroppedGameObject": {
           "_type": "gameobject",
-          "go": "c7000003-0000-0000-0000-000000000010"
+          "go": "c36e7806-fbd0-42f1-abe7-5fee2726be99"
         },
         "GrenadePrefab": {
           "_type": "gameobject",
@@ -70,7 +70,7 @@
       },
       {
         "__type": "DroppedWeapon",
-        "__guid": "c7000003-0000-0000-0000-000000000003",
+        "__guid": "6b1c8fde-1fd7-4793-ba32-2f29f2a82ff1",
         "__enabled": true,
         "Flags": 0,
         "OnComponentDestroy": null,
@@ -83,7 +83,7 @@
       },
       {
         "__type": "Sandbox.ModelCollider",
-        "__guid": "c7000003-0000-0000-0000-000000000004",
+        "__guid": "d853fc05-8516-4fd0-8546-17b5c526b2d7",
         "__enabled": true,
         "Flags": 0,
         "ColliderFlags": 0,
@@ -108,7 +108,7 @@
       },
       {
         "__type": "Sandbox.Rigidbody",
-        "__guid": "c7000003-0000-0000-0000-000000000005",
+        "__guid": "429aa685-aeae-40fa-aa2e-56d3153e90dc",
         "__enabled": true,
         "Flags": 0,
         "AngularDamping": 0,
@@ -142,7 +142,7 @@
       },
       {
         "__type": "Sandbox.BoxCollider",
-        "__guid": "c7000003-0000-0000-0000-000000000006",
+        "__guid": "793f759b-84c2-49b1-be09-c209a6bc568a",
         "__enabled": true,
         "Flags": 0,
         "Center": "0,0,4",
@@ -169,7 +169,7 @@
     ],
     "Children": [
       {
-        "__guid": "c7000003-0000-0000-0000-000000000010",
+        "__guid": "c36e7806-fbd0-42f1-abe7-5fee2726be99",
         "__version": 2,
         "Flags": 0,
         "Name": "standalone_wm",
@@ -186,7 +186,7 @@
         "Components": [
           {
             "__type": "WorldModel",
-            "__guid": "c7000003-0000-0000-0000-000000000011",
+            "__guid": "ffb63487-bfb7-44d0-a129-711751079f94",
             "__enabled": true,
             "Flags": 0,
             "DeploySound": null,
@@ -208,7 +208,7 @@
           },
           {
             "__type": "Sandbox.SkinnedModelRenderer",
-            "__guid": "c7000003-0000-0000-0000-000000000012",
+            "__guid": "3dbbb464-1c3f-40ff-af14-114de2e2b634",
             "__enabled": true,
             "Flags": 0,
             "AnimationGraph": null,

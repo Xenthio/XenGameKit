@@ -3526,9 +3526,31 @@
       "Children": []
     },
     {
-      "__guid": "67843d01-7776-46f7-8173-f252c6ae1870",
+      "__guid": "dd16aad3-3f58-43df-a4b6-f836a050892d",
       "__version": 2,
       "__Prefab": "prefabs/weapons/weapon_frag.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "6b1c8fde-1fd7-4793-ba32-2f29f2a82ff1": "a9a6b6d8-7cf2-419c-837b-d0790cac6929",
+        "8ae8b392-3c2e-4bac-8601-1a4b8a398ddc": "4b242d21-6a8a-421d-a0f6-52f9f3878c6b",
+        "3dbbb464-1c3f-40ff-af14-114de2e2b634": "25332f66-4b34-4efd-9388-bd7344b63f17",
+        "ffb63487-bfb7-44d0-a129-711751079f94": "8eebeeef-57d3-4ddd-be85-f168a72d54fb",
+        "793f759b-84c2-49b1-be09-c209a6bc568a": "e4378bb7-72ad-4c61-98e9-c4cfef0f2581",
+        "429aa685-aeae-40fa-aa2e-56d3153e90dc": "c12a7b10-3a99-461a-bbcb-3da5e6aec407",
+        "d853fc05-8516-4fd0-8546-17b5c526b2d7": "e6807932-695e-4943-9aed-47c4bda1e44a",
+        "c36e7806-fbd0-42f1-abe7-5fee2726be99": "d1ca5241-df62-4dc8-95bb-0e5c00946e2a",
+        "8ed93d5e-61f7-477d-92bc-966ff97de590": "dd16aad3-3f58-43df-a4b6-f836a050892d"
+      }
+    },
+    {
+      "__guid": "f6253f92-76ac-4d24-9156-cfe449e35a41",
+      "__version": 2,
+      "__Prefab": "prefabs/weapons/weapon_debug_admingun.prefab",
       "__PrefabInstancePatch": {
         "AddedObjects": [],
         "RemovedObjects": [],
@@ -3536,24 +3558,31 @@
           {
             "Target": {
               "Type": "GameObject",
-              "IdValue": "c7000003-0000-0000-0000-000000000001"
+              "IdValue": "c13bba3f-b4a4-4288-b059-2e0b7a2a2016"
             },
             "Property": "Position",
-            "Value": "0,127.999985,-1.52587891E-05"
+            "Value": "191.999969,95.9999847,2.50003052"
+          },
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "c13bba3f-b4a4-4288-b059-2e0b7a2a2016"
+            },
+            "Property": "Rotation",
+            "Value": "1.73250569E-08,0,-5.19751708E-08,0.99999994"
           }
         ],
         "MovedObjects": []
       },
       "__PrefabIdToInstanceId": {
-        "c7000003-0000-0000-0000-000000000001": "67843d01-7776-46f7-8173-f252c6ae1870",
-        "c7000003-0000-0000-0000-000000000002": "a20376ac-54a2-4cbf-8091-91d5a0ca66c5",
-        "c7000003-0000-0000-0000-000000000003": "f69bd67b-2413-47b0-9d55-02c46ad9f8a2",
-        "c7000003-0000-0000-0000-000000000004": "1fbc2c84-4e79-4837-84a1-582387df69fa",
-        "c7000003-0000-0000-0000-000000000005": "b49b8725-090d-4d26-a13d-9fcbca0a360e",
-        "c7000003-0000-0000-0000-000000000006": "fefeec8b-5611-4dec-ac06-fd633fa8f63f",
-        "c7000003-0000-0000-0000-000000000010": "c3d790ac-4b6f-4989-a9e7-60c3e93f93bb",
-        "c7000003-0000-0000-0000-000000000011": "5b212340-d263-486d-963e-b0ff97c4ddbf",
-        "c7000003-0000-0000-0000-000000000012": "daddbb08-ac2a-4192-abae-321cf24a8ee4"
+        "c13bba3f-b4a4-4288-b059-2e0b7a2a2016": "f6253f92-76ac-4d24-9156-cfe449e35a41",
+        "e485ba48-fea4-40cf-9b4b-570d9172109e": "4e0c897c-72ee-4f60-b399-b8be1ada7494",
+        "f7cad8fa-9434-4fce-9ea7-d10c1e5e41cf": "5289c909-d974-4f71-9dfe-091d6ec94f15",
+        "7b2e350d-9960-4a98-b60c-5419775b855d": "f835bd85-c785-4d50-8bcf-751c79aac89b",
+        "9e6c3e90-30fd-483d-bf13-ae627b1b5246": "87520ff7-c361-40e3-bbe8-8080ec5b0c31",
+        "8de8669a-2344-4c56-b80b-3cc7754ac884": "21e0f1cd-6296-43a0-ba72-063a190e283b",
+        "f906ae97-8a84-4c48-a5bd-7408236e5d06": "6ced4b39-68c9-4044-ac29-061075673526",
+        "65869f8b-8379-449f-9654-d161663a6c2c": "a19b9de3-3982-4a8c-99e9-62a5ecf975eb"
       }
     }
   ],

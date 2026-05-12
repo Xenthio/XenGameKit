@@ -121,7 +121,18 @@ public partial class BaseCarryable : Component
 	private void OnItemVisibility( bool oldVal, bool newVal )
 	{
 		if ( DroppedGameObject.IsValid() )
+		{
 			DroppedGameObject.Enabled = newVal;
+			return;
+		}
+
+		// No separate DroppedGameObject — fall back to toggling root Prop/ModelRenderer directly.
+		// This lets simple weapons use a single-object setup without a child dropped visual.
+		var prop = GetComponent<Sandbox.Prop>( true );
+		if ( prop.IsValid() ) prop.Enabled = newVal;
+
+		var mr = GetComponent<ModelRenderer>( true );
+		if ( mr.IsValid() ) mr.Enabled = newVal;
 	}
 
 	public virtual bool CanSwitch() => true;

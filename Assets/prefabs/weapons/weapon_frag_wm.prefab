@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "c7000002-0000-0000-0000-000000000001",
+    "__guid": "42f42305-6b36-4178-8d6d-d3d31ff6cf03",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_frag_wm",
@@ -17,7 +17,7 @@
     "Components": [
       {
         "__type": "WorldModel",
-        "__guid": "c7000002-0000-0000-0000-000000000002",
+        "__guid": "f9a2d810-3d4e-4eba-adce-45e6480c12c5",
         "__enabled": true,
         "Flags": 0,
         "DeploySound": null,
@@ -36,15 +36,15 @@
         "OnComponentUpdate": null,
         "Renderer": {
           "_type": "component",
-          "component_id": "c7000002-0000-0000-0000-000000000003",
-          "go": "c7000002-0000-0000-0000-000000000001",
+          "component_id": "ca086c9c-dc24-4e1e-8cc4-3392d34c5a43",
+          "go": "42f42305-6b36-4178-8d6d-d3d31ff6cf03",
           "component_type": "SkinnedModelRenderer"
         },
         "TracerEffect": null
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
-        "__guid": "c7000002-0000-0000-0000-000000000003",
+        "__guid": "ca086c9c-dc24-4e1e-8cc4-3392d34c5a43",
         "__enabled": true,
         "Flags": 0,
         "AnimationGraph": null,

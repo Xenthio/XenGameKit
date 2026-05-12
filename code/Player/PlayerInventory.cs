@@ -336,21 +336,41 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 		if ( ActiveWeapon == weapon )
 			SwitchWeapon( null, true );
 
-		// Unparent and drop in-place — the DroppedWeapon component on the same prefab handles pickup.
-		// Weapons that lack a DroppedWeapon component just get destroyed.
+		// Clone a fresh prefab at the drop position and destroy the inventory copy.
+		// This matches sandbox's approach and avoids ownership/state issues.
 		var droppedWeapon = weapon.GetComponent<DroppedWeapon>( true );
 		if ( droppedWeapon.IsValid() )
 		{
-			weapon.GameObject.SetParent( null, true );
-			weapon.SetDropped( true );
-			weapon.GameObject.Enabled = true;
-			weapon.Network.DropOwnership();
-
-			if ( weapon.GetComponent<Rigidbody>( true ) is { } rb )
+			var prefabSource = weapon.GameObject.PrefabInstanceSource;
+			if ( !string.IsNullOrEmpty( prefabSource ) )
 			{
-				rb.Velocity = (Player.Movement?.Velocity ?? Vector3.Zero) + dropVelocity;
-				rb.AngularVelocity = Vector3.Random * 8.0f;
+				var prefab = GameObject.GetPrefab( prefabSource );
+				if ( prefab.IsValid() )
+				{
+					var pickup = prefab.Clone( new CloneConfig
+					{
+						Transform = new Transform( dropPosition ),
+						StartEnabled = true
+					} );
+
+					// Preserve clip ammo from the held weapon so you don't lose your bullets on drop
+					if ( weapon.GetComponent<BaseWeapon>( true ) is { } heldWep &&
+					     pickup.GetComponent<BaseWeapon>( true ) is { } dropWep )
+					{
+						dropWep.ClipContents = heldWep.ClipContents;
+					}
+
+					pickup.NetworkSpawn();
+
+					if ( pickup.GetComponent<Rigidbody>() is { } rb )
+					{
+						rb.Velocity = (Player.Movement?.Velocity ?? Vector3.Zero) + dropVelocity;
+						rb.AngularVelocity = Vector3.Random * 8.0f;
+					}
+				}
 			}
+
+			weapon.DestroyGameObject();
 		}
 		else
 		{

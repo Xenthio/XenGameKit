@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "a3000001-0000-0000-0000-000000000001",
+    "__guid": "13551e7a-9695-485b-aa5b-377de40af55c",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_glock_vm",
@@ -17,7 +17,7 @@
     "Components": [
       {
         "__type": "ViewModel",
-        "__guid": "a3000001-0000-0000-0000-000000000002",
+        "__guid": "06321136-d28d-45df-94b2-dff686b7d762",
         "__enabled": true,
         "Flags": 0,
         "AnimationSpeed": 1,
@@ -28,7 +28,7 @@
         },
         "EjectTransform": {
           "_type": "gameobject",
-          "go": "a3000001-0000-0000-0000-000000000011"
+          "go": "64f881a5-d77a-453f-b817-0c766f7110f8"
         },
         "IncrementalAnimationSpeed": 3,
         "IncrementalReloadFinishSounds": [],
@@ -52,7 +52,7 @@
         },
         "MuzzleTransform": {
           "_type": "gameobject",
-          "go": "a3000001-0000-0000-0000-000000000010"
+          "go": "1f40040c-ed5c-4cb9-9436-ddfc4d72522b"
         },
         "OnComponentDestroy": null,
         "OnComponentDisabled": null,
@@ -72,8 +72,8 @@
         ],
         "Renderer": {
           "_type": "component",
-          "component_id": "a3000001-0000-0000-0000-000000000003",
-          "go": "a3000001-0000-0000-0000-000000000001",
+          "component_id": "f2b1bd90-e8a8-414a-b56c-a3d0c9f6a8f1",
+          "go": "13551e7a-9695-485b-aa5b-377de40af55c",
           "component_type": "SkinnedModelRenderer"
         },
         "ThrowableType": "HEGrenade",
@@ -82,7 +82,7 @@
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
-        "__guid": "a3000001-0000-0000-0000-000000000003",
+        "__guid": "f2b1bd90-e8a8-414a-b56c-a3d0c9f6a8f1",
         "__enabled": true,
         "Flags": 0,
         "AnimationGraph": null,
@@ -134,8 +134,8 @@
         "BodyGroups": 29,
         "BoneMergeTarget": {
           "_type": "component",
-          "component_id": "a3000001-0000-0000-0000-000000000003",
-          "go": "a3000001-0000-0000-0000-000000000001",
+          "component_id": "f2b1bd90-e8a8-414a-b56c-a3d0c9f6a8f1",
+          "go": "13551e7a-9695-485b-aa5b-377de40af55c",
           "component_type": "SkinnedModelRenderer"
         },
         "CreateAttachments": false,
@@ -178,7 +178,7 @@
     ],
     "Children": [
       {
-        "__guid": "a3000001-0000-0000-0000-000000000010",
+        "__guid": "1f40040c-ed5c-4cb9-9436-ddfc4d72522b",
         "__version": 2,
         "Flags": 8,
         "Name": "muzzle",
@@ -196,7 +196,7 @@
         "Children": []
       },
       {
-        "__guid": "a3000001-0000-0000-0000-000000000011",
+        "__guid": "64f881a5-d77a-453f-b817-0c766f7110f8",
         "__version": 2,
         "Flags": 8,
         "Name": "eject",

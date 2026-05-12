@@ -33,15 +33,6 @@ public partial class BaseCarryable : Component
 		var droppedWeapon = GetComponent<DroppedWeapon>( true );
 		if ( droppedWeapon.IsValid() ) droppedWeapon.Enabled = dropped;
 
-		// Hide any Prop or ModelRenderer on the root when held — these are the
-		// "dropped" world model representation and should only be visible when
-		// the weapon is on the ground, not when it's in a player's inventory.
-		var prop = GetComponent<Sandbox.Prop>( false );
-		if ( prop.IsValid() ) prop.Enabled = dropped;
-
-		var mr = GetComponent<ModelRenderer>( false );
-		if ( mr.IsValid() ) mr.Enabled = dropped;
-
 		if ( DroppedGameObject.IsValid() ) DroppedGameObject.Enabled = dropped;
 	}
 

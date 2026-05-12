@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "a2000001-0000-0000-0000-000000000001",
+    "__guid": "cc43090d-ef0e-4b4d-a2f0-d732b9e658ed",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_glock_wm",
@@ -12,12 +12,12 @@
     "Components": [
       {
         "__type": "WorldModel",
-        "__guid": "a2000001-0000-0000-0000-000000000002",
+        "__guid": "951cdffa-b25a-40f9-84d6-c6a12df3463e",
         "__enabled": true,
         "Renderer": {
           "_type": "component",
-          "component_id": "a2000001-0000-0000-0000-000000000003",
-          "go": "a2000001-0000-0000-0000-000000000001",
+          "component_id": "d0f806d0-7b1f-478c-944e-c12df96a2a59",
+          "go": "cc43090d-ef0e-4b4d-a2f0-d732b9e658ed",
           "component_type": "SkinnedModelRenderer"
         },
         "EjectBrass": {
@@ -26,7 +26,7 @@
         },
         "EjectTransform": {
           "_type": "gameobject",
-          "go": "a2000001-0000-0000-0000-000000000011"
+          "go": "f3af4ef5-f3a6-4557-9054-ecd314d74324"
         },
         "MuzzleEffect": {
           "_type": "gameobject",
@@ -34,12 +34,12 @@
         },
         "MuzzleTransform": {
           "_type": "gameobject",
-          "go": "a2000001-0000-0000-0000-000000000010"
+          "go": "3ab1f546-38f6-4852-85d1-8c61877f962b"
         }
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
-        "__guid": "a2000001-0000-0000-0000-000000000003",
+        "__guid": "d0f806d0-7b1f-478c-944e-c12df96a2a59",
         "__enabled": true,
         "Model": "models/weapons/sbox_pistol_usp/w_usp.vmdl",
         "CreateAttachments": true,
@@ -50,7 +50,7 @@
     ],
     "Children": [
       {
-        "__guid": "a2000001-0000-0000-0000-000000000010",
+        "__guid": "3ab1f546-38f6-4852-85d1-8c61877f962b",
         "__version": 2,
         "Flags": 8,
         "Name": "muzzle",
@@ -62,7 +62,7 @@
         "Children": []
       },
       {
-        "__guid": "a2000001-0000-0000-0000-000000000011",
+        "__guid": "f3af4ef5-f3a6-4557-9054-ecd314d74324",
         "__version": 2,
         "Flags": 8,
         "Name": "eject",

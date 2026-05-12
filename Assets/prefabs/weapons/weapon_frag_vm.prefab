@@ -1,6 +1,6 @@
 {
   "RootObject": {
-    "__guid": "c7000001-0000-0000-0000-000000000001",
+    "__guid": "2cbe34fe-0639-4067-aadb-35e302fd04ce",
     "__version": 2,
     "Flags": 0,
     "Name": "weapon_frag_vm",
@@ -17,7 +17,7 @@
     "Components": [
       {
         "__type": "ViewModel",
-        "__guid": "c7000001-0000-0000-0000-000000000002",
+        "__guid": "6560484b-f985-442f-988f-aa72f248c5a5",
         "__enabled": true,
         "Flags": 0,
         "AnimationSpeed": 1,
@@ -45,8 +45,8 @@
         "ReloadSoundEvents": [],
         "Renderer": {
           "_type": "component",
-          "component_id": "c7000001-0000-0000-0000-000000000003",
-          "go": "c7000001-0000-0000-0000-000000000001",
+          "component_id": "710f1ff4-57e3-4b32-9325-6ac27d96aa97",
+          "go": "2cbe34fe-0639-4067-aadb-35e302fd04ce",
           "component_type": "SkinnedModelRenderer"
         },
         "ThrowableType": "HEGrenade",
@@ -55,7 +55,7 @@
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
-        "__guid": "c7000001-0000-0000-0000-000000000003",
+        "__guid": "710f1ff4-57e3-4b32-9325-6ac27d96aa97",
         "__enabled": true,
         "Flags": 0,
         "AnimationGraph": null,
@@ -100,15 +100,15 @@
       },
       {
         "__type": "Sandbox.SkinnedModelRenderer",
-        "__guid": "c7000001-0000-0000-0000-000000000004",
+        "__guid": "efb816f6-011f-4c13-b5ca-f2d49d56096f",
         "__enabled": true,
         "Flags": 0,
         "AnimationGraph": null,
         "BodyGroups": 29,
         "BoneMergeTarget": {
           "_type": "component",
-          "component_id": "c7000001-0000-0000-0000-000000000003",
-          "go": "c7000001-0000-0000-0000-000000000001",
+          "component_id": "710f1ff4-57e3-4b32-9325-6ac27d96aa97",
+          "go": "2cbe34fe-0639-4067-aadb-35e302fd04ce",
           "component_type": "SkinnedModelRenderer"
         },
         "CreateAttachments": false,
