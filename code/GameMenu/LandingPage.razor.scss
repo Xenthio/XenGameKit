@@ -1,31 +1,81 @@
-LandingPage {
-	font-family: Poppins;
-	color: #fff;
-	font-size: 16px;
+@import "Styles/_vars.scss";
+@import "Styles/menu.scss";
 
-	.Controls {
-		background-color: #444;
-		flex-direction: column;
-		margin: 24px;
-		padding: 24px;
-		border-radius: 8px;
+// Landing page (sidebar layout)
+LandingPage {
+	position:       absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	pointer-events: all;
+
+	.Landing {
+		position:         absolute;
+		top: 0; left: 0; bottom: 0;
+		width:            370px;
+		background-color: rgba( 20, 20, 20, 0.92 );
+		flex-direction:   column;
+		padding:          48px 28px 24px;
 	}
 
-	.Button {
-		background-color: #333;
-		border: 0.5px solid #555;
-		color: #fff;
-		padding: 12px 24px;
-		border-radius: 4px;
-		cursor: pointer;
-		margin-bottom: 8px;
+	.GameTitle {
+		font-family:   $hud-font;
+		font-size:     48px;
+		font-weight:   $hud-weight-bold;
+		color:         $hud-color;
+		margin-bottom: 32px;
+	}
+
+	.MainButtons {
+		flex-direction: column;
+	}
+}
+
+// Shared button — available everywhere in the menu
+.MenuButton {
+	font-family:      $hud-font;
+	font-size:        $hud-size-md;
+	color:            $hud-color;
+	background-color: rgba( 40, 40, 40, 0.9 );
+	border:           1px solid rgba( 255, 255, 255, 0.12 );
+	border-radius:    $widget-radius;
+	padding:          10px 20px;
+	cursor:           pointer;
+	margin-bottom:    6px;
+	text-align:       center;
+	justify-content:  center;
+	align-items:      center;
+
+	&:hover {
+		background-color: rgba( 65, 65, 65, 0.9 );
+		border-color:     rgba( 255, 255, 255, 0.25 );
+	}
+
+	&.Selected {
+		background-color: rgba( 80, 80, 80, 0.9 );
+		border-color:     rgba( 255, 255, 255, 0.4 );
+	}
+
+	&.Secondary {
+		background-color: transparent;
+		border-color:     rgba( 255, 255, 255, 0.08 );
+		color:            $hud-color-dim;
 
 		&:hover {
-			background-color: #555;
+			background-color: rgba( 40, 40, 40, 0.5 );
 		}
 	}
 
-	.Title {
-		font-size: 48px;
+	&.disabled {
+		opacity: 0.4;
+		cursor:  default;
+	}
+
+	&.Quit {
+		color:        #cc4444;
+		border-color: rgba( 200, 60, 60, 0.2 );
+
+		&:hover {
+			background-color: rgba( 80, 20, 20, 0.9 );
+			border-color:     rgba( 200, 60, 60, 0.5 );
+		}
 	}
 }

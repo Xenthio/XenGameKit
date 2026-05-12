@@ -1,0 +1,91 @@
+@using Sandbox.UI;
+@inherits Panel
+@namespace XPSBase
+
+<root>
+	<div class="ModalOverlay">
+		<div class="Modal">
+			<label class="ModalTitle">Options</label>
+
+			<div class="OptionSection">
+				<label class="ModalSubTitle">Audio</label>
+				<div class="OptionRow">
+					<label class="OptionLabel">Master Volume</label>
+					<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(0) Max=@(100) Value:bind="@MasterVolume" />
+					<label class="OptionValue">@((int)MasterVolume)</label>
+				</div>
+				<div class="OptionRow">
+					<label class="OptionLabel">Music Volume</label>
+					<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(0) Max=@(100) Value:bind="@MusicVolume" />
+					<label class="OptionValue">@((int)MusicVolume)</label>
+				</div>
+				<div class="OptionRow">
+					<label class="OptionLabel">SFX Volume</label>
+					<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(0) Max=@(100) Value:bind="@SfxVolume" />
+					<label class="OptionValue">@((int)SfxVolume)</label>
+				</div>
+			</div>
+
+			<div class="OptionSection">
+				<label class="ModalSubTitle">Controls</label>
+				<div class="OptionRow">
+					<label class="OptionLabel">Mouse Sensitivity</label>
+					<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(1) Max=@(20) Value:bind="@Sensitivity" />
+					<label class="OptionValue">@Sensitivity.ToString("F1")</label>
+				</div>
+				<div class="OptionRow">
+					<label class="OptionLabel">Field of View</label>
+					<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(60) Max=@(120) Value:bind="@Fov" />
+					<label class="OptionValue">@((int)Fov)°</label>
+				</div>
+			</div>
+
+			<div class="ModalActions">
+				<button class="MenuButton" onclick=@ApplyOptions>Apply</button>
+				<button class="MenuButton Secondary" onclick=@OnClose>Cancel</button>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Action OnClose { get; set; }
+
+	float MasterVolume { get; set; } = 80;
+	float MusicVolume  { get; set; } = 70;
+	float SfxVolume    { get; set; } = 80;
+	float Sensitivity  { get; set; } = 5f;
+	float Fov          { get; set; } = 90;
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( !firstTime ) return;
+		MasterVolume = ReadFloat( "opt_master_vol", 80 );
+		MusicVolume  = ReadFloat( "opt_music_vol",  70 );
+		SfxVolume    = ReadFloat( "opt_sfx_vol",    80 );
+		Sensitivity  = ReadFloat( "opt_sensitivity", 5f );
+		Fov          = ReadFloat( "opt_fov",         90 );
+	}
+
+	void ApplyOptions()
+	{
+		Cookie.Set( "opt_master_vol",  MasterVolume.ToString() );
+		Cookie.Set( "opt_music_vol",   MusicVolume.ToString() );
+		Cookie.Set( "opt_sfx_vol",     SfxVolume.ToString() );
+		Cookie.Set( "opt_sensitivity", Sensitivity.ToString() );
+		Cookie.Set( "opt_fov",         Fov.ToString() );
+		// TODO: ConsoleSystem.Run( "volume", MasterVolume / 100f );
+		// TODO: ConsoleSystem.Run( "fov_desired", Fov );
+		OnClose?.Invoke();
+	}
+
+	static float ReadFloat( string key, float fallback )
+	{
+		var raw = Cookie.Get( key, fallback.ToString() );
+		return float.TryParse( raw, out var v ) ? v : fallback;
+	}
+
+	protected override int BuildHash() =>
+		HashCode.Combine( MasterVolume, MusicVolume, SfxVolume, Sensitivity, Fov );
+}

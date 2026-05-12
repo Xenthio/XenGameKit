@@ -1,0 +1,93 @@
+@using Sandbox.UI;
+@using Sandbox.Network;
+@inherits Panel
+@namespace XPSBase
+
+<root>
+	<div class="ModalOverlay">
+		<div class="Modal ModalWide">
+			<label class="ModalTitle">Server Browser</label>
+			<div class="ModalToolbar">
+				<button class="MenuButton" onclick=@RefreshServers>Refresh</button>
+			</div>
+			<div class="ServerList">
+				@if ( IsLoading )
+				{
+					<label class="Muted">Loading servers…</label>
+				}
+				else if ( Servers.Count == 0 )
+				{
+					<label class="Muted">No servers found.</label>
+				}
+				else
+				{
+					<div class="ServerHeader">
+						<label class="Col-Name Muted">Server Name</label>
+						<label class="Col-Players Muted">Players</label>
+						<label class="Col-Ping Muted">Ping</label>
+						<div class="Col-Join" />
+					</div>
+					<div class="ServerListBody">
+						@foreach ( var srv in Servers )
+						{
+							<div class="ServerRow">
+								<label class="Col-Name">@srv.Name</label>
+								<label class="Col-Players">@srv.Players / @srv.MaxPlayers</label>
+								<label class="Col-Ping">@srv.Ping ms</label>
+								<button class="Col-Join MenuButton" onclick=@( () => JoinServer( srv ) )>Join</button>
+							</div>
+						}
+					</div>
+				}
+			</div>
+			<div class="ModalActions">
+				<button class="MenuButton Secondary" onclick=@OnClose>Close</button>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Action OnClose { get; set; }
+
+	// TODO: Hook up to Networking.QueryLobbies — replace Handle with LobbyInformation
+	public record ServerEntry( string Name, string Map, int Players, int MaxPlayers, int Ping, LobbyInformation Handle = default );
+
+	List<ServerEntry> Servers   { get; set; } = new();
+	bool              IsLoading { get; set; } = false;
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime ) RefreshServers();
+	}
+
+	// Set to your game's package ident to filter to your own servers (leave empty to show all)
+	const string GamePackageIdent = "";
+
+	async void RefreshServers()
+	{
+		IsLoading = true;
+		Servers   = new();
+		StateHasChanged();
+
+		var filters = new Dictionary<string, string>();
+		if ( !string.IsNullOrEmpty( GamePackageIdent ) )
+			filters["game"] = GamePackageIdent;
+
+		var lobbies = await Networking.QueryLobbies( filters );
+		Servers = lobbies.Select( l => new ServerEntry(
+			l.Name, l.Map, l.Members, l.MaxMembers, l.Ping, l ) ).ToList();
+
+		IsLoading = false;
+		StateHasChanged();
+	}
+
+	void JoinServer( ServerEntry srv )
+	{
+		_ = Networking.TryConnectSteamId( srv.Handle.LobbyId );
+	}
+
+	protected override int BuildHash() =>
+		HashCode.Combine( IsLoading, Servers.Count );
+}

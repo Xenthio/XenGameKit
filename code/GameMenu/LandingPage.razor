@@ -1,20 +1,31 @@
-@using Sandbox.Menu
 @using Sandbox.UI;
-
 @inherits Panel
 @namespace XPSBase
 
-<root> 
-	<div class="Controls">
-		<label class="Title">XPS Base</label>
-		<button class="Button" @onclick=@( () => LoadScene("scenes/dev/minimal.scene") )>Start Game</button>
+<root>
+	<div class="Landing">
+		<label class="GameTitle">XenGameKit</label>
+		<div class="MainButtons">
+			<button class="MenuButton" onclick=@( () => { ShowPlay = true; } )>Play</button>
+			<button class="MenuButton" onclick=@( () => { ShowServers = true; } )>Server Browser</button>
+			<button class="MenuButton" onclick=@( () => { ShowOptions = true; } )>Options</button>
+			<button class="MenuButton Quit" onclick=@OnQuit>Quit</button>
+		</div>
 	</div>
+
+	@if ( ShowPlay )    { <PlayModal    OnClose=@( () => { ShowPlay = false; } ) /> }
+	@if ( ShowServers ) { <ServersModal OnClose=@( () => { ShowServers = false; } ) /> }
+	@if ( ShowOptions ) { <OptionsModal OnClose=@( () => { ShowOptions = false; } ) /> }
 </root>
 
 @code
-{ 
-	private void LoadScene(string scenePath)
-	{
-		Game.ActiveScene.LoadFromFile(scenePath);
-	}
+{
+	bool ShowPlay    { get; set; }
+	bool ShowServers { get; set; }
+	bool ShowOptions { get; set; }
+
+	void OnQuit() => Game.ActiveScene?.LoadFromFile( "scenes/menu.scene" );
+
+	protected override int BuildHash() =>
+		HashCode.Combine( ShowPlay, ShowServers, ShowOptions );
 }

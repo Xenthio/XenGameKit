@@ -1,0 +1,179 @@
+@using Sandbox.UI;
+@using Sandbox;
+@using Sandbox.Network;
+@inherits Panel
+@namespace XPSBase
+
+<root>
+	<div class="ModalOverlay">
+		<div class="Modal @(PickingMap ? "ModalPicking" : "")">
+			@if ( PickingMap )
+			{
+				<label class="ModalTitle">Pick a Map</label>
+
+				<div class="MapBrowserSearch">
+					<TextEntry Placeholder="Search maps…" Value:bind="@SearchQuery" />
+					<button class="MenuButton" onclick=@DoSearch>Search</button>
+				</div>
+
+				<div class="MapGrid">
+					@if ( IsSearching )
+					{
+						<label class="Muted">Searching…</label>
+					}
+					else if ( SearchResults.Count == 0 )
+					{
+						<label class="Muted">No maps found.</label>
+					}
+					else
+					{
+						@foreach ( var pkg in SearchResults )
+						{
+							<div class="MapGridItem" onclick=@( () => OnMapSelected(pkg) )>
+								<div class="MapGridThumb" style="background-image: url(@pkg.ThumbWide);" />
+								<label class="MapGridName">@pkg.Title</label>
+								<label class="MapGridOrg">@pkg.Org.Title</label>
+							</div>
+						}
+					}
+				</div>
+
+				<div class="ModalActions">
+					<button class="MenuButton Secondary" onclick=@( () => { PickingMap = false; } )>Cancel</button>
+				</div>
+			}
+			else
+			{
+				<label class="ModalTitle">New Game</label>
+				<div class="ModalRow">
+					<div class="ModalSection">
+						<label class="ModalSubTitle">Map</label>
+						<div class="MapSelected" onclick=@( () => { PickingMap = true; if (!_hasSearched) DoSearch(); } )>
+							@if ( MapPackage is not null )
+							{
+								<div class="MapThumb" style="background-image: url(@MapPackage.ThumbWide);" />
+								<label class="MapName">@MapPackage.Title</label>
+							}
+							else
+							{
+								<label class="MapName Muted">Click to pick a map…</label>
+							}
+						</div>
+					</div>
+
+					<div class="ModalSection">
+						<label class="ModalSubTitle">Gamemode</label>
+						@foreach ( var gm in GamemodePrefabs )
+						{
+							<button class="@GmClass(gm.ResourcePath)" onclick=@( () => { SelectedGamemode = gm.ResourcePath; } )>
+								@System.IO.Path.GetFileNameWithoutExtension( gm.ResourceName )
+							</button>
+						}
+						@if ( GamemodePrefabs.Count == 0 )
+						{
+							<label class="Muted">No gamemode prefabs found.</label>
+						}
+
+						<label class="ModalSubTitle TopMargin">Max Players: @((int)MaxPlayers)</label>
+						<SliderControl ShowTextEntry=@(false) ShowRange=@(false) Min=@(2) Max=@(16) Value:bind="@MaxPlayers" />
+
+						<label class="ModalSubTitle TopMargin">Privacy</label>
+						<div class="PrivacyRow">
+							<button class="@PrivClass(LobbyPrivacy.Public)"     onclick=@( () => { Privacy = LobbyPrivacy.Public; } )>Public</button>
+							<button class="@PrivClass(LobbyPrivacy.FriendsOnly)" onclick=@( () => { Privacy = LobbyPrivacy.FriendsOnly; } )>Friends</button>
+							<button class="@PrivClass(LobbyPrivacy.Private)"    onclick=@( () => { Privacy = LobbyPrivacy.Private; } )>Private</button>
+						</div>
+					</div>
+				</div>
+				<div class="ModalActions">
+					<button class="@StartClass()" onclick=@OnStartGame>Start Game</button>
+					<button class="MenuButton Secondary" onclick=@OnClose>Cancel</button>
+				</div>
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Action OnClose { get; set; }
+
+	List<PrefabFile> GamemodePrefabs { get; set; } = new();
+
+	Package       MapPackage       { get; set; }
+	string        SelectedGamemode { get; set; } = "";
+	float         MaxPlayers       { get; set; } = 8;
+	LobbyPrivacy  Privacy          { get; set; } = LobbyPrivacy.Public;
+	bool          PickingMap       { get; set; } = false;
+
+	string        SearchQuery   { get; set; } = "";
+	List<Package> SearchResults { get; set; } = new();
+	bool          IsSearching   { get; set; } = false;
+	bool          _hasSearched  = false;
+
+	string GmClass( string path )       => SelectedGamemode == path ? "MenuButton Selected" : "MenuButton";
+	string PrivClass( LobbyPrivacy p )  => Privacy == p ? "MenuButton Selected" : "MenuButton";
+	string StartClass()                 => MapPackage is null ? "MenuButton disabled" : "MenuButton";
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( !firstTime ) return;
+
+		// Find prefabs in the conventional gamemodes folder.
+		// Convention: put your gamemode prefabs in Assets/prefabs/gamemodes/
+		GamemodePrefabs = ResourceLibrary.GetAll<PrefabFile>()
+			.Where( pf => pf.ResourcePath.Contains( "gamemodes/", StringComparison.OrdinalIgnoreCase )
+			           || pf.ResourcePath.Contains( "gamemode/",  StringComparison.OrdinalIgnoreCase ) )
+			.ToList();
+
+		if ( GamemodePrefabs.Count > 0 )
+			SelectedGamemode = GamemodePrefabs[0].ResourcePath;
+	}
+
+	async void DoSearch()
+	{
+		IsSearching  = true;
+		_hasSearched = true;
+		StateHasChanged();
+
+		var query  = string.IsNullOrWhiteSpace( SearchQuery )
+			? "type:map sort:popular"
+			: $"type:map {SearchQuery}";
+		var result = await Package.FindAsync( query, 48 );
+		SearchResults = result?.Packages?.ToList() ?? new();
+
+		IsSearching = false;
+		StateHasChanged();
+	}
+
+	void OnMapSelected( Package pkg )
+	{
+		MapPackage = pkg;
+		PickingMap = false;
+		StateHasChanged();
+	}
+
+		void OnStartGame()
+	{
+		if ( MapPackage is null ) return;
+
+		// Configure launch arguments — the engine reads these when loading the game
+		LaunchArguments.Map        = MapPackage.FullIdent;
+		LaunchArguments.MaxPlayers = (int)MaxPlayers;
+		LaunchArguments.Privacy    = Privacy;
+		LaunchArguments.ServerName = $"{Sandbox.Utility.Steam.PersonaName}'s Server";
+
+		// Store the selected gamemode prefab path so GamemodeManager can read it on startup
+		// via LaunchArguments.GameSettings["xgk_gamemode"]
+		if ( !string.IsNullOrEmpty( SelectedGamemode ) )
+		{
+			LaunchArguments.GameSettings = new() { ["xgk_gamemode"] = SelectedGamemode };
+		}
+
+		// Reload this game package as host — engine mounts the map, creates the lobby
+		Game.Load( Game.Ident, false );
+	}
+
+	protected override int BuildHash() =>
+		HashCode.Combine( MapPackage?.FullIdent, SelectedGamemode, (int)MaxPlayers, PickingMap, IsSearching, SearchResults.Count, Privacy );
+}

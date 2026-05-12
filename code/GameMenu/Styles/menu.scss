@@ -1,0 +1,167 @@
+@import "_vars.scss";
+
+// Shared modal styles — used by PlayModal, ServersModal, OptionsModal
+.ModalOverlay {
+	position:         absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background-color: rgba( 0, 0, 0, 0.65 );
+	align-items:      center;
+	justify-content:  center;
+}
+
+.Modal {
+	background-color: rgba( 28, 28, 28, 0.98 );
+	border:           1px solid rgba( 255, 255, 255, 0.08 );
+	border-radius:    $widget-radius;
+	padding:          32px;
+	width:            480px;
+	flex-direction:   column;
+	pointer-events:   all;
+}
+
+.ModalWide {
+	width:          720px;
+	max-height:     680px;
+	flex-direction: column;
+}
+
+.ModalTitle {
+	font-family:   $hud-font;
+	font-size:     $hud-size-lg;
+	font-weight:   $hud-weight-bold;
+	color:         $hud-color;
+	margin-bottom: 20px;
+}
+
+.ModalSubTitle {
+	font-family:    $hud-font;
+	font-size:      $hud-size-sm;
+	color:          $hud-color-dim;
+	margin-bottom:  8px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+
+	&.TopMargin { margin-top: 16px; }
+}
+
+.ModalRow {
+	flex-direction: row;
+	gap:            20px;
+	margin-bottom:  20px;
+}
+
+.ModalSection {
+	flex:           1;
+	flex-direction: column;
+}
+
+.ModalToolbar {
+	flex-direction: row;
+	margin-bottom:  12px;
+}
+
+.ModalActions {
+	flex-direction: row;
+	gap:            8px;
+	margin-top:     20px;
+}
+
+// Options rows
+.OptionSection {
+	flex-direction: column;
+	margin-bottom:  16px;
+}
+
+.OptionRow {
+	flex-direction: row;
+	align-items:    center;
+	margin-bottom:  10px;
+	gap:            12px;
+}
+
+.OptionLabel {
+	font-family: $hud-font;
+	font-size:   $hud-size-sm;
+	color:       $hud-color;
+	width:       140px;
+}
+
+.OptionValue {
+	font-family: $hud-font;
+	font-size:   $hud-size-sm;
+	color:       $hud-color-dim;
+	width:       36px;
+	text-align:  right;
+}
+
+// Server list
+.ServerList {
+	flex-direction: column;
+	border:         1px solid rgba( 255, 255, 255, 0.06 );
+	border-radius:  $widget-radius;
+	overflow:       hidden; // clip the rounded corners
+}
+
+.ServerListBody {
+	flex-direction: column;
+	flex-grow:      1;
+	max-height:     440px;
+	overflow-y:     scroll;
+}
+
+.ServerHeader {
+	flex-direction:   row;
+	align-items:      center;
+	min-height:       28px;
+	padding:          0 10px;
+	white-space:      nowrap;
+	flex-shrink:      0;
+	border-bottom:    1px solid rgba( 255, 255, 255, 0.08 );
+	background-color: rgba( 0, 0, 0, 0.2 );
+}
+
+.ServerRow {
+	flex-direction: row;
+	align-items:    center;
+	min-height:     34px;
+	padding:        0 10px;
+	white-space:    nowrap;
+	flex-shrink:    0;
+
+	&:hover {
+		background-color: rgba( 255, 255, 255, 0.04 );
+	}
+}
+
+.Col-Name    {
+	flex:        1;
+	width:       0; // forces flex child to respect overflow
+	overflow:    hidden;
+	font-family: $hud-font;
+	font-size:   $hud-size-sm;
+	color:       $hud-color;
+}
+.Col-Players { width: 68px; font-family: $hud-font; font-size: $hud-size-sm; color: $hud-color-dim; text-align: center; }
+.Col-Ping    { width: 60px; font-family: $hud-font; font-size: $hud-size-sm; color: $hud-color-dim; text-align: right; }
+.Col-Join    {
+	width:           88px;
+	margin-left:     12px;
+	align-items:     center;
+	justify-content: center;
+
+	.MenuButton {
+		width:         88px;
+		margin-bottom: 0;
+		padding:       4px 0;
+		font-size:     $hud-size-sm;
+		height:        28px;
+	}
+}
+
+.Muted {
+	font-family: $hud-font;
+	font-size:   $hud-size-sm;
+	color:       $hud-color-dim;
+	align-self:  center;
+	padding:     24px;
+}

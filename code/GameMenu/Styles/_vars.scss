@@ -1,0 +1,33 @@
+// XenGameKit Game Menu — design tokens
+// Uses the same variable names as the HUD's _vars.scss so menu stylesheets
+// are immediately readable alongside HUD code.
+
+// Typography
+$hud-font:          Poppins;
+$hud-weight:        400;
+$hud-weight-bold:   700;
+$hud-color:         white;
+$hud-color-dim:     #aaa;
+$hud-color-faint:   #666;
+
+// Font sizes
+$hud-size-xl:       32px;
+$hud-size-lg:       24px;
+$hud-size-md:       16px;
+$hud-size-sm:       13px;
+$hud-size-icon:     28px;
+
+// Widget chrome
+$widget-bg:         rgba( 30, 30, 30, 0.88 );
+$widget-radius:     8px;
+$widget-pad:        12px 24px;
+$widget-gap:        8px;
+
+// Accent colours
+$color-health:      #ee0055;
+$color-armour:      #2299ff;
+
+// Spacing
+$pad:               12px;
+$pad-md:            24px;
+$pad-edge:          16px;

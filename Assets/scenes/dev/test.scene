@@ -132,80 +132,6 @@
           "Children": []
         },
         {
-          "__guid": "09cd5b8d-6bb4-4f50-9d24-e924a55dd683",
-          "__version": 2,
-          "Flags": 0,
-          "Name": "Object",
-          "Position": "95.4073944,220.19812,79.0289459",
-          "Rotation": "0,0,0,1",
-          "Scale": "1,1,1",
-          "Tags": "",
-          "Enabled": true,
-          "NetworkMode": 2,
-          "NetworkFlags": 0,
-          "NetworkOrphaned": 0,
-          "NetworkTransmit": true,
-          "OwnerTransfer": 1,
-          "Components": [
-            {
-              "__type": "Sandbox.EnvmapProbe",
-              "__guid": "703a78aa-5fcf-4de8-be79-dc3ea5e5df59",
-              "__enabled": true,
-              "Flags": 0,
-              "__version": 1,
-              "BakedTexture": "scenes/dev/test_scene_data/envmap/bake_703a78aa-5fcf-4de8-be79-dc3ea5e5df59.vtex",
-              "Bounds": {
-                "Mins": "-511.999329,-1112.7688,-512",
-                "Maxs": "779.055725,512,512"
-              },
-              "DelayBetweenUpdates": 0.1,
-              "Feathering": 8,
-              "FrameInterval": 5,
-              "MaxDistance": 512,
-              "Mode": "Baked",
-              "MultiBounce": true,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "Priority": 0,
-              "Projection": "Sphere",
-              "Resolution": "Small",
-              "Texture": null,
-              "TintColor": "1,1,1,1",
-              "UpdateStrategy": "OnEnabled",
-              "ZFar": 4096,
-              "ZNear": 16
-            },
-            {
-              "__type": "Sandbox.IndirectLightVolume",
-              "__guid": "17b27708-cfb3-4433-9bc5-ce31d6c3657f",
-              "__enabled": true,
-              "Flags": 0,
-              "Bounds": {
-                "Mins": "-490.389954,-1102.61023,-384",
-                "Maxs": "774.531921,270.023315,121.329193"
-              },
-              "Contrast": 1,
-              "DistanceTexture": "scenes/dev/test_scene_data/ddgi/object_distance_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex",
-              "InsideGeometry": "Relocate",
-              "IrradianceTexture": "scenes/dev/test_scene_data/ddgi/object_irradiance_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex",
-              "NormalBias": 5,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "ProbeDensity": 15,
-              "RelocationTexture": "scenes/dev/test_scene_data/ddgi/object_relocation_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex"
-            }
-          ],
-          "Children": []
-        },
-        {
           "__guid": "af6dbdc8-e160-49f2-9960-906b030e1c69",
           "__version": 2,
           "Flags": 0,
@@ -1635,6 +1561,150 @@
             }
           ],
           "Children": []
+        },
+        {
+          "__guid": "c9dc4b49-4a2a-47b0-b176-d18f26b4680e",
+          "__version": 2,
+          "Flags": 0,
+          "Name": "Probes",
+          "Position": "0,0,0",
+          "Rotation": "0,0,0,1",
+          "Scale": "1,1,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkFlags": 0,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [],
+          "Children": [
+            {
+              "__guid": "09cd5b8d-6bb4-4f50-9d24-e924a55dd683",
+              "__version": 2,
+              "Flags": 0,
+              "Name": "Big",
+              "Position": "95.4073944,220.19812,79.0289459",
+              "Rotation": "0,0,0,1",
+              "Scale": "1,1,1",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkFlags": 0,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [
+                {
+                  "__type": "Sandbox.EnvmapProbe",
+                  "__guid": "703a78aa-5fcf-4de8-be79-dc3ea5e5df59",
+                  "__enabled": true,
+                  "Flags": 0,
+                  "__version": 1,
+                  "BakedTexture": "scenes/dev/test_scene_data/envmap/bake_703a78aa-5fcf-4de8-be79-dc3ea5e5df59.vtex",
+                  "Bounds": {
+                    "Mins": "-511.999329,-1112.7688,-512",
+                    "Maxs": "779.055725,512,512"
+                  },
+                  "DelayBetweenUpdates": 0.1,
+                  "Feathering": 8,
+                  "FrameInterval": 5,
+                  "MaxDistance": 512,
+                  "Mode": "Baked",
+                  "MultiBounce": true,
+                  "OnComponentDestroy": null,
+                  "OnComponentDisabled": null,
+                  "OnComponentEnabled": null,
+                  "OnComponentFixedUpdate": null,
+                  "OnComponentStart": null,
+                  "OnComponentUpdate": null,
+                  "Priority": 0,
+                  "Projection": "Sphere",
+                  "Resolution": "Small",
+                  "Texture": null,
+                  "TintColor": "1,1,1,1",
+                  "UpdateStrategy": "OnEnabled",
+                  "ZFar": 4096,
+                  "ZNear": 16
+                },
+                {
+                  "__type": "Sandbox.IndirectLightVolume",
+                  "__guid": "17b27708-cfb3-4433-9bc5-ce31d6c3657f",
+                  "__enabled": true,
+                  "Flags": 0,
+                  "Bounds": {
+                    "Mins": "-490.389954,-1102.61023,-384",
+                    "Maxs": "774.531921,270.023315,121.329193"
+                  },
+                  "Contrast": 1,
+                  "DistanceTexture": "scenes/dev/test_scene_data/ddgi/big_distance_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex",
+                  "InsideGeometry": "Relocate",
+                  "IrradianceTexture": "scenes/dev/test_scene_data/ddgi/big_irradiance_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex",
+                  "NormalBias": 5,
+                  "OnComponentDestroy": null,
+                  "OnComponentDisabled": null,
+                  "OnComponentEnabled": null,
+                  "OnComponentFixedUpdate": null,
+                  "OnComponentStart": null,
+                  "OnComponentUpdate": null,
+                  "ProbeDensity": 15,
+                  "RelocationTexture": "scenes/dev/test_scene_data/ddgi/big_relocation_17b27708-cfb3-4433-9bc5-ce31d6c3657f.vtex"
+                }
+              ],
+              "Children": []
+            },
+            {
+              "__guid": "dd83128c-c7ab-4f8d-9d9a-6efc53d4d2d7",
+              "__version": 2,
+              "Flags": 0,
+              "Name": "Probe Area 1",
+              "Position": "293.016724,154.221375,63.0289459",
+              "Rotation": "0,0,0,1",
+              "Scale": "1,1,1",
+              "Tags": "",
+              "Enabled": true,
+              "NetworkMode": 2,
+              "NetworkFlags": 0,
+              "NetworkOrphaned": 0,
+              "NetworkTransmit": true,
+              "OwnerTransfer": 1,
+              "Components": [
+                {
+                  "__type": "Sandbox.EnvmapProbe",
+                  "__guid": "2ae423d1-c497-4020-a791-847cdd2496a9",
+                  "__enabled": true,
+                  "Flags": 0,
+                  "__version": 1,
+                  "BakedTexture": "scenes/dev/test_scene_data/envmap/bake_2ae423d1-c497-4020-a791-847cdd2496a9.vtex",
+                  "Bounds": {
+                    "Mins": "-608.727783,-321.350403,-115.574837",
+                    "Maxs": "295.128113,319.792816,267.755676"
+                  },
+                  "DelayBetweenUpdates": 0.1,
+                  "Feathering": 8,
+                  "FrameInterval": 5,
+                  "MaxDistance": 512,
+                  "Mode": "Baked",
+                  "MultiBounce": true,
+                  "OnComponentDestroy": null,
+                  "OnComponentDisabled": null,
+                  "OnComponentEnabled": null,
+                  "OnComponentFixedUpdate": null,
+                  "OnComponentStart": null,
+                  "OnComponentUpdate": null,
+                  "Priority": 0,
+                  "Projection": "Sphere",
+                  "Resolution": "Huge",
+                  "Texture": null,
+                  "TintColor": "1,1,1,1",
+                  "UpdateStrategy": "OnEnabled",
+                  "ZFar": 4096,
+                  "ZNear": 16
+                }
+              ],
+              "Children": []
+            }
+          ]
         }
       ]
     },
@@ -3509,13 +3579,13 @@
       "CustomBounds": false
     },
     "GameObjectSystems": {
+      "Sandbox.MovieMaker.MovieRecorderSystem": {
+        "DisableClientRecording": false
+      },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "ce6922af-e250-4e8a-a73c-7cae5e756f93"
         }
-      },
-      "Sandbox.MovieMaker.MovieRecorderSystem": {
-        "DisableClientRecording": false
       },
       "Sandbox.SelectionSetsSystem": {
         "Data": {

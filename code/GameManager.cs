@@ -33,7 +33,7 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		GiveToPlayer( player, name );
 	}
 
-	static void GiveToPlayer( Player player, string name )
+	public static void GiveToPlayer( Player player, string name )
 	{
 		var prefab = ResolvePrefab( name );
 		if ( prefab is null ) { Log.Warning( $"give: could not find prefab '{name}'" ); return; }
@@ -239,7 +239,14 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		if ( Scene.GetAll<Player>().Where( x => x.Network.Owner?.Id == playerData.PlayerId ).Any() )
 			return;
 
-		var startLocation = FindSpawnLocation().WithScale( 1 );
+		// Ask the gamemode for a spawn location first (e.g. team spawns in TDM)
+		var gamemodeSpawn = GamemodeManager.Current?.GetSpawnLocation( playerData );
+		var startLocation = (gamemodeSpawn ?? FindSpawnLocation()).WithScale( 1 );
+
+		// Fire pre-spawn event — listeners can modify the spawn location
+		var respawnEvent = new PlayerRespawnEvent { PlayerData = playerData, SpawnLocation = startLocation };
+		Global.IPlayerEvents.Post( x => x.OnPlayerRespawning( respawnEvent ) );
+		startLocation = respawnEvent.SpawnLocation;
 
 		var playerGo = GameObject.Clone( "/prefabs/player.prefab", new CloneConfig
 		{
@@ -255,6 +262,7 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		playerGo.NetworkSpawn( owner );
 
 		Local.IPlayerEvents.PostToGameObject( player.GameObject, x => x.OnSpawned() );
+		GamemodeManager.Current?.ActiveGamemode?.EquipPlayer( player );
 	}
 
 	public void SpawnPlayerDelayed( PlayerData playerData )
@@ -317,9 +325,10 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		Assert.True( player.IsValid(), "Player invalid" );
 		Assert.True( player.PlayerData.IsValid(), $"{player.GameObject.Name}'s PlayerData invalid" );
 
-		var weapon = dmg.Weapon;
+		var weapon       = dmg.Weapon;
 		var attackerData = PlayerData.For( dmg.InstigatorId );
-		bool isSuicide = attackerData == player.PlayerData;
+		var attacker     = attackerData is not null ? Scene.GetAll<Player>().FirstOrDefault( p => p.PlayerData == attackerData ) : null;
+		bool isSuicide   = attackerData == player.PlayerData;
 
 		if ( attackerData.IsValid() && !isSuicide )
 		{
@@ -330,6 +339,14 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		}
 
 		player.PlayerData.Deaths++;
+
+		// Fire kill event on the attacker (for kill feed, achievements etc.)
+		if ( attacker.IsValid() && !isSuicide )
+		{
+			var killEvent = new PlayerKillEvent { Player = attacker, Victim = player.GameObject, DamageInfo = dmg };
+			Local.IPlayerEvents.PostToGameObject( attacker.GameObject, x => x.OnKill( killEvent ) );
+			Global.IPlayerEvents.Post( x => x.OnPlayerKill( killEvent ) );
+		}
 
 		string attackerName = attackerData.IsValid() ? attackerData.DisplayName : dmg.Attacker?.Name;
 		if ( string.IsNullOrEmpty( attackerName ) )

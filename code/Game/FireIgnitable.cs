@@ -26,8 +26,17 @@ public sealed class FirePropExtension : Component, IPropExtension
 	{
 		if ( IsProxy ) return;
 		if ( !prop.IsFlammable ) return;
-		if ( prop.GetComponent<FireComponent>( true ).IsValid() ) return;
-		if ( !info.Tags.Has( DamageTags.Burn ) ) return;
+		if ( prop.IsOnFire ) return;
+
+		// Mirror HL2's OnTakeDamage logic:
+		// - Burn damage (from a nearby fire) always ignites
+		// - Explosion damage always ignites
+		// - Everything else (bullets, melee, physics) does NOT ignite by default
+		// The engine's ShouldDamageIgnite() returns true for all damage which is
+		// a Facepunch simplification; we enforce HL2 rules here instead.
+		var isBurn      = info.Tags.Has( DamageTags.Burn );
+		var isExplosion = info.Tags.Has( DamageTags.Explosion );
+		if ( !isBurn && !isExplosion ) return;
 
 		FireSystem.Ignite( prop.GameObject );
 	}
@@ -38,8 +47,9 @@ public sealed class FirePropExtension : Component, IPropExtension
 		if ( IsProxy ) return;
 		if ( !prop.IsValid() ) return;
 
-		var fire = prop.GetComponent<FireComponent>( true );
-		if ( !fire.IsValid() || !fire.IsBurning ) return;
+		// FireComponent lives on the ignite prefab GO, not on prop.GameObject.
+		// Use Prop.IsOnFire (set by Prop.Ignite()) as the canonical burning check.
+		if ( !prop.IsOnFire ) return;
 
 		foreach ( var gib in gibs )
 		{

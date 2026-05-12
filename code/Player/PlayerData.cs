@@ -18,6 +18,13 @@ public sealed partial class PlayerData : Component
 
 	[Sync] public bool IsGodMode { get; set; }
 
+	/// <summary>
+
+	/// Which team this player belongs to. -1 = unassigned.
+
+	/// </summary>
+	[Sync( SyncFlags.FromHost )] public int TeamIndex { get; set; } = -1;
+
 	public Connection Connection => Connection.Find( PlayerId );
 
 	/// <summary>

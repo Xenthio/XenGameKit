@@ -159,7 +159,12 @@ public static class FireSystem
 		var scene = Game.ActiveScene;
 		if ( !scene.IsValid() ) return;
 
-		var hits = scene.FindInPhysics( new Sphere( fire.WorldPosition, radius ) );
+		// HL2 uses FIRE_SPREAD_DAMAGE_MULTIPLIER = 2.0:
+		// outward ignition radius is 2x the visual fire radius so spread is noticeable.
+		// Self-damage (via heat model) uses the base radius; outward damage uses the doubled one.
+		var spreadRadius = radius * 2f;
+
+		var hits = scene.FindInPhysics( new Sphere( fire.WorldPosition, spreadRadius ) );
 		var tags = new TagSet();
 		tags.Add( DamageTags.Burn );
 

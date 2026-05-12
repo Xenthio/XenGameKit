@@ -47,10 +47,14 @@ public class PlayerDeathEffect : Component, Local.IPlayerEvents
 
 		_isDead = false;
 
-		// Destroy this player GO and let the game manager spawn a fresh one
 		var playerData = Player.PlayerData;
 		Player.GameObject.Destroy();
-		GameManager.Current?.SpawnPlayerDelayed( playerData );
+
+		// Route through GamemodeManager if one exists so modes like TDM can hold off respawns
+		if ( GamemodeManager.Current is not null )
+			GamemodeManager.Current.RequestRespawn( playerData );
+		else
+			GameManager.Current?.SpawnPlayerDelayed( playerData );
 	}
 
 	/// <summary>
