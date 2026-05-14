@@ -1,15 +1,4 @@
-/// <summary>
-/// Legacy round state enum. New code should use <see cref="RoundPhase"/> string constants
-/// via <see cref="BaseGamemode.Phase"/>.
-/// </summary>
-public enum RoundState
-{
-	/// <summary>Pre-round freeze — players are alive but movement/damage may be locked.</summary>
-	PreRound,
-	Active,
-	PostRound,
-	MatchOver,
-}
+// Round/match event data and scene event interfaces.
 
 public enum RoundEndReason
 {
@@ -34,14 +23,14 @@ public class RoundStartEvent
 
 public class RoundEndEvent
 {
-	public RoundEndReason Reason { get; init; }
-	public int WinningTeam { get; init; } // -1 = draw / no teams
+	public RoundEndReason Reason     { get; init; }
+	public int            WinningTeam { get; init; } // -1 = draw / no teams
 }
 
 public class MatchEndEvent
 {
-	public MatchEndReason Reason { get; init; }
-	public int WinningTeam { get; init; } // -1 = draw / no teams
+	public MatchEndReason Reason      { get; init; }
+	public int            WinningTeam { get; init; } // -1 = draw / no teams
 }
 
 public static partial class Global
@@ -52,7 +41,7 @@ public static partial class Global
 		void OnRoundEnd( RoundEndEvent e ) { }
 		void OnMatchEnd( MatchEndEvent e ) { }
 		void OnTeamAssigned( PlayerData playerData, int teamIndex ) { }
-		/// <summary>Fired whenever the active gamemode's Phase changes. Fires on all clients.</summary>
+		// Fires on all clients whenever BaseGamemode.Phase changes.
 		void OnPhaseChanged( string oldPhase, string newPhase ) { }
 	}
 }

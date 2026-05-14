@@ -1,25 +1,21 @@
-/// <summary>
-/// Well-known <see cref="BaseGamemode.Phase"/> string constants.
-/// Gamemodes are free to define their own additional phase names — just use string constants.
-/// Prefer these over raw strings so consumers can switch/compare without typos.
-/// </summary>
+// Well-known Phase string constants for BaseGamemode.
+// Using strings instead of an enum means gamemodes can define their own phases
+// without touching this file. Just match against these where you need to.
 public static class RoundPhase
 {
-	/// <summary>Not enough players connected, or server is idle between sessions.</summary>
+	// Not enough players, or the server is sitting idle.
 	public const string WaitingForPlayers = nameof( WaitingForPlayers );
 
-	/// <summary>
-	/// Round is about to start — freeze time, countdown, role/team assignment.
-	/// Players are alive but movement and damage may be suppressed.
-	/// </summary>
+	// Round is about to begin - freeze time, role assignment, countdowns, etc.
+	// Players are alive but movement/damage may be suppressed.
 	public const string Preparing = nameof( Preparing );
 
-	/// <summary>Round is live. Damage and movement are enabled.</summary>
+	// Round is live. Damage and movement are on.
 	public const string Active = nameof( Active );
 
-	/// <summary>Round just ended. Short intermission before the next round starts.</summary>
+	// Round just ended. Short break before the next one starts.
 	public const string PostRound = nameof( PostRound );
 
-	/// <summary>Match is over. Waiting for a vote, map change, or lobby return.</summary>
+	// Match is over. Waiting for map change, vote, or lobby.
 	public const string MatchOver = nameof( MatchOver );
 }

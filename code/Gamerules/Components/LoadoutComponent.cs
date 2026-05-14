@@ -1,23 +1,17 @@
-/// <summary>
-/// Composable loadout: add this alongside a <see cref="BaseGamemode"/> and populate
-/// <see cref="Weapons"/> in the inspector. BaseGamemode.EquipPlayer() calls GiveLoadout()
-/// automatically when this component is present.
-///
-/// For role-based or team-based loadouts, override <see cref="GetLoadoutFor"/> in a subclass
-/// and return a custom list per-player.
-/// </summary>
+// Drop this alongside a BaseGamemode and populate the Weapons list in the inspector.
+// BaseGamemode.EquipPlayer() will call GiveLoadout() automatically.
+//
+// If you need role or team-based loadouts, subclass this and override GetLoadoutFor().
 public class LoadoutComponent : Component, IGamemodeComponent
 {
-	/// <summary>Weapon prefabs to give every player when they spawn.</summary>
+	// Weapon prefabs to give every player when they spawn.
 	[Property] public List<GameObject> Weapons { get; set; } = new();
 
-	/// <summary>
-	/// Return the list of weapon prefabs this player should receive.
-	/// Override in a subclass to drive loadouts from roles, teams, or inventory configs.
-	/// </summary>
+	// Return the weapon prefabs this player should receive.
+	// Override in a subclass to drive loadouts from roles, teams, or whatever else.
 	public virtual IEnumerable<GameObject> GetLoadoutFor( Player player ) => Weapons;
 
-	/// <summary>Give this player their loadout. Called by BaseGamemode.EquipPlayer().</summary>
+	// Called by BaseGamemode.EquipPlayer(). Host-only.
 	public void GiveLoadout( Player player )
 	{
 		if ( !Networking.IsHost ) return;

@@ -71,7 +71,7 @@ public sealed class RoleBasedGamemode : BaseGamemode
 		RoundNumber++;
 		_isIntermission = false;
 		IsIntermission  = false;
-		RoundState      = RoundState.PreRound;
+		SetPhase( RoundPhase.Preparing );
 		TimeRemaining   = RoundTimeLimitSeconds > 0 ? RoundTimeLimitSeconds : float.MaxValue;
 		_roundTimer     = 0;
 
@@ -82,7 +82,7 @@ public sealed class RoleBasedGamemode : BaseGamemode
 		AssignRoles();
 		RefreshRoleCounts();
 
-		RoundState = RoundState.Active;
+		SetPhase( RoundPhase.Active );
 		AnnounceRoundStart( RoundNumber );
 		Global.IGamemodeEvents.Post( x => x.OnRoundStart( new RoundStartEvent { RoundNumber = RoundNumber } ) );
 	}
@@ -93,7 +93,7 @@ public sealed class RoleBasedGamemode : BaseGamemode
 
 		_isIntermission = true;
 		IsIntermission  = true;
-		RoundState      = RoundState.PostRound;
+		SetPhase( RoundPhase.PostRound );
 		TimeRemaining   = IntermissionSeconds;
 		_roundTimer     = 0;
 

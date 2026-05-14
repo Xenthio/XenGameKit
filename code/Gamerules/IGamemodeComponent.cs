@@ -1,28 +1,21 @@
-/// <summary>
-/// Optional interface that any <see cref="Component"/> on the gamemode GameObject can implement.
-/// <see cref="BaseGamemode"/> discovers and calls these automatically so components
-/// can hook the mode lifecycle without subclassing BaseGamemode.
-/// </summary>
+// Interface any Component on the gamemode GameObject can implement.
+// BaseGamemode finds all of them automatically and calls these at the right times,
+// so you don't need to subclass BaseGamemode just to hook the lifecycle.
 public interface IGamemodeComponent
 {
-	/// <summary>Called when the gamemode activates (host + clients, before first update).</summary>
+	// Called when the gamemode activates (runs on host and clients).
 	void OnGamemodeStart() { }
 
-	/// <summary>Called when the gamemode is torn down (host + clients).</summary>
+	// Called when the gamemode is torn down.
 	void OnGamemodeEnd() { }
 
-	/// <summary>
-	/// Called when the phase changes. Both old and new names are provided so
-	/// components can react to specific transitions (e.g. Preparing → Active = round live).
-	/// </summary>
+	// Called whenever BaseGamemode.Phase changes. Both old and new names are passed
+	// so you can react to specific transitions (e.g. Preparing -> Active = go!).
 	void OnPhaseChanged( string oldPhase, string newPhase ) { }
 
-	/// <summary>
-	/// Called right after a player spawns — use for equip, HUD setup, role reveal, etc.
-	/// Host-only by default; clients hear it via Global.IPlayerEvents.
-	/// </summary>
+	// Called right after a player spawns. Good for giving equipment, revealing roles, etc.
 	void OnPlayerSpawned( Player player ) { }
 
-	/// <summary>Called when a player dies. Host-only.</summary>
+	// Called when a player dies. Host-only.
 	void OnPlayerDied( Player player, PlayerDiedParams args ) { }
 }
