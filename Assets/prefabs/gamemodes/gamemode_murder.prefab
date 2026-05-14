@@ -1,0 +1,49 @@
+{
+  "RootObject": {
+    "__guid": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "Gamemode_Murder",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "RoleBasedGamemode",
+        "__guid": "a7b8c9d0-e1f2-3456-abcd-567890123456",
+        "__enabled": true,
+        "Flags": 0,
+        "AllowFriendlyFire": false,
+        "HudPrefab": null,
+        "RespawnDelay": 5,
+        "IncludeMurderer": true,
+        "IncludeDetective": true,
+        "RoundTimeLimitSeconds": 180,
+        "IntermissionSeconds": 5,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [],
+    "__properties": {},
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

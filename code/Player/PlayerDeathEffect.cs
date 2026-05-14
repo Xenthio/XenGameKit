@@ -3,22 +3,25 @@
 /// - A ragdoll is spawned in place using ModelPhysics (same approach as sandbox gamemode)
 /// - Camera locks at death position
 /// - Screen fades to grey/dark with "YOU DIED"
-/// - After RespawnDelay seconds, player respawns
+/// - After the gamemode's respawn delay, RequestRespawn is called.
+///   Delay is controlled by <see cref="BaseGamemode.GetRespawnDelay"/> — no need to set it here.
 /// </summary>
 public class PlayerDeathEffect : Component, Local.IPlayerEvents
 {
 	[RequireComponent] public Player Player { get; set; }
 
-	[Property] public float RespawnDelay { get; set; } = 5f;
-
 	bool _isDead = false;
 	TimeSince _timeSinceDeath;
+	float _respawnDelay = 5f; // cached at death time from GameRulesService
 
 	void Local.IPlayerEvents.OnDied( PlayerDiedParams args )
 	{
 		if ( _isDead ) return;
 		_isDead = true;
 		_timeSinceDeath = 0;
+
+		// Cache the delay from the gamemode now — GameRulesService may change between now and respawn
+		_respawnDelay = GameRulesService.Current?.GetRespawnDelay( Player.PlayerData ) ?? 5f;
 
 		Player.WalkController.Enabled = false;
 
@@ -43,16 +46,17 @@ public class PlayerDeathEffect : Component, Local.IPlayerEvents
 	{
 		if ( !_isDead ) return;
 		if ( !Networking.IsHost ) return;
-		if ( _timeSinceDeath < RespawnDelay ) return;
+		if ( _timeSinceDeath < _respawnDelay ) return;
 
 		_isDead = false;
 
 		var playerData = Player.PlayerData;
 		Player.GameObject.Destroy();
 
-		// Route through GamemodeManager if one exists so modes like TDM can hold off respawns
-		if ( GamemodeManager.Current is not null )
-			GamemodeManager.Current.RequestRespawn( playerData );
+		// Route through GameRulesService so modes like TDM can hold off respawns.
+		// GamemodeManager registers itself there — the base never references it directly.
+		if ( GameRulesService.Current is not null )
+			GameRulesService.Current.RequestRespawn( playerData );
 		else
 			GameManager.Current?.SpawnPlayerDelayed( playerData );
 	}

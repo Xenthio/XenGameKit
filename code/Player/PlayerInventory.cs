@@ -68,6 +68,7 @@ public sealed class PlayerInventory : Component, Local.IPlayerEvents
 	protected override void OnUpdate()
 	{
 		if ( IsProxy ) return;
+		if ( !Player.IsValid() ) return;
 
 		var renderer = Player?.WalkController?.BodyModelRenderer;
 

@@ -1,7 +1,19 @@
 public struct PlayerDiedParams
 {
+	/// <summary>Connection Id of the player who dealt the killing blow. Use <see cref="KillerPlayer"/> for a direct Player reference.</summary>
 	public Guid InstigatorId { get; set; }
+
+	/// <summary>The weapon or entity that dealt the killing blow (can be null).</summary>
 	public GameObject Attacker { get; set; }
+
+	/// <summary>
+	/// Convenience accessor — the Player who killed this one, or null for world/environmental kills.
+	/// Equivalent to GMod's <c>attacker</c> argument in <c>GM:PlayerDeath</c>.
+	/// </summary>
+	public readonly Player KillerPlayer =>
+		InstigatorId != Guid.Empty
+			? Game.ActiveScene?.GetAll<Player>().FirstOrDefault( p => p.PlayerId == InstigatorId )
+			: null;
 }
 
 public struct PlayerDamageParams

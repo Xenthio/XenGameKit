@@ -34,10 +34,6 @@
         "DisplayIcon": null,
         "DisplayName": "Admin Gun",
         "DroppedGameObject": null,
-        "ExplosionEffectPrefab": {
-          "_type": "gameobject",
-          "prefab": "prefabs/engine/explosion_med.prefab"
-        },
         "ExplosionMagnitude": 200,
         "ExplosionRadius": 256,
         "HoldType": "HoldItem",

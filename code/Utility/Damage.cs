@@ -1,12 +1,9 @@
 public static class Damage
 {
-	[Rpc.Broadcast]
-	private static void ApplyForce( Rigidbody rb, Vector3 point, Vector3 force )
+	// Force is applied directly — Damage.Radius is host-only so no RPC needed
+	private static void ApplyForceLocal( Rigidbody rb, Vector3 point, Vector3 force )
 	{
 		if ( !rb.IsValid() ) return;
-		if ( rb.Network.Owner is null ) return;
-		if ( !rb.Network.Owner.Id.Equals( Connection.Local.Id ) ) return;
-
 		rb.ApplyForceAt( point, force );
 	}
 
@@ -26,7 +23,7 @@ public static class Damage
 
 		var objectsInArea = scene.FindInPhysics( new Sphere( point, radius ) );
 
-		var losTrace = scene.Trace.WithTag( "map" ).WithoutTags( "trigger" );
+		var losTrace = scene.Trace.WithoutTags( "trigger" );
 
 		if ( weapon.IsValid() )
 			losTrace = losTrace.IgnoreGameObjectHierarchy( weapon );
@@ -50,12 +47,11 @@ public static class Damage
 			var dir = (rb.WorldPosition - point).Normal;
 			var distance = rb.WorldPosition.Distance( point );
 
-			// Bullshit, we should pass a force through or invent a scale from damage
+			// Matches engine RadiusDamage formula: massive near-field force that falls off with d²
 			var forceMagnitude = Math.Clamp( 10000000000f / (distance * distance + 1), 0, 10000000000f );
+			forceMagnitude += extraForce * (1f - (distance / radius));
 
-			forceMagnitude += extraForce * (1 - (distance / radius));
-
-			ApplyForce( rb, point, dir * forceMagnitude );
+			ApplyForceLocal( rb, point, dir * forceMagnitude );
 		}
 
 		foreach ( var damageable in objectsInArea.SelectMany( x => x.GetComponentsInParent<Component.IDamageable>().Distinct() ) )

@@ -6,13 +6,8 @@ using Sandbox.Rendering;
 /// </summary>
 public class AdminGun : BaseBulletWeapon
 {
-	[Property, Group( "Admin Gun" )] public float ExplosionMagnitude { get; set; } = 200f;
+	[Property, Group( "Admin Gun" )] public float ExplosionMagnitude { get; set; } = 100f;
 	[Property, Group( "Admin Gun" )] public float ExplosionRadius    { get; set; } = 256f;
-
-	/// <summary>
-	/// Effect prefab spawned at the explosion point. Defaults to prefabs/engine/explosion_med.prefab.
-	/// </summary>
-	[Property, Group( "Admin Gun" )] public GameObject ExplosionEffectPrefab { get; set; }
 
 	// Rapid autofire on primary
 	protected override float GetPrimaryFireRate() => 0.05f;
@@ -63,14 +58,13 @@ public class AdminGun : BaseBulletWeapon
 
 		Explosion.Blast( new ExplosionInfo
 		{
-			Position              = pos,
-			Magnitude             = ExplosionMagnitude,
-			Radius                = ExplosionRadius,
-			DoDamage              = true,
-			DamageForce           = 2f,
-			Attacker              = Owner?.GameObject,
-			Weapon                = GameObject,
-			ExplosionEffectPrefab = ExplosionEffectPrefab ?? GameObject.GetPrefab( "prefabs/engine/explosion_med.prefab" ),
+			Position    = pos,
+			Magnitude   = ExplosionMagnitude,
+			Radius      = ExplosionRadius,
+			DoDamage    = true,
+			DamageForce = 1f,
+			Attacker    = Owner?.GameObject,
+			Weapon      = GameObject,
 		} );
 	}
 

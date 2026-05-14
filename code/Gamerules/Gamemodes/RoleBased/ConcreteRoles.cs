@@ -14,8 +14,7 @@ public sealed class MurdererRole : BaseRole
 
 	public override void OnRoundStart( Player player, RoleBasedGamemode gamemode )
 	{
-		// Replace "weapon_knife" with whatever melee prefab you have
-		GameManager.GiveToPlayer( player, "weapon_knife" );
+		GameManager.GiveToPlayer( player, "weapon_crowbar" );
 	}
 
 	public override bool CanDamage( Player attacker, Player victim, RoleBasedGamemode gamemode ) =>

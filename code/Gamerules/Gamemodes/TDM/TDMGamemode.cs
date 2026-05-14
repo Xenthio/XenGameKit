@@ -2,7 +2,7 @@
 /// CS-style Team Deathmatch. Rounds end when one team is wiped or time runs out.
 /// First team to <see cref="RoundsToWin"/> wins the match. Dead players sit out until next round.
 /// </summary>
-public sealed class TDMGamemode : BaseGamemode, Global.IGamemodeEvents
+public sealed class TDMGamemode : BaseGamemode
 {
 	[Property] public int   RoundsToWin           { get; set; } = 8;
 	[Property] public float RoundTimeLimitSeconds { get; set; } = 120f;
@@ -202,11 +202,6 @@ public sealed class TDMGamemode : BaseGamemode, Global.IGamemodeEvents
 			GameManager.Current?.SpawnPlayer( pd );
 		}
 	}
-
-	void Global.IGamemodeEvents.OnRoundStart( RoundStartEvent e ) { }
-	void Global.IGamemodeEvents.OnRoundEnd( RoundEndEvent e ) { }
-	void Global.IGamemodeEvents.OnMatchEnd( MatchEndEvent e ) { }
-	void Global.IGamemodeEvents.OnTeamAssigned( PlayerData playerData, int teamIndex ) { }
 
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
 	void AnnounceRoundStart( int roundNumber )

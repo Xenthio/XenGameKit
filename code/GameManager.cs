@@ -239,8 +239,9 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		if ( Scene.GetAll<Player>().Where( x => x.Network.Owner?.Id == playerData.PlayerId ).Any() )
 			return;
 
-		// Ask the gamemode for a spawn location first (e.g. team spawns in TDM)
-		var gamemodeSpawn = GamemodeManager.Current?.GetSpawnLocation( playerData );
+		// Ask the gamerules service for a spawn location first (e.g. team spawns in TDM).
+		// GamemodeManager registers itself into GameRulesService — the base never references it directly.
+		var gamemodeSpawn = GameRulesService.Current?.GetSpawnLocation( playerData );
 		var startLocation = (gamemodeSpawn ?? FindSpawnLocation()).WithScale( 1 );
 
 		// Fire pre-spawn event — listeners can modify the spawn location
@@ -262,7 +263,7 @@ public sealed partial class GameManager : GameObjectSystem<GameManager>, Compone
 		playerGo.NetworkSpawn( owner );
 
 		Local.IPlayerEvents.PostToGameObject( player.GameObject, x => x.OnSpawned() );
-		GamemodeManager.Current?.ActiveGamemode?.EquipPlayer( player );
+		GameRulesService.Current?.EquipPlayer( player );
 	}
 
 	public void SpawnPlayerDelayed( PlayerData playerData )

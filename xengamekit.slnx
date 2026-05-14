@@ -1,0 +1,23 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+  </Configurations>
+  <Project Path="code/xengamekit.csproj" />
+  <Project Path="Editor/xengamekit.editor.csproj" />
+  <Folder Name="/Addons/">
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/addons/base/code/Base Library.csproj" />
+  </Folder>
+  <Folder Name="/Libraries/">
+    <Project Path="Libraries/XMovement/Code/xmovement.csproj" />
+    <Project Path="Libraries/XMovement/Editor/xmovement.editor.csproj" />
+    <Project Path="Libraries/XMovement/UnitTests/xmovement.unittest.csproj" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/addons/tools/Code/Base Editor Library.csproj" />
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/editor/ActionGraph/Code/actiongraph.csproj" />
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/editor/DooEditor/Code/dooeditor.csproj" />
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/editor/Hammer/Code/hammer.csproj" />
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/editor/MovieMaker/Code/moviemaker.csproj" />
+    <Project Path="../../SteamLibrary/steamapps/common/sbox/editor/ShaderGraph/Code/shadergraph.csproj" />
+  </Folder>
+</Solution>

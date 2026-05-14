@@ -70,8 +70,6 @@ public sealed class GrenadeProjectile : Component, Component.ICollisionListener
 	[Property, Group( "Explosion" )] public float Magnitude { get; set; } = 100f;
 	[Property, Group( "Explosion" )] public float Radius { get; set; } = 0f;
 	[Property, Group( "Explosion" )] public float DamageForce { get; set; } = 0f;
-	[Property, Group( "Explosion" )] public SoundEvent ExplosionSound { get; set; }
-	[Property, Group( "Explosion" )] public GameObject ExplosionEffectPrefab { get; set; }
 
 	TimeSince _timeSinceArmed;
 	bool _isArmed;
@@ -124,16 +122,14 @@ public sealed class GrenadeProjectile : Component, Component.ICollisionListener
 
 		Explosion.Blast( new ExplosionInfo
 		{
-			Position = WorldPosition,
-			Magnitude = Magnitude,
-			Radius = Radius,
+			Position    = WorldPosition,
+			Magnitude   = Magnitude,
+			Radius      = Radius,
 			DamageForce = DamageForce,
-			DoDamage = true,
-			Attacker = _attacker ?? GameObject,
-			Weapon = _weapon,
-			Ignore = GameObject,
-			ExplosionSound = ExplosionSound,
-			ExplosionEffectPrefab = ExplosionEffectPrefab
+			DoDamage    = true,
+			Attacker    = _attacker ?? GameObject,
+			Weapon      = _weapon,
+			Ignore      = GameObject,
 		} );
 
 		GameObject.Destroy();

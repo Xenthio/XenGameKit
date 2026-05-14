@@ -4,7 +4,7 @@
 /// </summary>
 public abstract class BaseGamemode : Component, Global.IPlayerEvents
 {
-	[Property] public float RespawnDelay { get; set; } = 5f;
+	[Property] public float DefaultRespawnDelay { get; set; } = 5f;
 	[Property] public bool AllowFriendlyFire { get; set; } = false;
 
 	/// <summary>
@@ -54,6 +54,13 @@ public abstract class BaseGamemode : Component, Global.IPlayerEvents
 	{
 		GameManager.Current?.SpawnPlayerDelayed( playerData );
 	}
+
+	/// <summary>
+	/// How long <see cref="PlayerDeathEffect"/> waits before calling <see cref="RequestRespawn"/>.
+	/// Override per-player (e.g. VIPs respawn faster) or return 0 for instant respawn.
+	/// Defaults to <see cref="DefaultRespawnDelay"/>.
+	/// </summary>
+	public virtual float GetRespawnDelay( PlayerData playerData ) => DefaultRespawnDelay;
 
 	/// <summary>
 	/// Called right after a player spawns. Give them their starting loadout here.

@@ -63,15 +63,12 @@
 
 					<div class="ModalSection">
 						<label class="ModalSubTitle">Gamemode</label>
+						<button class="@GmClass("")" onclick=@( () => { SelectedGamemode = ""; } )>None</button>
 						@foreach ( var gm in GamemodePrefabs )
 						{
 							<button class="@GmClass(gm.ResourcePath)" onclick=@( () => { SelectedGamemode = gm.ResourcePath; } )>
 								@System.IO.Path.GetFileNameWithoutExtension( gm.ResourceName )
 							</button>
-						}
-						@if ( GamemodePrefabs.Count == 0 )
-						{
-							<label class="Muted">No gamemode prefabs found.</label>
 						}
 
 						<label class="ModalSubTitle TopMargin">Max Players: @((int)MaxPlayers)</label>
@@ -126,8 +123,7 @@
 			           || pf.ResourcePath.Contains( "gamemode/",  StringComparison.OrdinalIgnoreCase ) )
 			.ToList();
 
-		if ( GamemodePrefabs.Count > 0 )
-			SelectedGamemode = GamemodePrefabs[0].ResourcePath;
+		// Default to None — the None button is always present
 	}
 
 	async void DoSearch()

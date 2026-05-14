@@ -4,7 +4,7 @@
 ///
 /// Self-contained — safe to delete the whole RoleBased/ folder without breaking anything else.
 /// </summary>
-public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
+public sealed class RoleBasedGamemode : BaseGamemode
 {
 	[Property] public bool IncludeMurderer  { get; set; } = true;
 	[Property] public bool IncludeDetective { get; set; } = true;
@@ -15,7 +15,8 @@ public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
 	[Sync( SyncFlags.FromHost )] public int MurdererCount  { get; private set; }
 	[Sync( SyncFlags.FromHost )] public int DetectiveCount { get; private set; }
 	[Sync( SyncFlags.FromHost )] public int InnocentCount  { get; private set; }
-	[Sync( SyncFlags.FromHost )] public bool MatchOver     { get; private set; }
+	[Sync( SyncFlags.FromHost )] public bool MatchOver        { get; private set; }
+	[Sync( SyncFlags.FromHost )] public bool IsIntermission    { get; private set; }
 	[Sync( SyncFlags.FromHost )] public float TimeRemaining { get; private set; }
 
 	// Host-only — never synced, roles must stay secret
@@ -37,7 +38,11 @@ public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
 
 	public override void OnHostBecame()
 	{
-		_roundTimer = RoundTimeLimitSeconds > 0 ? RoundTimeLimitSeconds - TimeRemaining : 0;
+		// Reconstruct the TimeSince timer from the synced TimeRemaining value so the
+		// round clock survives host migration without resetting.
+		_roundTimer = _isIntermission
+			? IntermissionSeconds - TimeRemaining
+			: RoundTimeLimitSeconds - TimeRemaining;
 	}
 
 	protected override void OnUpdate()
@@ -65,6 +70,7 @@ public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
 
 		RoundNumber++;
 		_isIntermission = false;
+		IsIntermission  = false;
 		RoundState      = RoundState.PreRound;
 		TimeRemaining   = RoundTimeLimitSeconds > 0 ? RoundTimeLimitSeconds : float.MaxValue;
 		_roundTimer     = 0;
@@ -86,6 +92,7 @@ public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
 		if ( !Networking.IsHost ) return;
 
 		_isIntermission = true;
+		IsIntermission  = true;
 		RoundState      = RoundState.PostRound;
 		TimeRemaining   = IntermissionSeconds;
 		_roundTimer     = 0;
@@ -239,11 +246,6 @@ public sealed class RoleBasedGamemode : BaseGamemode, Global.IGamemodeEvents
 			GameManager.Current?.SpawnPlayer( pd );
 		}
 	}
-
-	void Global.IGamemodeEvents.OnRoundStart( RoundStartEvent e ) { }
-	void Global.IGamemodeEvents.OnRoundEnd( RoundEndEvent e ) { }
-	void Global.IGamemodeEvents.OnMatchEnd( MatchEndEvent e ) { }
-	void Global.IGamemodeEvents.OnTeamAssigned( PlayerData playerData, int teamIndex ) { }
 
 	[Rpc.Broadcast]
 	void RpcRevealRole( string roleName )
