@@ -10,10 +10,16 @@ public struct PlayerDiedParams
 	/// Convenience accessor — the Player who killed this one, or null for world/environmental kills.
 	/// Equivalent to GMod's <c>attacker</c> argument in <c>GM:PlayerDeath</c>.
 	/// </summary>
-	public readonly Player KillerPlayer =>
-		InstigatorId != Guid.Empty
-			? Game.ActiveScene?.GetAll<Player>().FirstOrDefault( p => p.PlayerId == InstigatorId )
-			: null;
+	public readonly Player KillerPlayer
+	{
+		get
+		{
+			var id = InstigatorId;
+			return id != Guid.Empty
+				? Game.ActiveScene?.GetAll<Player>().FirstOrDefault( p => p.PlayerId == id )
+				: null;
+		}
+	}
 }
 
 public struct PlayerDamageParams
