@@ -18,7 +18,7 @@ public sealed class FFAGamemode : BaseGamemode
 		if ( !Networking.IsHost ) return;
 
 		MatchOver       = false;
-		RoundState      = RoundState.Active;
+		SetPhase( RoundPhase.Active );
 		_timeSinceStart = 0;
 		TimeRemaining   = RoundTimeLimitSeconds > 0 ? RoundTimeLimitSeconds : float.MaxValue;
 
@@ -65,7 +65,7 @@ public sealed class FFAGamemode : BaseGamemode
 
 		MatchOver  = true;
 		IsActive   = false;
-		RoundState = RoundState.MatchOver;
+		SetPhase( RoundPhase.MatchOver );
 
 		AnnounceMatchEnd( reason );
 		Global.IGamemodeEvents.Post( x => x.OnMatchEnd( new MatchEndEvent { Reason = reason, WinningTeam = -1 } ) );

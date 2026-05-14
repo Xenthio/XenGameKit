@@ -35,17 +35,17 @@ public sealed class TDMGamemode : BaseGamemode
 	{
 		if ( IsIntermission )
 		{
-			RoundState  = RoundState.PostRound;
+			SetPhase( RoundPhase.PostRound );
 			_phaseTimer = IntermissionSeconds - TimeRemaining;
 		}
 		else if ( IsFreezeTime )
 		{
-			RoundState  = RoundState.PreRound;
+			SetPhase( RoundPhase.Preparing );
 			_phaseTimer = FreezeTimeSeconds - TimeRemaining;
 		}
 		else
 		{
-			RoundState  = MatchOver ? RoundState.MatchOver : RoundState.Active;
+			SetPhase( MatchOver ? RoundPhase.MatchOver : RoundPhase.Active );
 			_phaseTimer = RoundTimeLimitSeconds - TimeRemaining;
 		}
 	}
@@ -82,7 +82,7 @@ public sealed class TDMGamemode : BaseGamemode
 		RoundNumber++;
 		IsFreezeTime   = FreezeTimeSeconds > 0;
 		IsIntermission = false;
-		RoundState     = IsFreezeTime ? RoundState.PreRound : RoundState.Active;
+		SetPhase( IsFreezeTime ? RoundPhase.Preparing : RoundPhase.Active );
 		TimeRemaining  = IsFreezeTime ? FreezeTimeSeconds : RoundTimeLimitSeconds;
 		_phaseTimer    = 0;
 
@@ -97,7 +97,7 @@ public sealed class TDMGamemode : BaseGamemode
 	{
 		if ( !Networking.IsHost ) return;
 		IsFreezeTime  = false;
-		RoundState    = RoundState.Active;
+		SetPhase( RoundPhase.Active );
 		TimeRemaining = RoundTimeLimitSeconds;
 		_phaseTimer   = 0;
 	}
@@ -108,7 +108,7 @@ public sealed class TDMGamemode : BaseGamemode
 
 		IsIntermission = true;
 		IsFreezeTime   = false;
-		RoundState     = RoundState.PostRound;
+		SetPhase( RoundPhase.PostRound );
 		TimeRemaining  = IntermissionSeconds;
 		_phaseTimer    = 0;
 
@@ -129,7 +129,7 @@ public sealed class TDMGamemode : BaseGamemode
 		MatchOver      = true;
 		IsActive       = false;
 		IsIntermission = false;
-		RoundState     = RoundState.MatchOver;
+		SetPhase( RoundPhase.MatchOver );
 
 		AnnounceMatchEnd( reason, winningTeam );
 		Global.IGamemodeEvents.Post( x => x.OnMatchEnd( new MatchEndEvent { Reason = reason, WinningTeam = winningTeam } ) );
