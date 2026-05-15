@@ -48,9 +48,13 @@ public partial class PlayerWalkControllerComplex : Component
 
 		// Build wish velocity from full 3D view angles (pitch included), like Source WaterMove.
 		// This means looking down swims you down, looking up swims you up.
-		// Use the same WishMove * rotation pattern as noclip and ground movement.
+		// Normalize before scaling so diagonal input (forward+strafe) doesn't exceed 1x speed.
+		// HL2 does VectorNormalize(wishdir) before capping - without this you get ~1.41x speed diagonally.
 		var wishvel = WishMove * EyeAngles.ToRotation();
-		wishvel *= (GetWishSpeed() * SwimmingSpeedScale);
+		var wishspeed = wishvel.Length;
+		if ( wishspeed > 0 ) wishvel = wishvel.Normal;
+		wishspeed = MathF.Min( wishspeed, 1f ) * GetWishSpeed() * SwimmingSpeedScale;
+		wishvel *= wishspeed;
 
 		// Jump key moves up; no input sinks at 60 u/s (Source behaviour)
 		if ( Input.Down( SwimUpAction ) )
