@@ -10,7 +10,7 @@
 ///   FirstPerson — locked to a target's eyes (OBS_MODE_IN_EYE)
 ///   ThirdPerson — orbiting camera behind a target (OBS_MODE_CHASE)
 /// </summary>
-public class PlayerSpectator : Component, Local.IPlayerEvents, IPlayerEvents
+public class PlayerSpectator : Component, Local.IPlayerEvents
 {
 	public enum SpectatorMode { Free, FirstPerson, ThirdPerson }
 

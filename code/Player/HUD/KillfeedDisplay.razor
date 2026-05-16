@@ -2,8 +2,8 @@
 @using Sandbox.UI;
 @inherits Panel
 
-@* Source-style killfeed. Listens for IGamemodeEvents.OnKillFeedEntry.
-   Entries fade out after EntryLifetime seconds.
+@* Source-style killfeed. Entries arrive via KillfeedDisplay.Receive(), which BaseGamemode
+   calls after each kill broadcast. Entries fade out after EntryLifetime seconds.
    No setup needed — just add <killfeed></killfeed> to your HUD. *@
 
 <root class="Killfeed">
@@ -27,28 +27,17 @@
 
 	record Entry( string Killer, string Victim, string Weapon, RealTimeSince Age );
 
-	readonly List<Entry> _entries = new();
+	// Static so BaseGamemode can push entries from the game layer without a scene event.
+	static readonly List<Entry> _entries = new();
 
-	protected override void OnAfterTreeRender( bool firstTime )
-	{
-		if ( !firstTime ) return;
-
-		// Subscribe to kills broadcast by BaseGamemode.BroadcastKill
-		Global.IGamemodeEvents.Register( this );
-	}
-
-	protected override void OnDestroy()
-	{
-		Global.IGamemodeEvents.Unregister( this );
-	}
-
-	// Called by Global.IGamemodeEvents when BaseGamemode broadcasts a kill.
-	public void OnKillFeedEntry( string killer, string victim, string weapon )
+	/// <summary>
+	/// Called by BaseGamemode.BroadcastKill on all clients after a kill is broadcast.
+	/// </summary>
+	public static void Receive( string killer, string victim, string weapon )
 	{
 		_entries.Insert( 0, new Entry( killer, victim, weapon, new RealTimeSince() ) );
 		while ( _entries.Count > MaxEntries )
 			_entries.RemoveAt( _entries.Count - 1 );
-		StateHasChanged();
 	}
 
 	protected override void OnUpdate()
@@ -60,7 +49,6 @@
 
 	float EntryOpacity( Entry e )
 	{
-		// Start fading in the last second
 		float remaining = EntryLifetime - e.Age;
 		return MathX.Clamp( remaining, 0f, 1f );
 	}

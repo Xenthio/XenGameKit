@@ -104,7 +104,10 @@ public abstract class BaseGamemode : Component, Global.IPlayerEvents
 	// Host fires this on death; HUDs listen via IGamemodeEvents.OnKillFeedEntry.
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
 	protected void BroadcastKill( string killer, string victim, string weapon )
-		=> Global.IGamemodeEvents.Post( x => x.OnKillFeedEntry( killer, victim, weapon ) );
+	{
+		Global.IGamemodeEvents.Post( x => x.OnKillFeedEntry( killer, victim, weapon ) );
+		KillfeedDisplay.Receive( killer, victim, weapon );
+	}
 
 	// ─── Respawn helper ──────────────────────────────────────────────────────
 
