@@ -7,7 +7,7 @@
    No setup needed — just add <killfeed></killfeed> to your HUD. *@
 
 <root class="Killfeed">
-	@foreach ( var entry in KillfeedData.Entries )
+	@foreach ( var entry in Entries() )
 	{
 		<div class="KillfeedEntry" style="opacity: @(Opacity(entry));">
 			<label class="KillerName">@entry.Killer</label>
@@ -24,17 +24,16 @@
 {
 	const float EntryLifetime = 6f;
 
-	protected override void OnAfterTreeRender( bool firstTime ) { }
-
-	protected override void OnTick()
+	// Prune expired entries and return the live ones. Called every BuildHash tick.
+	IEnumerable<KillfeedData.Entry> Entries()
 	{
-		var before = KillfeedData.Entries.Count;
 		KillfeedData.Prune( EntryLifetime );
-		if ( KillfeedData.Entries.Count != before ) StateHasChanged();
+		return KillfeedData.Entries;
 	}
 
 	float Opacity( KillfeedData.Entry e ) => MathX.Clamp( EntryLifetime - e.Age, 0f, 1f );
 
+	// Rebuild every frame while there are entries so opacity animates smoothly.
 	protected override int BuildHash() =>
-		HashCode.Combine( KillfeedData.Entries.Count, KillfeedData.Entries.FirstOrDefault()?.Killer );
+		HashCode.Combine( KillfeedData.Entries.Count, (int)(RealTime.Now * 4f) );
 }

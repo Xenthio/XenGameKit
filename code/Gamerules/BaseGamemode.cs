@@ -27,7 +27,11 @@ public abstract class BaseGamemode : Component, Global.IPlayerEvents
 	// ─── Lifecycle ───────────────────────────────────────────────────────────
 
 	public virtual void OnGamemodeStart() { IsActive = true; }
-	public virtual void OnGamemodeEnd()   { IsActive = false; }
+	public virtual void OnGamemodeEnd()
+	{
+		IsActive = false;
+		KillfeedData.Clear();
+	}
 
 	// Re-arm any host-only timers here after a host migration.
 	public virtual void OnHostBecame() { }

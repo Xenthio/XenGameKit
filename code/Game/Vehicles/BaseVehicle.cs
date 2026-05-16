@@ -21,10 +21,16 @@ public abstract class BaseVehicle : Component, Component.IPressable
 	[Property, Group( "Camera"  )] public float     CameraHeight   { get; set; } = 80f;
 	[Property, Group( "Camera"  )] public float     CameraSmooth   { get; set; } = 8f;
 
-	// The player currently driving, null if unoccupied. Synced so all clients know.
-	[Sync] public Player Driver { get; private set; }
+	// The player currently driving, null if unoccupied.
+	// We sync the driver's Guid rather than the Player Component directly,
+	// since Components aren't safely serialisable across RPC boundaries.
+	[Sync] public Guid DriverId { get; private set; }
 
-	public bool IsOccupied => Driver.IsValid();
+	public Player Driver => DriverId != Guid.Empty
+		? Game.ActiveScene.GetAll<Player>().FirstOrDefault( p => p.PlayerId == DriverId )
+		: null;
+
+	public bool IsOccupied => DriverId != Guid.Empty;
 
 	Angles _cameraAngles;
 
@@ -39,25 +45,24 @@ public abstract class BaseVehicle : Component, Component.IPressable
 
 		if ( IsOccupied )
 		{
-			// Only the driver can exit by pressing E again
-			if ( presser == Driver ) Exit();
+			if ( presser.PlayerId == DriverId ) Exit();
 			return false;
 		}
 
-		Enter( presser );
+		Enter( presser.PlayerId );
 		return true;
 	}
 
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
-	public void Enter( Player player )
+	public void Enter( Guid playerId )
 	{
 		if ( IsOccupied ) return;
 
-		Driver = player;
+		DriverId = playerId;
+		var player = Driver;
 		OnDriverEntered( player );
 
-		// Disable the player's own movement — vehicle drives them now
-		if ( player.IsLocalPlayer )
+		if ( player.IsValid() && player.IsLocalPlayer )
 			player.WalkController.Enabled = false;
 	}
 
@@ -67,9 +72,8 @@ public abstract class BaseVehicle : Component, Component.IPressable
 		if ( !IsOccupied ) return;
 
 		var driver = Driver;
-		Driver = null;
+		DriverId = Guid.Empty;
 
-		// Teleport driver to exit point
 		if ( driver.IsValid() )
 		{
 			driver.WorldPosition = ExitPoint.Position != Vector3.Zero

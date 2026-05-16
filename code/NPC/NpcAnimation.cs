@@ -16,7 +16,7 @@ public class NpcAnimation : Component
 	protected override void OnStart()
 	{
 		_npc      = GetComponent<BaseNpc>();
-		_renderer = GetComponent<SkinnedModelRenderer>() ?? _npc?.Renderer;
+		_renderer = _npc?.Renderer ?? GetComponentInChildren<SkinnedModelRenderer>();
 	}
 
 	protected override void OnUpdate()

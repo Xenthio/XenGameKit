@@ -10,6 +10,9 @@ public static class KillfeedData
 	public static IReadOnlyList<Entry> Entries => _entries;
 	static readonly List<Entry> _entries = new();
 
+	// Call this when the scene is torn down (GamemodeManager.OnGamemodeEnd, map change, etc.)
+	public static void Clear() => _entries.Clear();
+
 	public static void Add( string killer, string victim, string weapon )
 	{
 		_entries.Insert( 0, new Entry( killer, victim, weapon, new RealTimeSince() ) );
