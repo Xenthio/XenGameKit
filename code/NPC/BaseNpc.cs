@@ -35,6 +35,9 @@ public abstract class BaseNpc : Component, Component.IDamageable
 
 	public bool IsDead { get; private set; }
 
+	// Unique id for relationship lookups. Stable for this instance's lifetime.
+	public Guid NpcId { get; } = Guid.NewGuid();
+
 	// Host-only: the currently running schedule
 	ScheduleBase  _schedule;
 	readonly Dictionary<Type, ScheduleBase> _scheduleCache = new();
@@ -118,6 +121,57 @@ public abstract class BaseNpc : Component, Component.IDamageable
 
 	// Override to react to being hit (pain sounds, flinch, interrupt schedule, etc.)
 	protected virtual void OnHurt( in DamageInfo damage ) { }
+
+	// ─── Senses reactions ────────────────────────────────────────────────────
+	//
+	// These fire when NpcSenses detects a change — first time seeing something,
+	// losing sight of it, hearing it, smelling it. Override to react.
+	// All run host-only. Check GetDisposition(obj) if you want to filter by faction.
+
+	/// <summary>A new object just entered line of sight.</summary>
+	public virtual void OnSighted( GameObject obj ) { }
+
+	/// <summary>An object we were watching has left line of sight.</summary>
+	public virtual void OnLostSight( GameObject obj ) { }
+
+	/// <summary>A new object just entered hearing range (no LoS required).</summary>
+	public virtual void OnHeard( GameObject obj ) { }
+
+	/// <summary>An object we could hear has gone silent / left range.</summary>
+	public virtual void OnLostHearing( GameObject obj ) { }
+
+	/// <summary>
+	/// A sound stimulus was emitted nearby via NpcStimulusSystem.EmitSound.
+	/// e.g. gunshot, footstep, explosion — anything that makes noise in the world.
+	/// </summary>
+	public virtual void OnHeardSound( NpcSoundStimulus stimulus ) { }
+
+	/// <summary>
+	/// A smell stimulus was emitted nearby via NpcStimulusSystem.EmitSmell.
+	/// e.g. blood, food, chemicals, a player's scent trail.
+	/// </summary>
+	public virtual void OnSmelled( NpcSmellStimulus stimulus ) { }
+
+	// ─── Relationships ───────────────────────────────────────────────────────
+
+	/// <summary>
+	/// How does this NPC feel about a given GameObject?
+	/// Checks personal overrides first, then class-level defaults in NpcRelationships.
+	/// Returns Ignore for anything not registered.
+	/// </summary>
+	public NpcDisposition GetDisposition( GameObject target )
+		=> NpcRelationships.Get( NpcId, GetType(), target );
+
+	/// <summary>
+	/// Override how this specific NPC instance feels about a specific target.
+	/// Good for grudges, betrayals, or a player aggro-ing a neutral NPC.
+	/// </summary>
+	public void SetDisposition( GameObject target, NpcDisposition disposition )
+		=> NpcRelationships.SetPersonal( NpcId, target.Id, disposition );
+
+	/// <summary>Clear a personal disposition override, reverting to the class default.</summary>
+	public void ClearDisposition( GameObject target )
+		=> NpcRelationships.ClearPersonal( NpcId, target.Id );
 
 	// Override for custom death behaviour (loot drops, sounds, etc.).
 	// Default: kill feed entry + ragdoll + destroy.

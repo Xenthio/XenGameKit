@@ -11,19 +11,41 @@ public class CombatNpc : BaseNpc
 	[Property, Group( "Combat" )] public float WanderRadius   { get; set; } = 400f;
 
 	TimeSince _lastAttack;
+	Vector3?  _lastKnownPosition;
 
 	protected override void OnStart()
 	{
 		base.OnStart();
-		Senses.TargetTags = new() { "player" };
+
+		// Register class-level relationships so NpcSenses knows what to react to.
+		// Hate players and other hostile NPCs; ignore friendly NPCs.
+		NpcRelationships.Set<CombatNpc>( "player",       NpcDisposition.Hate );
+		NpcRelationships.Set<CombatNpc>( "hostile_npc",  NpcDisposition.Hate );
+		NpcRelationships.Set<CombatNpc>( "friendly_npc", NpcDisposition.Like );
+
+		Senses.ScanTags = new() { "player", "npc" };
 		NpcName = "Grunt";
+	}
+
+	// Interrupt our current plan when we first sight an enemy.
+	public override void OnSighted( GameObject obj )
+	{
+		if ( GetDisposition( obj ) == NpcDisposition.Hate )
+			InterruptSchedule();
+	}
+
+	// Heard a gunshot or explosion nearby — go investigate.
+	public override void OnHeardSound( NpcSoundStimulus stimulus )
+	{
+		if ( stimulus.SoundType is "gunshot" or "explosion" )
+			_lastKnownPosition = stimulus.Origin;
 	}
 
 	public override ScheduleBase GetSchedule()
 	{
 		var target = Senses.NearestVisible;
 
-		if ( target.IsValid() )
+		if ( target.IsValid() && GetDisposition( target ) == NpcDisposition.Hate )
 		{
 			// In attack range? Swing at them.
 			float dist = WorldPosition.Distance( target.WorldPosition );
@@ -35,7 +57,7 @@ public class CombatNpc : BaseNpc
 			return chase;
 		}
 
-		// Nothing visible — wander around.
+		// Nothing hostile visible — wander around.
 		return GetSchedule<PatrolSchedule>();
 	}
 
