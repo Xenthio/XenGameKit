@@ -105,6 +105,13 @@ public static class Bullet
 		// Physics push
 		if ( tr.Body.IsValid() && info.Force > 0f )
 			tr.Body.ApplyImpulseAt( tr.HitPosition, direction * info.Force * tr.Body.Mass );
+
+		// Emit a gunshot sound stimulus so nearby NPCs react
+		NpcStimulusSystem.EmitSound( info.Origin, "gunshot", volume: 1f, source: info.Attacker );
+
+		// If we hit something biological, emit a blood splat
+		if ( tr.Hit && tr.GameObject.IsValid() && tr.GameObject.Tags.HasAny( "npc", "player" ) )
+			BloodSystem.Splat( tr.HitPosition, tr.Normal, tr.GameObject );
 	}
 
 	/// <summary>

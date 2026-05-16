@@ -1,23 +1,25 @@
 // Base class for all NPCs in XenGameKit.
 //
 // Closely mirrors the sandbox gamemode's Npc base, adapted for the XenGameKit
-// player/damage system. Runs only on the host — proxies receive synced state.
+// player/damage system.
 //
-// Architecture (same as sandbox gamemode):
-//   BaseNpc        — core: health, damage, death, ragdoll
-//   NpcSenses      — sight/hearing scans, target detection
-//   NpcNavigation  — NavMeshAgent wrapper, move commands
-//   NpcAnimation   — animator parameters, look-at, holdtype
-//   ScheduleBase   — ordered list of NpcTasks (see NpcSchedule.cs)
-//   NpcTask        — single step in a schedule (move to, wait, fire, etc.)
+// Networking: NPCs are owned by whoever spawned them (host by default).
+// Simulation (schedule ticking, damage handling) runs only on the owner.
+// All clients receive synced state via [Sync] and see ragdolls via [Rpc.Broadcast].
+//
+// Source SDK notes consulted:
+//   - CAI_Senses separates Look (LoS) from Listen (sound ents) — we mirror that.
+//   - CAI_BaseNPC.GetSchedule() returning null = idle, same as Source.
+//   - Relationships: D_HT/D_LI/D_FR/D_NU → NpcDisposition.Hate/Like/Fear/Ignore.
+//   - Sound stimuli (CSoundEnt) are world-registered; we use NpcStimulusSystem instead.
 //
 // To create a new NPC:
-//   1. Subclass BaseNpc. Add [Property] fields for tunable values.
-//   2. Override GetSchedule() to return which schedule to run.
-//   3. Add your NPC Component to a GameObject with a SkinnedModelRenderer,
-//      NavMeshAgent, and Rigidbody. The required sub-layers add themselves
-//      via [RequireComponent].
-//   4. Override OnDie() for custom death logic (loot drops, sound, etc).
+//   1. Subclass BaseNpc. Add [Property] fields.
+//   2. Register relationships in OnStart via NpcRelationships.Set<T>(tag, disposition).
+//   3. Override GetSchedule() to drive behaviour.
+//   4. Override reaction virtuals (OnSighted, OnHeardSound, etc.) to interrupt schedules.
+//   5. NetworkSpawn(null) the GameObject — OwnerTransfer.Fixed keeps ownership on host.
+//   6. Override OnDie() for loot drops, sounds, etc.
 
 public abstract class BaseNpc : Component, Component.IDamageable
 {
@@ -38,9 +40,30 @@ public abstract class BaseNpc : Component, Component.IDamageable
 	// Unique id for relationship lookups. Stable for this instance's lifetime.
 	public Guid NpcId { get; } = Guid.NewGuid();
 
+	// True on the peer that owns and simulates this NPC (host by default).
+	// Like IsProxy but semantically clearer — use this instead of !IsProxy in NPC code.
+	bool IsOwner => !IsProxy;
+
 	// Host-only: the currently running schedule
 	ScheduleBase  _schedule;
 	readonly Dictionary<Type, ScheduleBase> _scheduleCache = new();
+
+	// ─── Spawn helper ────────────────────────────────────────────────────────────
+
+	/// <summary>
+	/// Spawn and network an NPC at a given transform.
+	/// Ownership is given to <paramref name="owner"/> (default null = host).
+	/// Call this instead of raw NetworkSpawn so ownership is always set correctly.
+	/// </summary>
+	public static T Spawn<T>( Scene scene, Transform transform, Connection owner = null ) where T : BaseNpc
+	{
+		var go = new GameObject( true, typeof(T).Name );
+		go.WorldTransform = transform;
+		var npc = go.Components.Create<T>();
+		go.NetworkSpawn( owner );
+		go.Network.SetOwnerTransfer( OwnerTransfer.Fixed );
+		return npc;
+	}
 
 	// ─── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -52,7 +75,7 @@ public abstract class BaseNpc : Component, Component.IDamageable
 
 	protected override void OnUpdate()
 	{
-		if ( IsProxy || IsDead ) return;
+		if ( !IsOwner || IsDead ) return;
 
 		TickSchedule();
 
@@ -106,7 +129,7 @@ public abstract class BaseNpc : Component, Component.IDamageable
 	void Component.IDamageable.OnDamage( in Sandbox.DamageInfo rawDamage )
 	{
 		var damage = rawDamage as DamageInfo ?? new DamageInfo( rawDamage.Damage, rawDamage.Attacker, rawDamage.Weapon );
-		if ( IsProxy || IsDead ) return;
+		if ( !IsOwner || IsDead ) return;
 
 		Health -= damage.Damage;
 		OnHurt( damage );

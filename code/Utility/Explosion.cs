@@ -35,6 +35,9 @@ public static class Explosion
 		// Visuals: clone explosion_med.prefab (particles + sound) on all clients
 		SpawnEffect( info.Position );
 
+		// Emit explosion sound stimulus — NPCs hear this and investigate
+		NpcStimulusSystem.EmitSound( info.Position, "explosion", volume: 1f, source: info.Attacker );
+
 		if ( !info.DoDamage || radius <= 0f || magnitude <= 0f )
 			return;
 
