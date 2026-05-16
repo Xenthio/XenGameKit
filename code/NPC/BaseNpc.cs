@@ -55,7 +55,7 @@ public abstract class BaseNpc : Component, Component.IDamageable
 	/// Ownership is given to <paramref name="owner"/> (default null = host).
 	/// Call this instead of raw NetworkSpawn so ownership is always set correctly.
 	/// </summary>
-	public static T Spawn<T>( Scene scene, Transform transform, Connection owner = null ) where T : BaseNpc
+	public static T Spawn<T>( Scene scene, Transform transform, Connection owner = null ) where T : BaseNpc, new()
 	{
 		var go = new GameObject( true, typeof(T).Name );
 		go.WorldTransform = transform;
