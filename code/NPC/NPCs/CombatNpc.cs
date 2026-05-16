@@ -57,13 +57,8 @@ public class CombatNpc : BaseNpc
 		// Face the target first
 		Animation.LookAt( target.WorldPosition );
 
-		var damageable = target.GetComponent<IDamageable>();
-		damageable?.OnDamage( new DamageInfo
-		{
-			Attacker   = GameObject,
-			Damage     = AttackDamage,
-			Position   = target.WorldPosition,
-		} );
+		var damageable = target.GetComponentInParent<Component.IDamageable>();
+		damageable?.OnDamage( new DamageInfo( AttackDamage, GameObject, null ) );
 	}
 
 	// ─── Schedules ────────────────────────────────────────────────────────────

@@ -13,7 +13,7 @@
 // The vehicle sets the camera and disables the player's own movement while occupied.
 // On exit, everything is restored.
 
-public abstract class BaseVehicle : Component, IPressable
+public abstract class BaseVehicle : Component, Component.IPressable
 {
 	[Property, Group( "Seats"   )] public Transform DriverSeat     { get; set; }
 	[Property, Group( "Seats"   )] public Transform ExitPoint      { get; set; }
@@ -30,10 +30,11 @@ public abstract class BaseVehicle : Component, IPressable
 
 	// ─── Enter / exit ─────────────────────────────────────────────────────────
 
-	bool IPressable.Press( IPressable.Event e )
+	bool Component.IPressable.CanPress( Component.IPressable.Event e ) => !IsOccupied || Driver.IsLocalPlayer;
+
+	bool Component.IPressable.Press( Component.IPressable.Event e )
 	{
-		// Use key from any player who isn't already in a vehicle
-		var presser = (e.Source as Component)?.GetComponent<Player>( FindMode.InSelf | FindMode.InParent );
+		var presser = (e.Source as Component)?.GetComponentInParent<Player>();
 		if ( !presser.IsValid() ) return false;
 
 		if ( IsOccupied )

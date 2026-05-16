@@ -60,7 +60,7 @@ public class ArcadeCar : BaseVehicle
 		// Steering — rotate the body when moving
 		if ( grounded && MathF.Abs( input.Steering ) > 0.01f )
 		{
-			float speedFactor = MathX.Clamp01( vel.WithZ( 0 ).Length / 100f );
+			float speedFactor = MathX.Clamp( vel.WithZ( 0 ).Length / 100f, 0f, 1f );
 			float turn        = input.Steering * TurnSpeed * speedFactor * Time.Delta;
 
 			// Flip turn direction when reversing

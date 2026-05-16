@@ -100,8 +100,9 @@ public abstract class BaseNpc : Component, Component.IDamageable
 
 	// ─── Damage / death ───────────────────────────────────────────────────────
 
-	void IDamageable.OnDamage( in DamageInfo damage )
+	void Component.IDamageable.OnDamage( in Sandbox.DamageInfo rawDamage )
 	{
+		var damage = rawDamage as DamageInfo ?? new DamageInfo( rawDamage.Damage, rawDamage.Attacker, rawDamage.Weapon );
 		if ( IsProxy || IsDead ) return;
 
 		Health -= damage.Damage;
@@ -195,11 +196,21 @@ public abstract class BaseNpc : Component, Component.IDamageable
 
 	void DrawDebug()
 	{
-		var pos  = WorldPosition + Vector3.Up * 80f;
+		var pos  = Scene.Camera.PointToScreenPixels( WorldPosition + Vector3.Up * 80f, out var behind );
+		if ( behind ) return;
+
 		var info = new System.Text.StringBuilder();
 		info.AppendLine( $"{NpcName} [{Health:F0}/{MaxHealth:F0}]" );
 		if ( _schedule is not null ) info.AppendLine( $"Schedule: {_schedule.GetType().Name}" );
 		info.Append( Senses.GetDebugString() );
-		Gizmo.Draw.ScreenText( info.ToString(), Scene.Camera.PointToScreenPixels( pos ), 12, TextFlag.Center );
+
+		var text = TextRendering.Scope.Default;
+		text.Text      = info.ToString();
+		text.FontSize  = 13;
+		text.FontName  = "Poppins";
+		text.TextColor = Color.Yellow;
+		text.Outline   = new TextRendering.Outline { Color = Color.Black, Size = 4, Enabled = true };
+
+		DebugOverlay.ScreenText( pos, text, TextFlag.Center );
 	}
 }
