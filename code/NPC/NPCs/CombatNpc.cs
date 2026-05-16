@@ -1,30 +1,34 @@
-// Example combat NPC. Searches for players, chases them, and attacks.
-// Shows the full pattern for making a functional NPC with XenGameKit.
+// Example combat NPC. Armed with a bullet weapon, chases and shoots players.
+// Shows the full pattern for making a functional armed NPC with XenGameKit.
+//
+// Set WeaponPrefab on the NpcBulletWeapon component to any BaseBulletWeapon prefab
+// and the NPC will shoot with that weapon's stats and play its worldmodel.
 //
 // To make your own NPC, copy this file, rename everything, and override GetSchedule().
 
+[RequireComponent] public NpcBulletWeapon Weapon { get; private set; }
+
 public class CombatNpc : BaseNpc
 {
-	[Property, Group( "Combat" )] public float AttackRange    { get; set; } = 128f;
-	[Property, Group( "Combat" )] public float AttackDamage   { get; set; } = 10f;
-	[Property, Group( "Combat" )] public float AttackCooldown { get; set; } = 1.5f;
+	[Property, Group( "Combat" )] public float AttackRange    { get; set; } = 512f;
 	[Property, Group( "Combat" )] public float WanderRadius   { get; set; } = 400f;
 
-	TimeSince _lastAttack;
-	Vector3?  _lastKnownPosition;
+	Vector3? _lastKnownPosition;
 
 	protected override void OnStart()
 	{
 		base.OnStart();
 
-		// Register class-level relationships so NpcSenses knows what to react to.
-		// Hate players and other hostile NPCs; ignore friendly NPCs.
 		NpcRelationships.Set<CombatNpc>( "player",       NpcDisposition.Hate );
 		NpcRelationships.Set<CombatNpc>( "hostile_npc",  NpcDisposition.Hate );
 		NpcRelationships.Set<CombatNpc>( "friendly_npc", NpcDisposition.Like );
 
 		Senses.ScanTags = new() { "player", "npc" };
 		NpcName = "Grunt";
+
+		// Attach weapon worldmodel to our hold_r bone
+		if ( Renderer.IsValid() )
+			Weapon.AttachWorldModel( Renderer );
 	}
 
 	// Interrupt our current plan when we first sight an enemy.
@@ -47,11 +51,16 @@ public class CombatNpc : BaseNpc
 
 		if ( target.IsValid() && GetDisposition( target ) == NpcDisposition.Hate )
 		{
-			// In attack range? Swing at them.
 			float dist = WorldPosition.Distance( target.WorldPosition );
-			if ( dist <= AttackRange ) return GetSchedule<AttackSchedule>();
 
-			// Close in.
+			// In attack range and weapon ready — shoot
+			if ( dist <= AttackRange && Weapon.CanFire )
+			{
+				var shoot = GetSchedule<ShootSchedule>();
+				return shoot;
+			}
+
+			// Close in
 			var chase = GetSchedule<ChaseSchedule>();
 			chase.Target = target;
 			return chase;
@@ -61,27 +70,7 @@ public class CombatNpc : BaseNpc
 		return GetSchedule<PatrolSchedule>();
 	}
 
-	protected override void OnHurt( in DamageInfo damage )
-	{
-		InterruptSchedule();
-	}
-
-	// Try to melee attack the nearest visible target.
-	public void TryAttack()
-	{
-		if ( _lastAttack < AttackCooldown ) return;
-		var target = Senses.NearestVisible;
-		if ( !target.IsValid() ) return;
-		if ( WorldPosition.Distance( target.WorldPosition ) > AttackRange ) return;
-
-		_lastAttack = 0;
-
-		// Face the target first
-		Animation.LookAt( target.WorldPosition );
-
-		var damageable = target.GetComponentInParent<Component.IDamageable>();
-		damageable?.OnDamage( new DamageInfo( AttackDamage, GameObject, null ) );
-	}
+	protected override void OnHurt( in DamageInfo damage ) => InterruptSchedule();
 
 	// ─── Schedules ────────────────────────────────────────────────────────────
 
@@ -103,12 +92,12 @@ public class CombatNpc : BaseNpc
 		protected override bool ShouldInterrupt( BaseNpc npc ) => !Target.IsValid();
 	}
 
-	class AttackSchedule : ScheduleBase
+	class ShootSchedule : ScheduleBase
 	{
 		protected override void OnStart( BaseNpc npc )
 		{
-			AddTask( new AttackTask() );
-			AddTask( new WaitTask( 0.5f ) );
+			AddTask( new FireWeaponTask() );
+			AddTask( new WaitTask( 0.3f ) ); // brief pause between bursts
 		}
 	}
 
@@ -121,12 +110,4 @@ public class CombatNpc : BaseNpc
 		}
 	}
 
-	class AttackTask : NpcTask
-	{
-		protected override NpcTaskStatus OnTick( BaseNpc npc )
-		{
-			(npc as CombatNpc)?.TryAttack();
-			return NpcTaskStatus.Success;
-		}
-	}
 }
