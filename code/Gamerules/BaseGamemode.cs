@@ -106,7 +106,7 @@ public abstract class BaseGamemode : Component, Global.IPlayerEvents
 	protected void BroadcastKill( string killer, string victim, string weapon )
 	{
 		Global.IGamemodeEvents.Post( x => x.OnKillFeedEntry( killer, victim, weapon ) );
-		KillfeedDisplay.Receive( killer, victim, weapon );
+		KillfeedData.Add( killer, victim, weapon );
 	}
 
 	// ─── Respawn helper ──────────────────────────────────────────────────────

@@ -2,14 +2,14 @@
 @using Sandbox.UI;
 @inherits Panel
 
-@* Source-style killfeed. Entries arrive via KillfeedDisplay.Receive(), which BaseGamemode
-   calls after each kill broadcast. Entries fade out after EntryLifetime seconds.
+@* Source-style killfeed. Reads from KillfeedData — populated by BaseGamemode.BroadcastKill.
+   Entries fade out after EntryLifetime seconds.
    No setup needed — just add <killfeed></killfeed> to your HUD. *@
 
 <root class="Killfeed">
-	@foreach ( var entry in _entries )
+	@foreach ( var entry in KillfeedData.Entries )
 	{
-		<div class="KillfeedEntry" style="opacity: @(EntryOpacity(entry));">
+		<div class="KillfeedEntry" style="opacity: @(Opacity(entry));">
 			<label class="KillerName">@entry.Killer</label>
 			@if ( !string.IsNullOrEmpty( entry.Weapon ) )
 			{
@@ -23,36 +23,18 @@
 @code
 {
 	const float EntryLifetime = 6f;
-	const int   MaxEntries    = 8;
 
-	record Entry( string Killer, string Victim, string Weapon, RealTimeSince Age );
+	protected override void OnAfterTreeRender( bool firstTime ) { }
 
-	// Static so BaseGamemode can push entries from the game layer without a scene event.
-	static readonly List<Entry> _entries = new();
-
-	/// <summary>
-	/// Called by BaseGamemode.BroadcastKill on all clients after a kill is broadcast.
-	/// </summary>
-	public static void Receive( string killer, string victim, string weapon )
+	protected override void OnFixedUpdate()
 	{
-		_entries.Insert( 0, new Entry( killer, victim, weapon, new RealTimeSince() ) );
-		while ( _entries.Count > MaxEntries )
-			_entries.RemoveAt( _entries.Count - 1 );
+		var before = KillfeedData.Entries.Count;
+		KillfeedData.Prune( EntryLifetime );
+		if ( KillfeedData.Entries.Count != before ) StateHasChanged();
 	}
 
-	protected override void OnUpdate()
-	{
-		var before = _entries.Count;
-		_entries.RemoveAll( e => e.Age > EntryLifetime );
-		if ( _entries.Count != before ) StateHasChanged();
-	}
-
-	float EntryOpacity( Entry e )
-	{
-		float remaining = EntryLifetime - e.Age;
-		return MathX.Clamp( remaining, 0f, 1f );
-	}
+	float Opacity( KillfeedData.Entry e ) => MathX.Clamp( EntryLifetime - e.Age, 0f, 1f );
 
 	protected override int BuildHash() =>
-		HashCode.Combine( _entries.Count, _entries.FirstOrDefault()?.Killer );
+		HashCode.Combine( KillfeedData.Entries.Count, KillfeedData.Entries.FirstOrDefault()?.Killer );
 }
