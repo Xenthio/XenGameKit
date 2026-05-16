@@ -1,0 +1,48 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+
+@* Source-style scoreboard. Hold Tab to show, release to hide.
+   Reads from PlayerData.All — no setup needed, works with any gamemode.
+   Override the SCSS for visual changes; override BuildHash for update frequency. *@
+
+<root class="Scoreboard @(Visible ? "visible" : "")">
+	<div class="ScoreboardInner">
+		<div class="ScoreboardHeader">
+			<label class="ScoreboardTitle">@Title</label>
+			<label class="ScoreboardServerName">@Game.Server?.ServerName</label>
+		</div>
+
+		<div class="ScoreboardColumns">
+			<label class="ColName">Player</label>
+			<label class="ColStat">Kills</label>
+			<label class="ColStat">Deaths</label>
+			<label class="ColStat">Ping</label>
+		</div>
+
+		@foreach ( var pd in Rows )
+		{
+			<div class="ScoreboardRow @(pd.IsMe ? "IsMe" : "")">
+				<label class="ColName">@pd.DisplayName</label>
+				<label class="ColStat">@pd.Kills</label>
+				<label class="ColStat">@pd.Deaths</label>
+				<label class="ColStat">@((int)pd.Ping)</label>
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	bool Visible => Input.Down( "Score" );
+
+	// Title comes from the active gamemode type name, falling back to a generic label.
+	string Title => GamemodeManager.Instance?.ActiveGamemode?.GetType().Name.Replace( "Gamemode", "" ) ?? "Players";
+
+	// Sort by kills descending, then by name for tie-breaking.
+	IEnumerable<PlayerData> Rows =>
+		PlayerData.All.OrderByDescending( pd => pd.Kills ).ThenBy( pd => pd.DisplayName );
+
+	protected override int BuildHash() =>
+		HashCode.Combine( Visible, PlayerData.All.Sum( pd => pd.Kills + pd.Deaths ) );
+}

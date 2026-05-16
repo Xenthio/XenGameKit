@@ -1,11 +1,17 @@
 /// <summary>
-/// Scene singleton that manages the active gamemode. Add it alongside <see cref="GameManager"/> in your scene.
-/// Set <see cref="GamemodePrefab"/> in the inspector, or leave it null for a mode-less session.
+/// Scene singleton. Manages the active gamemode — creates it, destroys it, delegates events.
+///
+/// Set GamemodeType in the inspector (or leave blank for a typeless session).
+/// Gamemodes are discovered automatically via TypeLibrary; no registration needed.
 /// </summary>
 public sealed class GamemodeManager : GameObjectSystem<GamemodeManager>, ISceneStartup, Component.INetworkListener,
 	GameRulesService.IGameRulesProvider
 {
-	[Property] public GameObject GamemodePrefab { get; set; }
+	// Convenient scene-singleton accessor.
+	public static GamemodeManager Instance => GamemodeManager.Current;
+	// Set this in the scene to the fully-qualified type name of your gamemode,
+	// e.g. "FFAGamemode". Overridden at runtime by LaunchArguments (xgk_gamemode).
+	[Property] public string GamemodeType { get; set; }
 
 	public BaseGamemode ActiveGamemode { get; private set; }
 
@@ -17,22 +23,17 @@ public sealed class GamemodeManager : GameObjectSystem<GamemodeManager>, ISceneS
 	{
 		if ( !Networking.IsHost ) return;
 
-		// Prefer the gamemode baked into the prefab property (editor/scene authoring).
-		// Fall back to the runtime selection stored by PlayModal in LaunchArguments.
-		var prefabToUse = GamemodePrefab;
+		var typeName = GamemodeType;
 
-		if ( prefabToUse is null
-		     && LaunchArguments.GameSettings is not null
-		     && LaunchArguments.GameSettings.TryGetValue( "xgk_gamemode", out var gmPath )
-		     && !string.IsNullOrEmpty( gmPath ) )
+		if ( LaunchArguments.GameSettings is not null
+		     && LaunchArguments.GameSettings.TryGetValue( "xgk_gamemode", out var arg )
+		     && !string.IsNullOrWhiteSpace( arg ) )
 		{
-			prefabToUse = GameObject.GetPrefab( gmPath );
-			if ( prefabToUse is null )
-				Log.Warning( $"[GamemodeManager] Could not find gamemode prefab '{gmPath}' from LaunchArguments" );
+			typeName = arg;
 		}
 
-		if ( prefabToUse is not null )
-			ActivateGamemodePrefab( prefabToUse );
+		if ( !string.IsNullOrWhiteSpace( typeName ) )
+			ActivateGamemode( typeName );
 	}
 
 	void Component.INetworkListener.OnActive( Connection channel ) { }
@@ -40,53 +41,36 @@ public sealed class GamemodeManager : GameObjectSystem<GamemodeManager>, ISceneS
 
 	void Component.INetworkListener.OnBecameHost( Connection previousHost )
 	{
-		// Synced state is already restored — just re-wire the reference and let the gamemode know
 		ActiveGamemode = Scene.GetAllComponents<BaseGamemode>().FirstOrDefault();
 		ActiveGamemode?.OnHostBecame();
 	}
 
-	/// <summary>
-	/// Called by PlayerDeathEffect when a player needs to respawn. Host-only.
-	/// </summary>
+	// ─── GameRulesService ────────────────────────────────────────────────────
+
 	public void RequestRespawn( PlayerData playerData )
 	{
 		if ( !Networking.IsHost ) return;
-
-		if ( ActiveGamemode is not null )
-			ActiveGamemode.RequestRespawn( playerData );
-		else
-			GameManager.Current?.SpawnPlayerDelayed( playerData );
+		if ( ActiveGamemode is not null ) ActiveGamemode.RequestRespawn( playerData );
+		else GameManager.Current?.SpawnPlayerDelayed( playerData );
 	}
 
-	/// <summary>
-	/// Returns a custom spawn location from the gamemode, or null for the default. Host-only.
-	/// </summary>
 	public Transform? GetSpawnLocation( PlayerData playerData )
 	{
 		if ( !Networking.IsHost ) return null;
 		return ActiveGamemode?.GetSpawnLocation( playerData );
 	}
 
-	/// <summary>
-	/// Delegates to the active gamemode to give the player their starting loadout.
-	/// </summary>
-	public void EquipPlayer( Player player )
-	{
-		ActiveGamemode?.EquipPlayer( player );
-	}
+	public void EquipPlayer( Player player ) => ActiveGamemode?.EquipPlayer( player );
+
+	public float GetRespawnDelay( PlayerData playerData ) => ActiveGamemode?.GetRespawnDelay( playerData ) ?? 5f;
+
+	// ─── Gamemode switching ──────────────────────────────────────────────────
 
 	/// <summary>
-	/// Delegates respawn delay to the active gamemode, falling back to 5 seconds.
+	/// Switch to a gamemode by type name at runtime. Host-only.
+	/// Pass null to go back to a mode-less session.
 	/// </summary>
-	public float GetRespawnDelay( PlayerData playerData )
-	{
-		return ActiveGamemode?.GetRespawnDelay( playerData ) ?? 5f;
-	}
-
-	/// <summary>
-	/// Swap to a different gamemode prefab at runtime. Host-only.
-	/// </summary>
-	public void SwitchGamemode( GameObject newGamemodePrefab )
+	public void SwitchTo( string typeName )
 	{
 		if ( !Networking.IsHost ) return;
 
@@ -95,37 +79,50 @@ public sealed class GamemodeManager : GameObjectSystem<GamemodeManager>, ISceneS
 			ActiveGamemode.OnGamemodeEnd();
 			ActiveGamemode.GameObject.Destroy();
 			ActiveGamemode = null;
+			DestroyHud();
 		}
 
-		DestroyHud();
+		GameRulesService.Current = null;
 
-		if ( newGamemodePrefab is not null )
-			ActivateGamemodePrefab( newGamemodePrefab );
-		else
-			GameRulesService.Current = null; // nothing active
+		if ( !string.IsNullOrWhiteSpace( typeName ) )
+			ActivateGamemode( typeName );
 	}
 
-	void ActivateGamemodePrefab( GameObject prefab )
+	/// <summary>
+	/// All gamemode types registered in the TypeLibrary. Use this to populate a gamemode picker UI.
+	/// </summary>
+	public static IEnumerable<TypeDescription> AllGamemodeTypes()
+		=> TypeLibrary.GetTypes<BaseGamemode>().Where( t => !t.IsAbstract );
+
+	// ─── Internal ────────────────────────────────────────────────────────────
+
+	void ActivateGamemode( string typeName )
 	{
-		var go = prefab.Clone( new CloneConfig { Transform = Transform.Zero } );
+		var type = TypeLibrary.GetType( typeName );
+		if ( type is null )
+		{
+			Log.Warning( $"[GamemodeManager] Unknown gamemode type '{typeName}'" );
+			return;
+		}
+
+		var go = new GameObject();
+		go.Name = typeName;
 		go.NetworkSpawn( null );
 		go.Network.SetOwnerTransfer( OwnerTransfer.Fixed );
 
-		ActiveGamemode = go.Components.Get<BaseGamemode>( true );
-		ActiveGamemode?.OnGamemodeStart();
+		ActiveGamemode = (BaseGamemode)go.Components.Create( type );
+		ActiveGamemode.OnGamemodeStart();
 
-		// Register with the service so the FPS base can reach us without a direct reference
 		GameRulesService.Current = this;
-
 		SpawnHud();
 	}
 
 	void SpawnHud()
 	{
 		DestroyHud();
-		var hudPrefab = ActiveGamemode?.HudPrefab;
-		if ( hudPrefab is null ) return;
-		_activeHud = hudPrefab.Clone( new CloneConfig { Transform = Transform.Zero } );
+		var prefab = ActiveGamemode?.HudPrefab;
+		if ( prefab is null ) return;
+		_activeHud = prefab.Clone( new CloneConfig { Transform = Transform.Zero } );
 	}
 
 	void DestroyHud()

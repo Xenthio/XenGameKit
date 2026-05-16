@@ -1,4 +1,4 @@
-// Round/match event data and scene event interfaces.
+// Round/match event data and the scene event interface.
 
 public enum RoundEndReason
 {
@@ -16,22 +16,9 @@ public enum MatchEndReason
 	ForceEnd,
 }
 
-public class RoundStartEvent
-{
-	public int RoundNumber { get; init; }
-}
-
-public class RoundEndEvent
-{
-	public RoundEndReason Reason     { get; init; }
-	public int            WinningTeam { get; init; } // -1 = draw / no teams
-}
-
-public class MatchEndEvent
-{
-	public MatchEndReason Reason      { get; init; }
-	public int            WinningTeam { get; init; } // -1 = draw / no teams
-}
+public class RoundStartEvent { public int RoundNumber { get; init; } }
+public class RoundEndEvent   { public RoundEndReason Reason { get; init; } public int WinningTeam { get; init; } }
+public class MatchEndEvent   { public MatchEndReason Reason { get; init; } public int WinningTeam { get; init; } }
 
 public static partial class Global
 {
@@ -40,8 +27,10 @@ public static partial class Global
 		void OnRoundStart( RoundStartEvent e ) { }
 		void OnRoundEnd( RoundEndEvent e ) { }
 		void OnMatchEnd( MatchEndEvent e ) { }
-		void OnTeamAssigned( PlayerData playerData, int teamIndex ) { }
-		// Fires on all clients whenever BaseGamemode.Phase changes.
 		void OnPhaseChanged( string oldPhase, string newPhase ) { }
+		void OnTeamAssigned( PlayerData playerData, int teamIndex ) { }
+
+		// Fires on all clients for every kill. Implement on your HUD to display a killfeed.
+		void OnKillFeedEntry( string killerName, string victimName, string weaponName ) { }
 	}
 }

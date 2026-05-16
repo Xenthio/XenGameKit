@@ -1,0 +1,96 @@
+.Scoreboard {
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	align-items: center;
+	justify-content: flex-start;
+	padding-top: 60px;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.1s ease;
+
+	&.visible {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+.ScoreboardInner {
+	background-color: rgba(0, 0, 0, 0.75);
+	border: 1px solid rgba(255,255,255,0.08);
+	border-radius: 4px;
+	padding: 12px 0;
+	width: 640px;
+	flex-direction: column;
+}
+
+.ScoreboardHeader {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 16px 10px 16px;
+	border-bottom: 1px solid rgba(255,255,255,0.08);
+	margin-bottom: 6px;
+}
+
+.ScoreboardTitle {
+	font-family: Poppins;
+	font-size: 18px;
+	font-weight: 600;
+	color: white;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+.ScoreboardServerName {
+	font-family: Poppins;
+	font-size: 12px;
+	color: rgba(255,255,255,0.4);
+}
+
+.ScoreboardColumns {
+	flex-direction: row;
+	padding: 4px 16px;
+	margin-bottom: 2px;
+}
+
+.ScoreboardRow {
+	flex-direction: row;
+	padding: 5px 16px;
+
+	&:hover {
+		background-color: rgba(255,255,255,0.04);
+	}
+
+	&.IsMe {
+		background-color: rgba(255,200,50,0.08);
+	}
+}
+
+.ColName {
+	font-family: Poppins;
+	font-size: 13px;
+	color: white;
+	flex-grow: 1;
+}
+
+.ScoreboardColumns .ColName {
+	color: rgba(255,255,255,0.4);
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.ColStat {
+	font-family: Poppins;
+	font-size: 13px;
+	color: white;
+	width: 60px;
+	text-align: center;
+}
+
+.ScoreboardColumns .ColStat {
+	color: rgba(255,255,255,0.4);
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}

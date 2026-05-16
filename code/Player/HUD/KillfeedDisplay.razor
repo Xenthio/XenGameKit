@@ -1,0 +1,70 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits Panel
+
+@* Source-style killfeed. Listens for IGamemodeEvents.OnKillFeedEntry.
+   Entries fade out after EntryLifetime seconds.
+   No setup needed — just add <killfeed></killfeed> to your HUD. *@
+
+<root class="Killfeed">
+	@foreach ( var entry in _entries )
+	{
+		<div class="KillfeedEntry" style="opacity: @(EntryOpacity(entry));">
+			<label class="KillerName">@entry.Killer</label>
+			@if ( !string.IsNullOrEmpty( entry.Weapon ) )
+			{
+				<label class="WeaponName">[@entry.Weapon]</label>
+			}
+			<label class="VictimName">@entry.Victim</label>
+		</div>
+	}
+</root>
+
+@code
+{
+	const float EntryLifetime = 6f;
+	const int   MaxEntries    = 8;
+
+	record Entry( string Killer, string Victim, string Weapon, RealTimeSince Age );
+
+	readonly List<Entry> _entries = new();
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( !firstTime ) return;
+
+		// Subscribe to kills broadcast by BaseGamemode.BroadcastKill
+		Global.IGamemodeEvents.Register( this );
+	}
+
+	protected override void OnDestroy()
+	{
+		Global.IGamemodeEvents.Unregister( this );
+	}
+
+	// Called by Global.IGamemodeEvents when BaseGamemode broadcasts a kill.
+	public void OnKillFeedEntry( string killer, string victim, string weapon )
+	{
+		_entries.Insert( 0, new Entry( killer, victim, weapon, new RealTimeSince() ) );
+		while ( _entries.Count > MaxEntries )
+			_entries.RemoveAt( _entries.Count - 1 );
+		StateHasChanged();
+	}
+
+	protected override void OnUpdate()
+	{
+		var before = _entries.Count;
+		_entries.RemoveAll( e => e.Age > EntryLifetime );
+		if ( _entries.Count != before ) StateHasChanged();
+	}
+
+	float EntryOpacity( Entry e )
+	{
+		// Start fading in the last second
+		float remaining = EntryLifetime - e.Age;
+		return MathX.Clamp( remaining, 0f, 1f );
+	}
+
+	protected override int BuildHash() =>
+		HashCode.Combine( _entries.Count, _entries.FirstOrDefault()?.Killer );
+}

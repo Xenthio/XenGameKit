@@ -1,0 +1,43 @@
+{
+  "publish": {
+    "Enabled": false,
+    "ProjectConfig": {
+      "Title": "Test",
+      "Type": "map",
+      "Org": "local",
+      "Ident": "test",
+      "Schema": 0,
+      "IncludeSourceFiles": false,
+      "Resources": null,
+      "PackageReferences": [],
+      "EditorReferences": [
+        "facepunch.aerial_socket#163345",
+        "facepunch.cabinet_a1#143425",
+        "facepunch.cabinet_a3#143428",
+        "facepunch.ceilingplaster03a#104230",
+        "facepunch.couch#139679",
+        "facepunch.crispcylinder_body#143347",
+        "facepunch.double_socket#163352",
+        "facepunch.light_bulb_fitting#143325",
+        "facepunch.oildrumexplosive#166080",
+        "facepunch.plastic_crate_02#143382",
+        "facepunch.plasticbucketa1#33624",
+        "facepunch.radiator#143389",
+        "facepunch.tablerounda#143496",
+        "facepunch.tea_towel_a#143410",
+        "facepunch.tv#143951",
+        "facepunch.wallpaperpatternaold#241556",
+        "facepunch.wooden_chair_a#43573",
+        "facepunch.wooden_crate#143950",
+        "facepunch.wooden_door_01b#143451",
+        "facepunch.woodfloorchevronblend#104340"
+      ],
+      "Mounts": null,
+      "IsStandaloneOnly": false,
+      "Metadata": {
+        "SingleAssetSource": "maps/test.vmap",
+        "ParentPackage": "xenthio.xengamekit"
+      }
+    }
+  }
+}
