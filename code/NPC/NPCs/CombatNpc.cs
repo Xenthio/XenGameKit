@@ -6,10 +6,9 @@
 //
 // To make your own NPC, copy this file, rename everything, and override GetSchedule().
 
-[RequireComponent] public NpcBulletWeapon Weapon { get; private set; }
-
 public class CombatNpc : BaseNpc
 {
+	[RequireComponent] public NpcBulletWeapon Weapon { get; private set; }
 	[Property, Group( "Combat" )] public float AttackRange    { get; set; } = 512f;
 	[Property, Group( "Combat" )] public float WanderRadius   { get; set; } = 400f;
 

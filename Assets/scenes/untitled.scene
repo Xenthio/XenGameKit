@@ -1851,6 +1851,48 @@
         "c36e7806-fbd0-42f1-abe7-5fee2726be99": "80f16c03-8ae6-4146-a8e7-db6b45f15d7e",
         "8ed93d5e-61f7-477d-92bc-966ff97de590": "4cf99f2e-eb9d-48f1-926b-9437a21fcaae"
       }
+    },
+    {
+      "__guid": "0f14d092-5f8e-427f-b1d0-0fc594425509",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Object",
+      "Position": "544,-288,64",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": false,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.IndirectLightVolume",
+          "__guid": "fcfc6704-94f3-4714-a9dd-8bd4ea260c71",
+          "__enabled": true,
+          "Flags": 0,
+          "Bounds": {
+            "Mins": "-429.598877,-864.519836,-69.7574463",
+            "Maxs": "527.224365,421.153351,128.211136"
+          },
+          "Contrast": 1,
+          "DistanceTexture": "scenes/untitled_scene_data/ddgi/object_distance_fcfc6704-94f3-4714-a9dd-8bd4ea260c71.vtex",
+          "InsideGeometry": "Relocate",
+          "IrradianceTexture": "scenes/untitled_scene_data/ddgi/object_irradiance_fcfc6704-94f3-4714-a9dd-8bd4ea260c71.vtex",
+          "NormalBias": 5,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "ProbeDensity": 48,
+          "RelocationTexture": "scenes/untitled_scene_data/ddgi/object_relocation_fcfc6704-94f3-4714-a9dd-8bd4ea260c71.vtex"
+        }
+      ],
+      "Children": []
     }
   ],
   "SceneProperties": {

@@ -158,10 +158,7 @@ public class NpcGrenadeWeapon : NpcWeaponBase
 		var rb = go.GetComponent<Rigidbody>();
 		rb?.ApplyImpulse( aimDir * ThrowForce * (rb.Mass) );
 
-		// Set attacker on any Grenade component so the explosion credits the right killer
-		var grenade = go.GetComponent<Grenade>();
-		if ( grenade.IsValid() && attacker.IsValid() )
-			grenade.Attacker = attacker.GameObject;
+		// Note: Grenade is now a static type in s&box — attacker attribution not available here.
 	}
 }
 
@@ -176,7 +173,7 @@ public class FireWeaponTask : NpcTask
 {
 	protected override NpcTaskStatus OnTick( BaseNpc npc )
 	{
-		var weapon = npc.GetComponent<NpcWeaponBase>( FindMode.EnabledInSelfAndDescendants );
+		var weapon = npc.Components.Get<NpcWeaponBase>( FindMode.EnabledInSelfAndDescendants );
 		var target = npc.Senses.NearestVisible;
 
 		if ( weapon is null || !target.IsValid() )
