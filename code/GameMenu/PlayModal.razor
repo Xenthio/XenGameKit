@@ -161,8 +161,10 @@
 		if ( !string.IsNullOrEmpty( SelectedGamemode ) )
 			LaunchArguments.GameSettings = new() { ["xgk_gamemode"] = SelectedGamemode };
 
-		// Reload this game package as host — engine mounts the map, creates the lobby
-		Game.Load( Game.Ident, false );
+		// Transition to the map loader scene — MapInstance there reads LaunchArguments.Map
+		var sceneOptions = new SceneLoadOptions();
+		sceneOptions.SetScene( "scenes/map_loader.scene" );
+		Game.ChangeScene( sceneOptions );
 	}
 
 	protected override int BuildHash() =>

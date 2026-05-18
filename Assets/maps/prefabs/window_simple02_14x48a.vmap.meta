@@ -1,0 +1,25 @@
+{
+  "publish": {
+    "Enabled": false,
+    "ProjectConfig": {
+      "Title": "Window Simple 02 14X 48A",
+      "Type": "map",
+      "Org": "local",
+      "Ident": "windowsimple0214x48a",
+      "Schema": 0,
+      "IncludeSourceFiles": false,
+      "Resources": null,
+      "PackageReferences": [],
+      "EditorReferences": [
+        "facepunch.dirty_moss_glass#101344",
+        "facepunch.plywood_hs#111278"
+      ],
+      "Mounts": null,
+      "IsStandaloneOnly": false,
+      "Metadata": {
+        "SingleAssetSource": "maps/prefabs/window_simple02_14x48a.vmap",
+        "ParentPackage": "xenthio.xengamekit"
+      }
+    }
+  }
+}
